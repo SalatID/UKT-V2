@@ -23,7 +23,7 @@ class Peserta extends Model
     }
     public function data_ts()
     {
-        return $this->hasOne(Ts::class,'id','ts_id');
+        return $this->hasOne(Ts::class,'id','ts_awal_id');
     }
     public function data_kelompok()
     {

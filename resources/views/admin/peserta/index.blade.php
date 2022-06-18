@@ -2,7 +2,7 @@
 @section('title','List Peserta')
 @section('content')
     <div class="row d-flex justify-content-start mb-3">
-        <button type="button" class="btn btn-success">Tambah Peserta</button>
+        <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addPeserta">Tambah Peserta</button>
     </div>
     <div class="row">
         <div class="col-xl-12 table-responsive">
@@ -41,4 +41,125 @@
             </table>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="addPeserta" tabindex="-1" role="dialog" aria-labelledby="addPesertaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addPesertaLabel">Tambah Peserta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <form action="{{ route('store-peserta') }}" method="POST" id="formPeserta">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="nama">Nama</label>
+                                    <input type="text" class="form-control" name="name" id="nama"
+                                        placeholder="Nama" required>
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
+                                <div class="form-group">
+                                    <label for="ts_awal_id">Tingkat Sabuk</label>
+                                    <select name="ts_awal_id" class="form-control" id="ts_awal_id">
+                                        <option value="">Pilih Tingkat</option>
+                                        @foreach ($ts as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="komwil">Komwil</label>
+                                    <select name="komwil_id" class="form-control" id="komwil">
+                                        <option value="">Pilih Komwil</option>
+                                        @foreach ($komwil as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="unit_id">Unit</label>
+                                    <select name="unit_id" class="form-control" id="unit_id">
+                                        <option value="">Pilih Unit</option>
+                                        @foreach ($unit as $item)
+                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tingkat">Tingkat</label>
+                                    <select name="tingkat" class="form-control" id="tingkat">
+                                        <option value="">Pilih Tingkat</option>
+                                        <option value="TK">TK</option>
+                                        <option value="SD">SD</option>
+                                        <option value="SMP">SMP</option>
+                                        <option value="SMA/SMK">SMA/SMK</option>
+                                        <option value="Kuliah">Kuliah</option>
+                                        <option value="Bekerja">Bekerja</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tempat_lahir">Tempat Lahir</label>
+                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
+                                        placeholder="Tempat Lahir" required>
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
+                                <div class="form-group">
+                                    <label for="tgl_lahir">Tanggal Lahir</label>
+                                    <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
+                                        placeholder="Tanggal Lahir" required>
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var form = $('#formPeserta')
+        $('#tablePeserta').dataTable()
+        $('.btn-edit').click(function() {
+            $.get($(this).data('action'), function(data) {
+                console.log(data.id)
+                if (typeof data.id !== 'undefined') {
+                    $('#addPesertaLabel').text('Edit Peserta')
+                    form.attr('action', '{{ route('update-peserta') }}')
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'id',
+                        value:data.id
+                    }).appendTo('#formPeserta');
+                    $('input[name="name"]', form).val(data.name)
+                    $('select[name="ts_id"]',form).val(data.ts_id)
+                    $('select[name="komwil_id"]',form).val(data.data_komwil.id)
+                    $('#addPeserta').modal('show')
+                    return
+                }
+                showAllerJs({
+                    error:true,
+                    message:'Data Tidak Ditemukan'
+                })
+            })
+        });
+        $('.btn-delete').click(function(){
+            if(confirm('Hapus Peserta?')){
+                $.get($(this).data('action'),function(){
+                    location.reload()
+                })
+            }
+        })
+        $('.btn-add').click(function(){
+            $('#addPesertaLabel').text('Tambah Peserta')
+            form.attr('action', '{{ route('store-peserta') }}')
+            $('input[name="id"]').remove()
+            form.trigger("reset");
+        })
+    </script>
 @endsection

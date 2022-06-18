@@ -233,7 +233,7 @@ class AdminController extends Controller
         $validate = Validator::make(request()->all(),[
             'name'=>'required|max:200',
             'ts_id'=>'required',
-            'parent_id'=>'required'
+            'komwil_id'=>'required'
         ]);
         
         if($validate->fails()){

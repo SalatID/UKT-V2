@@ -27,6 +27,10 @@ Route::group(['prefix'=>'admin'],function(){
 
     Route::group(['prefix'=>'peserta'],function(){
         Route::get('/',[PesertaController::class,'index'])->name('peserta');
+        Route::post('/',[PesertaController::class,'storePeserta'])->name('store-peserta');
+            Route::get('/json-data/{id}',[PesertaController::class,'jsonPeserta'])->name('json-peserta');
+            Route::post('/update-peserta',[PesertaController::class,'updatePeserta'])->name('update-peserta');
+            Route::get('/delete/{id}',[PesertaController::class,'deletePeserta'])->name('delete-peserta');
     });
 
     Route::group(['prefix'=>'kelompok'],function(){
