@@ -66,9 +66,17 @@ Route::group(['prefix'=>'admin'],function(){
         });
         Route::group(['prefix'=>'jurus'],function(){
             Route::get('/',[AdminController::class,'jurus'])->name('master-jurus');
+            Route::post('/',[AdminController::class,'storeJurus'])->name('store-jurus');
+            Route::get('/json-data/{id}',[AdminController::class,'jsonJurus'])->name('json-jurus');
+            Route::post('/update-jurus',[AdminController::class,'updateJurus'])->name('update-jurus');
+            Route::get('/delete/{id}',[AdminController::class,'deleteJurus'])->name('delete-jurus');
         });
         Route::group(['prefix'=>'penilai'],function(){
             Route::get('/',[AdminController::class,'penilai'])->name('master-penilai');
+            Route::post('/',[AdminController::class,'storePenilai'])->name('store-penilai');
+            Route::get('/json-data/{id}',[AdminController::class,'jsonPenilai'])->name('json-penilai');
+            Route::post('/update-penilai',[AdminController::class,'updatePenilai'])->name('update-penilai');
+            Route::get('/delete/{id}',[AdminController::class,'deletePenilai'])->name('delete-penilai');
         });
         Route::group(['prefix'=>'ts'],function(){
             Route::get('/',[AdminController::class,'ts'])->name('master-ts');

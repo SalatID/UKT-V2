@@ -12,4 +12,17 @@ class Jurus extends Model
     public $fillable = [
         'parent_id','name','ts_id','created_user'
     ];
+
+    public function data_ts()
+    {
+        return $this->hasOne(Ts::class,'id','ts_id');
+    }
+    public function data_parent()
+    {
+        return $this->hasOne(Jurus::class,'id','parent_id');
+    }
+    public function newQuery($excludeDeleted = true) {
+        return parent::newQuery($excludeDeleted)
+            ->whereNull('deleted_at');
+    }
 }

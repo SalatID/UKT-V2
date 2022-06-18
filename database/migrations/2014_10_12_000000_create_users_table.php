@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('role',5);
             $table->integer('komwil_id')->unsigned();
+            $table->integer('event_id')->unsigned()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
