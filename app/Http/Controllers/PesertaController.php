@@ -18,7 +18,7 @@ class PesertaController extends Controller
     }
     public function index()
     {
-        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts'])->get();
+        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts'])->orderBy('name')->get();
         $komwil = Komwil::get();
         $unit = Unit::get();
         $ts = Ts::whereNotIn('id',[1])->get();

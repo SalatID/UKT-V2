@@ -29,4 +29,8 @@ class Peserta extends Model
     {
         return $this->hasOne(Kelompok::class,'id','kelompok_id');
     }
+    public function newQuery($excludeDeleted = true) {
+        return parent::newQuery($excludeDeleted)
+            ->whereNull('deleted_at');
+    }
 }

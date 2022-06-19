@@ -6,7 +6,7 @@
     </div>
     <div class="row">
         <div class="col-xl-12 table-responsive">
-            <table class="table table-striped">
+            <table class="table table-striped" id="tablePeserta">
                 <thead>
                     <tr>
                         <th>#</th>
@@ -34,7 +34,19 @@
                         <td>{{$item->tingkat}}</td>
                         <td>{{$item->tempat_lahir}}</td>
                         <td>{{$item->tgl_lahir}}</td>
-                        <td></td>
+                        <td>
+                            <div class="dropdown">
+                                <button class="btn dropdown-toggle" type="button" id="dropDownOption"
+                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropDownOption">
+                                    <a class="dropdown-item btn-edit" href="#"
+                                        data-action="{{ route('json-peserta', $item->id) }}">Edit</a>
+                                    <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-peserta', $item->id) }}">Delete</a>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
@@ -44,7 +56,7 @@
     <!-- Modal -->
     <div class="modal fade" id="addPeserta" tabindex="-1" role="dialog" aria-labelledby="addPesertaLabel"
         aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="addPesertaLabel">Tambah Peserta</h5>
@@ -72,23 +84,29 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="komwil">Komwil</label>
-                                    <select name="komwil_id" class="form-control" id="komwil">
-                                        <option value="">Pilih Komwil</option>
-                                        @foreach ($komwil as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="unit_id">Unit</label>
-                                    <select name="unit_id" class="form-control" id="unit_id">
-                                        <option value="">Pilih Unit</option>
-                                        @foreach ($unit as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
-                                        @endforeach
-                                    </select>
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="form-group">
+                                            <label for="komwil">Komwil</label>
+                                            <select name="komwil_id" class="form-control" id="komwil">
+                                                <option value="">Pilih Komwil</option>
+                                                @foreach ($komwil as $item)
+                                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="form-group">
+                                            <label for="unit_id">Unit</label>
+                                            <select name="unit_id" class="form-control" id="unit_id">
+                                                <option value="">Pilih Unit</option>
+                                                @foreach ($unit as $item)
+                                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group">
                                     <label for="tingkat">Tingkat</label>
@@ -102,18 +120,24 @@
                                         <option value="Bekerja">Bekerja</option>
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="tempat_lahir">Tempat Lahir</label>
-                                    <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
-                                        placeholder="Tempat Lahir" required>
-                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
-                                </div>
-                                <div class="form-group">
-                                    <label for="tgl_lahir">Tanggal Lahir</label>
-                                    <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
-                                        placeholder="Tanggal Lahir" required>
-                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
-                                </div>
+                                <div class="row">
+                                    <div class="col-xl-6">
+                                        <div class="form-group">
+                                            <label for="tempat_lahir">Tempat Lahir</label>
+                                            <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
+                                                placeholder="Tempat Lahir" required>
+                                            {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-6">
+                                        <div class="form-group">
+                                            <label for="tgl_lahir">Tanggal Lahir</label>
+                                            <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
+                                                placeholder="Tanggal Lahir" required>
+                                            {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                        </div>
+                                    </div>
+                                </div>                               
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </form>
                         </div>
@@ -137,8 +161,12 @@
                         value:data.id
                     }).appendTo('#formPeserta');
                     $('input[name="name"]', form).val(data.name)
-                    $('select[name="ts_id"]',form).val(data.ts_id)
+                    $('input[name="tempat_lahir"]', form).val(data.tempat_lahir)
+                    $('input[name="tgl_lahir"]', form).val(data.tgl_lahir)
+                    $('select[name="ts_awal_id"]',form).val(data.ts_awal_id)
                     $('select[name="komwil_id"]',form).val(data.data_komwil.id)
+                    $('select[name="unit_id"]',form).val(data.unit_id)
+                    $('select[name="tingkat"]',form).val(data.tingkat)
                     $('#addPeserta').modal('show')
                     return
                 }

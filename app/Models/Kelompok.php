@@ -17,4 +17,8 @@ class Kelompok extends Model
     {
         return $this->hasMany(Peserta::class,'kelompok_id','id');
     }
+    public function data_ts()
+    {
+        return $this->hasOne(Ts::class,'id','ts_id');
+    }
 }

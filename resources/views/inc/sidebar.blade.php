@@ -125,8 +125,8 @@
               
             </ul>
           </li>
-          <li class="nav-item {{ explode('/', url()->current())[3] == 'admin' && explode('/', url()->current())[4]!='home' && explode('/', url()->current())[4]!='master' ? 'menu-open' : '' }}">
-            <a href="#" class="nav-link {{ explode('/', url()->current())[3] == 'admin' && explode('/', url()->current())[4]!='home' && explode('/', url()->current())[4]!='master' ? 'active' : '' }}">
+          <li class="nav-item {{ explode('/', url()->current())[3] == 'admin' && explode('/', url()->current())[4]!='home' && explode('/', url()->current())[4]!='peserta' && explode('/', url()->current())[4]!='master' ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ explode('/', url()->current())[3] == 'admin' && explode('/', url()->current())[4]!='home' && explode('/', url()->current())[4]!='peserta' && explode('/', url()->current())[4]!='master' ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
               <p>
                 Admin

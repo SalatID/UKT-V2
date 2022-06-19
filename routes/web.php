@@ -35,6 +35,15 @@ Route::group(['prefix'=>'admin'],function(){
 
     Route::group(['prefix'=>'kelompok'],function(){
         Route::get('/',[AdminController::class,'kelompok'])->name('kelompok');
+        Route::get('/reset-filter',[AdminController::class,'resetFilteredPeserta'])->name('reset-filter');
+        Route::get('/filtered-peserta',[AdminController::class,'getFilteredPeserta'])->name('filtered-peserta');
+        Route::get('/set-anggota-kelompok/{id}',[AdminController::class,'setAnggotaKelompok'])->name('set-anggota-kelompok');
+        Route::get('/delete-tmp-anggota-kelompok/{id}',[AdminController::class,'deleteTmpAnggotaKel'])->name('delete-tmp-anggota-kelompok');
+        Route::get('/add-kelompok',[AdminController::class,'addKelompok'])->name('add-kelompok');
+        Route::post('/',[AdminController::class,'storeKelompok'])->name('store-kelompok');
+        Route::get('/json-data/{id}',[AdminController::class,'jsonKelompok'])->name('json-kelompok');
+        Route::post('/update-kelompok',[AdminController::class,'updateKelompok'])->name('update-kelompok');
+        Route::get('/delete/{id}',[AdminController::class,'deleteKelompok'])->name('delete-kelompok');
     });
 
     Route::group(['prefix'=>'nilai'],function(){
