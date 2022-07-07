@@ -77,7 +77,7 @@ class AdminController extends Controller
 
     public function updateKomwil()
     {
-        if(!request()->has('id')) return redirect()->back()->with(['error'=>!$ins,'message'=>'Id tidak ditemukan']); 
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->komwil->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
@@ -141,7 +141,7 @@ class AdminController extends Controller
 
     public function updateUnit()
     {
-        if(!request()->has('id')) return redirect()->back()->with(['error'=>!$ins,'message'=>'Id tidak ditemukan']); 
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->unit->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
@@ -204,7 +204,7 @@ class AdminController extends Controller
 
     public function updateTs()
     {
-        if(!request()->has('id')) return redirect()->back()->with(['error'=>!$ins,'message'=>'Id tidak ditemukan']); 
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->ts->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
@@ -273,7 +273,7 @@ class AdminController extends Controller
 
     public function updatePenilai()
     {
-        if(!request()->has('id')) return redirect()->back()->with(['error'=>!$ins,'message'=>'Id tidak ditemukan']); 
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->penilai->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
@@ -340,7 +340,7 @@ class AdminController extends Controller
 
     public function updateJurus()
     {
-        if(!request()->has('id')) return redirect()->back()->with(['error'=>!$ins,'message'=>'Id tidak ditemukan']); 
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->jurus->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
@@ -374,13 +374,13 @@ class AdminController extends Controller
         $ts = Ts::whereNotIn('id',[1])->get();
         $komwil = Komwil::get();
         $unit = Unit::get();
-        $anggotaKelompok = session()->get('anggota_kelompok')??[];
+        $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
         return view('admin.kelompok.addKelompok',compact('ts','unit','komwil','anggotaKelompok'));
     }
     public function setAnggotaKelompok($id)
     {
         
-        $sessionData = session()->has('anggota_kelompok')?session()->get('anggota_kelompok'):[];
+        $sessionData = session()->has(auth()->user()->id.'_'.'anggota_kelompok')?session()->get(auth()->user()->id.'_'.'anggota_kelompok'):[];
         // dd($sessionData);
         $dataPeserta = Peserta::with(['data_komwil','data_ts','data_unit'])->where('id',$id)->first();
         array_push($sessionData,[
@@ -392,23 +392,27 @@ class AdminController extends Controller
             'ts'=>$dataPeserta->data_ts->name,
             'tingkat'=>$dataPeserta->tingkat,
         ]);
-        $notPeserta = session()->has('not_peserta')?session()->get('not_peserta'):[];
+        $notPeserta = session()->has(auth()->user()->id.'_'.'not_peserta')?session()->get(auth()->user()->id.'_'.'not_peserta'):[];
         array_push($notPeserta,$id);
         // dd($notPeserta);
-        session()->put('anggota_kelompok',$sessionData);
-        session()->put('not_peserta',$notPeserta);
+        session()->put(auth()->user()->id.'_'.'anggota_kelompok',$sessionData);
+        session()->put(auth()->user()->id.'_'.'not_peserta',$notPeserta);
         return $this->getFilteredPeserta();
     }
     public function getFilteredPeserta()
     {
-        // dd(session()->get('not_peserta'));
+        // dd(session()->get(auth()->user()->id.'_'.'not_peserta'));
         $sessionFilter = [
             ['komwil_id','like',request('komwil_id')??'%'],
             ['unit_id','like',request('unit_id')??'%'],
             ['ts_awal_id','like',request('ts_id')??'%'],
             ['tingkat','like',request('tingkat')??'%'],
         ];
-        $notPeserta = session()->has('not_peserta')?session()->get('not_peserta'):[];
+        session()->put(auth()->user()->id.'_'.'form_data',[
+            'name'=>request('name'),
+            'ts_id'=>request('ts_id'),
+        ]);
+        $notPeserta = session()->has(auth()->user()->id.'_'.'not_peserta')?session()->get(auth()->user()->id.'_'.'not_peserta'):[];
         if(!session()->has('filter_data')) session()->put('filter_data',$sessionFilter);
         $event_data = session()->has('event_data')?session()->get('event_data'):null;
         return response()->json(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNotIn('id',$notPeserta)->whereNull('kelompok_id')->where('event_id',($event_data!==null?$event_data->id:0))->get());
@@ -416,9 +420,10 @@ class AdminController extends Controller
     public function resetFilteredPeserta()
     {
         session()->forget('filter_data');
-        session()->forget('not_peserta');
-        session()->forget('anggota_kelompok');
-        session()->forget('not_peserta');
+        session()->forget(auth()->user()->id.'_'.'form_data');
+        session()->forget(auth()->user()->id.'_'.'not_peserta');
+        session()->forget(auth()->user()->id.'_'.'anggota_kelompok');
+        session()->forget(auth()->user()->id.'_'.'not_peserta');
     }
     public function storeKelompok()
     {
@@ -450,7 +455,7 @@ class AdminController extends Controller
             $ins = Kelompok::create($params);
             $id = $ins->id;
             if($ins){
-                $anggotaKelompok = session()->get('anggota_kelompok');
+                $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok');
                 $insSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $insSuccess++;
@@ -469,16 +474,91 @@ class AdminController extends Controller
     }
     public function deleteTmpAnggotaKel($id)
     {
-        $anggotaKelompok = session()->get('anggota_kelompok');
-        $notPeserta = session()->get('not_peserta');
+        $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok');
+        $notPeserta = session()->get(auth()->user()->id.'_'.'not_peserta');
         foreach($anggotaKelompok as $key=>$val){
             if($val['id']==$id) {
                 unset($anggotaKelompok[$key]);
             }
         }
         unset($notPeserta[array_search($id,$notPeserta)]);
-        session()->put('anggota_kelompok',$anggotaKelompok);
-        session()->put('not_peserta',$notPeserta);
+        session()->put(auth()->user()->id.'_'.'anggota_kelompok',$anggotaKelompok);
+        session()->put(auth()->user()->id.'_'.'not_peserta',$notPeserta);
         return redirect()->back()->with(['error'=>false,'message'=>'Delete Berhasil']);
+    }
+    public function deleteAnggotaKel($id)
+    {
+        $sts = Peserta::where('id',$id)->update([
+            'kelompok_id'=>null,
+            'updated_user'=>auth()->user()->id
+        ]);
+        return redirect()->back()->with(['error'=>!$sts,'message'=>!$sts?'Delete Gagal':'Delete Berhasil']);
+    }
+    public function editKelompok($id)
+    { 
+        $ts = Ts::whereNotIn('id',[1])->get();
+        $komwil = Komwil::get();
+        $unit = Unit::get();
+        $dataKelompok = Kelompok::with('data_peserta')->where('id',$id)->first();
+        $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
+        // dd($anggotaKelompok);
+        return view('admin.kelompok.editKelompok',compact('ts','unit','komwil','dataKelompok','anggotaKelompok'));
+    }
+    public function updateKelompok()
+    {
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->kelompok->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        $params['updated_user']=auth()->user()->id;
+        $event_data = session()->has('event_data')?session()->get('event_data'):null;
+        $params['event_id']=$event_data!==null?$event_data->id:0;
+        return DB::transaction(function() use ($params){
+            $upd = Kelompok::where('id',request('id'))->update($params);
+            $id = request('id');
+            if($upd){
+                $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
+                $updSuccess = 0;
+                foreach($anggotaKelompok as $val){
+                    $updSuccess++;
+                    Peserta::where('id',$val['id'])->update([
+                        'kelompok_id'=>$id
+                    ]);
+                }
+            }
+            $this->resetFilteredPeserta();
+            return redirect()->route('kelompok')->with([
+                'error'=>count($anggotaKelompok)!=$updSuccess,
+                'message'=>count($anggotaKelompok)==$updSuccess?'Tambah Berhasil':'Tambah Gagal'
+            ]);
+
+        });
+    }
+    public function deleteKelompok($id)
+    {
+        return DB::transaction(function() {
+            $kelompok = Kelompok::with('data_peserta')->where('id',request('id'));
+            $upd = $kelompok->update([
+                'deleted_at'=>date('Y-m-d H:i:s'),
+                'deleted_user'=>auth()->user()->id
+            ]);
+            $id = request('id');
+            if($upd){
+                $anggotaKelompok = $kelompok->first()->data_peserta;
+                $updSuccess = 0;
+                foreach($anggotaKelompok as $val){
+                    $updSuccess++;
+                    Peserta::where('id',$val['id'])->update([
+                        'kelompok_id'=>null
+                    ]);
+                }
+            }
+            $this->resetFilteredPeserta();
+            return redirect()->route('kelompok')->with([
+                'error'=>count($anggotaKelompok)!=$updSuccess,
+                'message'=>count($anggotaKelompok)==$updSuccess?'Tambah Berhasil':'Tambah Gagal'
+            ]);
+
+        });
     }
 }

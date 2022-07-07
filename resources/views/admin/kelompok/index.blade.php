@@ -25,8 +25,8 @@
                             <td>{{ $item->data_ts->name }}</td>
                             <td>
                                 <ol>
-                                    @foreach ($item->data_peserta as $item)
-                                        <li>{{$item->name}}</li>
+                                    @foreach ($item->data_peserta as $p)
+                                        <li>{{$p->name}}</li>
                                     @endforeach
                                 </ol>
                             </td>
@@ -37,8 +37,7 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
-                                            data-action="{{ route('json-kelompok', $item->id) }}">Edit</a>
+                                        <a class="dropdown-item btn-edit" href="{{route('edit-kelompok',$item->id)}}">Edit</a>
                                         <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-kelompok', $item->id) }}">Delete</a>
                                     </div>
                                 </div>

@@ -13,6 +13,10 @@ class Kelompok extends Model
         'name','event_id','ts_id','penilai_id','created_user'
     ];
 
+    public function newQuery($excludeDeleted = true) {
+        return parent::newQuery($excludeDeleted)
+            ->whereNull('deleted_at');
+    }
     public function data_peserta()
     {
         return $this->hasMany(Peserta::class,'kelompok_id','id');

@@ -1,14 +1,15 @@
 @extends('admin.index')
 @section('title','Tambah Kelompok')
 @section('content')
-<form action="{{route('store-kelompok')}}" method="POST">
+<form action="{{route('update-kelompok')}}" method="POST">
     @csrf
+    <input type="hidden" name="id" value="{{$dataKelompok->id}}">
     <div class="row">
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="nama">Nama</label>
-                <input type="text" class="form-control" name="name" id="nama" value="{{session()->get(auth()->user()->id.'_'.'form_data')['name']??''}}"
-                    placeholder="Nama" required>
+                <input type="text" class="form-control" name="name" id="nama"
+                    placeholder="Nama" value="{{$dataKelompok->name??''}}" required>
                 {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             </div>
         </div>
@@ -18,7 +19,7 @@
                 <select name="ts_id" class="form-control" id="ts_id">
                     <option value="">Pilih Tingkat</option>
                     @foreach ($ts as $item)
-                        <option value="{{$item->id}}" {{(session()->get(auth()->user()->id.'_'.'form_data')['ts_id']??'')==$item->id?'selected':''}}>{{$item->name}}</option>
+                        <option value="{{$item->id}}" {{$dataKelompok->ts_id==$item->id?'selected':''}}>{{$item->name}}</option>
                     @endforeach
                 </select>
             </div>
@@ -46,6 +47,20 @@
                     </tr>
                 </thead>
                 @php($i=1)
+                @foreach ($dataKelompok->data_peserta as $item)
+                <tr>
+                    <td>{{$i++}}</td>
+                    <td>{{$item['no_peserta']}}</td>
+                    <td>{{$item['name']}}</td>
+                    <td>{{$item->data_komwil['name']}}</td>
+                    <td>{{$item->data_unit['name']??''}}</td>
+                    <td>{{$item->data_ts['name']}}</td>
+                    <td>{{$item['tingkat']}}</td>
+                    <td>
+                        <a href="{{route('delete-anggota-kelompok',$item['id'])}}" class="text-danger"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr>
+                @endforeach
                 @foreach ($anggotaKelompok as $item)
                 <tr>
                     <td>{{$i++}}</td>
@@ -109,7 +124,7 @@
                 <div class="col-xl-3">
                     <div class="form-group">
                         <label for="ts_awal_id">Tingkat Sabuk</label>
-                        <select name="ts_awal_id" class="form-control" id="ts_awal_id" disabled>
+                        <select name="ts_awal_id" class="form-control" id="ts_awal_id">
                             <option value="">Pilih Tingkat</option>
                             @foreach ($ts as $item)
                                 <option value="{{$item->id}}">{{$item->name}}</option>
@@ -180,14 +195,7 @@
 </div>
 <script>
     $('.btn-close').click(function(){
-        var url = window.location.href;   
-            if($('input[name="name"]').val()!=''){
-                url += (url.indexOf('?') > -1 && $('select[name="ts_id"]').val()!=''?'&':'?')+'name='+$('input[name="name"]').val()
-            }
-            if($('select[name="ts_id"]').val()!=''){
-                url += (url.indexOf('?') > -1 && $('input[name="name"]').val()!=''?'&':'?')+'ts_id='+$('select[name="ts_id"]').val()
-            }
-        window.location.href = url;
+        location.reload()
     })
     $('.btn-filter').click(function(){
         $.get($(this).data('action'),{
@@ -195,7 +203,6 @@
             'unit_id':$('select[name="unit_id"]').val(),
             'ts_id':$('select[name="ts_awal_id"]').val(),
             'tingkat':$('select[name="tingkat"]').val(),
-            'name':$('input[name="name"]').val(),
         },function(data){
             parseTable(data)
         })
