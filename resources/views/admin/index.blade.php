@@ -169,6 +169,23 @@
     $('.div-message').text(data.message)
     $('.div-error').removeClass('d-none')
   }
+  $('#komwil').change(function(){
+        e = $(this);
+        $.get(e.data('href')+'?id='+e.val(),function(data){
+        if(data.length > 0){
+            var html = '<option value="">Pilih Unit</option>'
+            html += data.map(function(d){
+                return '<option value="'+d.id+'">'+d.name+'</option>'
+            })
+            $('select[name="unit_id"]').html(html).promise().done(function(){
+            $('select[name="unit_id"]').attr('disabled',false)
+            if(typeof e.data('unit_id')!=='undefined') $('select[name="unit_id"]').val(e.data('unit_id'))
+            })
+            return
+        }
+        $('select[name="unit_id"]').attr('disabled',true)
+        })
+    })
 </script>
 </body>
 </html>

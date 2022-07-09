@@ -177,7 +177,7 @@
             })
         });
         $('.btn-delete').click(function(){
-            if(confirm('Hapus Peserta?')){
+            if(confirm('Hapus User?')){
                 $.get($(this).data('action'),function(){
                     location.reload()
                 })

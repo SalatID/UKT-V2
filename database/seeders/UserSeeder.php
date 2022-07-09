@@ -21,7 +21,8 @@ class UserSeeder extends Seeder
             'email_verified_at'=>date('Y-m-d H:i:s'),
             'password'=>Hash::make('SA#2022!'),
             'role'=>'SPADM',
-            'komwil_id'=>0
+            'unit_id'=>1,
+            'created_user'=>1,
         ]);
     }
 }

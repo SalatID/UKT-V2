@@ -17,10 +17,8 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
+    public $fillable = [
+        'name','email','password','phone','role','unit_id','event_id','phone_verified_at','created_user'
     ];
 
     /**
@@ -41,4 +39,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function data_unit()
+    {
+        return $this->hasOne(Unit::class,'id','unit_id');
+    }
+    public function data_event()
+    {
+        return $this->hasOne(Event::class,'id','event_id');
+    }
+    public function newQuery($excludeDeleted = true) {
+        return parent::newQuery($excludeDeleted)
+            ->whereNull('deleted_at');
+    }
 }

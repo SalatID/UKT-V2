@@ -54,6 +54,10 @@ Route::group(['prefix'=>'admin'],function(){
 
     Route::group(['prefix'=>'user'],function(){
         Route::get('/',[AdminController::class,'user'])->name('admin-user');
+        Route::post('/',[AdminController::class,'storeUser'])->name('store-user');
+        Route::get('/json-data/{id}',[AdminController::class,'jsonUser'])->name('json-user');
+        Route::get('/delete/{id}',[AdminController::class,'deleteUser'])->name('delete-user');
+        Route::post('/update-user',[AdminController::class,'updateUser'])->name('update-user');
     });
 
     Route::group(['prefix'=>'event'],function(){
@@ -62,6 +66,10 @@ Route::group(['prefix'=>'admin'],function(){
 
     Route::group(['prefix'=>'log'],function(){
         Route::get('/',[AdminController::class,'log'])->name('admin-log');
+    });
+
+    Route::group(['prefix'=>'komwil'],function(){
+        Route::get('/get-json-unit',[AdminController::class,'getJsonUnit'])->name('get-json-unit');
     });
 
     Route::group(['prefix'=>'master'],function(){

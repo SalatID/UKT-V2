@@ -10,6 +10,7 @@ use App\Models\Penilai;
 use App\Models\Jurus;
 use App\Models\Kelompok;
 use App\Models\Peserta;
+use App\Models\User;
 use DB;
 use Validator;
 
@@ -21,6 +22,7 @@ class AdminController extends Controller
     protected $penilai;
     protected $kelompok;
     protected $jurus;
+    protected $user;
 
     public function __construct()
     {
@@ -30,6 +32,7 @@ class AdminController extends Controller
         $this->penilai = new Penilai();
         $this->kelompok = new Kelompok();
         $this->jurus = new Jurus();
+        $this->user = new User();
     }
 
     public function home()
@@ -73,6 +76,12 @@ class AdminController extends Controller
     public function jsonKomwil($id)
     {
         return response()->json(Komwil::where('id',$id)->first());
+    }
+
+    public function getJsonUnit()
+    {
+        if(!request()->has('id')) return response()->json([]);
+        return response()->json(Unit::where('komwil_id',request('id'))->get());
     }
 
     public function updateKomwil()
@@ -560,5 +569,78 @@ class AdminController extends Controller
             ]);
 
         });
+    }
+
+    public function user()
+    {
+        $dataUser = User::get();
+        $komwil = Komwil::get();
+        $unit = Unit::get();
+        return view('admin.user.index',compact('dataUser','komwil','unit'));
+    }
+    public function storeUser()
+    {
+        $filter = [
+            'name'=>'required|max:200',
+            'email'=>'required|email',
+            'komwil_id'=>'required',
+            'unit_id'=>'required',
+        ];
+        if(!request()->has('validasi_email')){
+            $filter['password'] = 'required';
+            $filter['retyp_password'] = 'same:password';
+        } 
+        $validate = Validator::make(request()->all(),$filter);
+        
+        if($validate->fails()){
+            foreach($validate->errors()->getMessages() as $key =>$data){
+                array_push($this->error,[
+                    "name"=>$key,
+                    "message"=>$data[0]
+                ]);
+            }
+            return redirect()->back()->with([
+                'error'=>true,
+                'message'=>'The given data was invalid',
+                'data'=>$this->error
+            ]);
+        }
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->user->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        $params['created_user']=auth()->user()->id;
+        $ins = User::create($params);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Tambah Berhasil':'Tambah Gagal'
+        ]);
+    }
+    public function jsonUser($id)
+    {
+        return response()->json(User::with('data_unit')->where('id',$id)->first());
+    }
+    public function deleteUser($id)
+    {
+        $ins = User::where('id',$id)->update([
+            'deleted_at'=>date('Y-m-d H:i:s'),
+            'deleted_user'=>auth()->user()->id
+        ]);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Update Berhasil':'Update Gagal'
+        ]);
+    }
+    public function updateUser()
+    {
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->user->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        $params['updated_user']=auth()->user()->id;
+        $ins = User::where('id',request('id'))->update($params);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Update Berhasil':'Update Gagal'
+        ]);
     }
 }

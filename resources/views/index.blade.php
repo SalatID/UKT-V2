@@ -163,6 +163,5 @@
 <script src="{{asset('assets/admin')}}/js/adminlte.js"></script>
 <!-- AdminLTE for demo purposes -->
 <script src="{{asset('assets/admin')}}/js/demo.js"></script>
-
 </body>
 </html>
