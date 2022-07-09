@@ -20,9 +20,9 @@ use App\Http\Controllers\NilaiController;
 
 Route::get('/event/run/{id}',[GuestController::class,'index']);
 Route::post('/process/kelompok',[GuestController::class,'setKelompok'])->name('proc-kelompok');
-
 Route::get('/login',[AuthController::class,'login'])->name('login');
-Route::group(['prefix'=>'admin'],function(){
+
+Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
     Route::get('/home',[AdminController::class,'home'])->name('home');
 
     Route::group(['prefix'=>'peserta'],function(){
