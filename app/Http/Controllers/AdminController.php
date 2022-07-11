@@ -11,10 +11,11 @@ use App\Models\Jurus;
 use App\Models\Kelompok;
 use App\Models\Peserta;
 use App\Models\User;
-use App\Models\Event;
+use App\Models\EventMaster;
 use DB;
 use Validator;
 use Str;
+use Hash;
 
 class AdminController extends Controller
 {
@@ -36,7 +37,7 @@ class AdminController extends Controller
         $this->kelompok = new Kelompok();
         $this->jurus = new Jurus();
         $this->user = new User();
-        $this->event = new Event();
+        $this->event = new EventMaster();
     }
 
     public function home()
@@ -388,7 +389,8 @@ class AdminController extends Controller
         $komwil = Komwil::get();
         $unit = Unit::get();
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
-        return view('admin.kelompok.addKelompok',compact('ts','unit','komwil','anggotaKelompok'));
+        $event = EventMaster::all();
+        return view('admin.kelompok.addKelompok',compact('ts','unit','komwil','anggotaKelompok','event'));
     }
     public function setAnggotaKelompok($id)
     {
@@ -424,11 +426,14 @@ class AdminController extends Controller
         session()->put(auth()->user()->id.'_'.'form_data',[
             'name'=>request('name'),
             'ts_id'=>request('ts_id'),
+            'event_id'=>request('event_id'),
         ]);
         $notPeserta = session()->has(auth()->user()->id.'_'.'not_peserta')?session()->get(auth()->user()->id.'_'.'not_peserta'):[];
         if(!session()->has('filter_data')) session()->put('filter_data',$sessionFilter);
         $event_data = auth()->user()->event_id;
-        return response()->json(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNotIn('id',$notPeserta)->whereNull('kelompok_id')->where('event_id',($event_data))->get());
+        $peserta = Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNotIn('id',$notPeserta)->whereNull('kelompok_id');
+        if(auth()->user()->role!=='SPADM')$peserta=$peserta->where('event_id',$event_data);
+        return response()->json($peserta->get());
     }
     public function resetFilteredPeserta()
     {
@@ -463,7 +468,7 @@ class AdminController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
         $event_data = auth()->user()->event_id;
-        $params['event_id']=$event_data;
+        $params['event_id']=request()->has('event_id')?request('event_id'):$event_data;
         return DB::transaction(function() use ($params){
             $ins = Kelompok::create($params);
             $id = $ins->id;
@@ -580,7 +585,7 @@ class AdminController extends Controller
         $dataUser = User::get();
         $komwil = Komwil::get();
         $unit = Unit::get();
-        $event = Event::get();
+        $event = EventMaster::get();
         return view('admin.user.index',compact('dataUser','komwil','unit','event'));
     }
     public function storeUser()
@@ -614,6 +619,7 @@ class AdminController extends Controller
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->user->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
+        $params['password']=Hash::make(request('password'));
         $params['created_user']=auth()->user()->id;
         $ins = User::create($params);
         return redirect()->back()->with([
@@ -651,7 +657,7 @@ class AdminController extends Controller
     }
     public function event()
     {
-        $dataEvent = Event::all();
+        $dataEvent = EventMaster::all();
         $dataKomwil = Komwil::all();
         return view('admin.event.index',compact('dataEvent','dataKomwil'));
     }
@@ -685,15 +691,16 @@ class AdminController extends Controller
             return in_array($key,$this->event->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
+        $params['event_alias']=str_replace(' ','-',request('name'));
         $dir ='banner_event/';
         $gambar = request()->file('gambar');
         if($gambar){
-            $fielName = Str::random(15).'_'.request('name').".".$gambar->getClientOriginalExtension();
+            $fielName = Str::random(15).'_'.$params['event_alias'].".".$gambar->getClientOriginalExtension();
             $gambar->move($dir,$fielName);
             $params['gambar']=$dir.$fielName;
         }
         // dd($params);
-        $ins = Event::create($params);
+        $ins = EventMaster::create($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Tambah Berhasil':'Tambah Gagal'
@@ -701,11 +708,11 @@ class AdminController extends Controller
     }
     public function jsonEvent($id)
     {
-        return response()->json(Event::where('id',$id)->first());
+        return response()->json(EventMaster::where('id',$id)->first());
     }
     public function deleteEvent($id)
     {
-        $ins = Event::where('id',$id)->update([
+        $ins = EventMaster::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -728,7 +735,7 @@ class AdminController extends Controller
             $gambar->move($dir,$fielName);
             $params['gambar']=$dir.$fielName;
         }
-        $ins = Event::where('id',request('id'))->update($params);
+        $ins = EventMaster::where('id',request('id'))->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'

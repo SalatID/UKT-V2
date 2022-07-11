@@ -15,6 +15,7 @@
         </div>
         <div class="info">
           <a href="#" class="d-block">{{auth()->user()->name}}</a>
+          <span class="text-white">{{\App\Models\EventMaster::where('id',auth()->user()->event_id)->first()->name??'No Event'}}</span>
         </div>
       </div>
 
@@ -51,6 +52,7 @@
               </p>
             </a>
           </li>
+          @if (auth()->user()->role==='SPADM')
           <li class="nav-item">
             <a href="{{route('kelompok')}}" class="nav-link {{ url()->current() == route('kelompok') ? 'active' : '' }}">
               <i class="nav-icon fas fa-users"></i>
@@ -59,6 +61,7 @@
               </p>
             </a>
           </li>
+          @endif
           <li class="nav-item">
             <a href="{{route('nilai')}}" class="nav-link {{ url()->current() == route('nilai') ? 'active' : '' }}">
               <i class="nav-icon fas fa-sort-numeric-up"></i>
@@ -83,6 +86,7 @@
               </p>
             </a>
           </li> --}}
+          @if (auth()->user()->role==='SPADM')
           <li class="nav-item {{ explode('/', url()->current())[4] == 'master' ? 'menu-open' : '' }} ">
             <a href="#" class="nav-link {{ explode('/', url()->current())[4] == 'master' ? 'active' : '' }}">
               <i class="nav-icon fas fa-bars"></i>
@@ -125,6 +129,7 @@
               
             </ul>
           </li>
+          
           <li class="nav-item {{ explode('/', url()->current())[3] == 'admin' && explode('/', url()->current())[4]!='home' && explode('/', url()->current())[4]!='peserta' && explode('/', url()->current())[4]!='master' ? 'menu-open' : '' }}">
             <a href="#" class="nav-link {{ explode('/', url()->current())[3] == 'admin' && explode('/', url()->current())[4]!='home' && explode('/', url()->current())[4]!='peserta' && explode('/', url()->current())[4]!='master' ? 'active' : '' }}">
               <i class="nav-icon fas fa-cog"></i>
@@ -154,6 +159,7 @@
               </li>
             </ul>
           </li>
+          @endif
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

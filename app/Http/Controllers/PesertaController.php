@@ -8,6 +8,7 @@ use App\Models\Komwil;
 use App\Models\Unit;
 use App\Models\Ts;
 use Validator;
+use Str;
 
 class PesertaController extends Controller
 {
@@ -18,7 +19,9 @@ class PesertaController extends Controller
     }
     public function index()
     {
-        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts'])->orderBy('name')->get();
+        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts'])->orderBy('name');
+        if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+        $dataPeserta = $dataPeserta->get();
         $komwil = Komwil::get();
         $unit = Unit::get();
         $ts = Ts::whereNotIn('id',[1])->get();
@@ -55,8 +58,15 @@ class PesertaController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
         $event_data = auth()->user()->event_id;
-        $params['event_id']=$event_data!==null?$event_data->id:0;
-        $params['no_peserta']=sprintf("%03d", (Peserta::max('id')??0)+1);
+        $params['event_id']=$event_data;
+        $params['no_peserta']=sprintf("%03d", (Peserta::where('event_id',$params['event_id'])->max('no_peserta')??0)+1);
+        $foto = request()->file('foto');
+        if($foto){
+            $dir='foto_peserta/';
+            $fielName = Str::random(15).'_'.str_replace(' ','-',request('name')).".".$foto->getClientOriginalExtension();
+            $foto->move($dir,$fielName);
+            $params['foto']=$dir.$fielName;
+        }
         $ins = Peserta::create($params);
         return redirect()->back()->with([
             'error'=>!$ins,
@@ -65,7 +75,9 @@ class PesertaController extends Controller
     }
     public function jsonPeserta($id)
     {
-        return response()->json(Peserta::with(['data_komwil','data_ts'])->where('id',$id)->first());
+        $peserta = Peserta::with(['data_komwil','data_ts'])->where(['id'=>$id]);
+        if(auth()->user()->role!=='SPADM')$peserta = $peserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+        return response()->json($peserta->first());
     }
 
     public function updatePeserta()
@@ -74,6 +86,13 @@ class PesertaController extends Controller
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->peserta->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
+        $foto = request()->file('foto');
+        if($foto){
+            $dir='foto_peserta/';
+            $fielName = Str::random(15).'_'.str_replace(' ','-',request('name')).".".$foto->getClientOriginalExtension();
+            $foto->move($dir,$fielName);
+            $params['foto']=$dir.$fielName;
+        }
         $params['updated_user']=auth()->user()->id;
         $ins = Peserta::where('id',request('id'))->update($params);
         return redirect()->back()->with([

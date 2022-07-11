@@ -13,6 +13,7 @@
                         <th>Nama Kelompok</th>
                         <th>TS</th>
                         <th>Anggota</th>
+                        <th>Aktif Event</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -26,10 +27,11 @@
                             <td>
                                 <ol>
                                     @foreach ($item->data_peserta as $p)
-                                        <li>{{$p->name}}</li>
+                                    <li>{{$p->name}}</li>
                                     @endforeach
                                 </ol>
                             </td>
+                            <td>{{$item->data_event->name??'No Event'}} - {{$item->data_event->penyelenggara??'No Event'}}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"

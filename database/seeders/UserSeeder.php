@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             'password'=>Hash::make('SA#2022!'),
             'role'=>'SPADM',
             'unit_id'=>1,
+            'komwil_id'=>1,
             'created_user'=>1,
         ]);
     }

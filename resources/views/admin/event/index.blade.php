@@ -26,8 +26,8 @@
                             <td>{{ $no++ }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->penyelenggara }}</td>
-                            <td>{{ $item->tgl_mulai}}</td>
-                            <td>{{ $item->tgl_selesai}}</td>
+                            <td>{{ date('Y-m-d',strtotime($item->tgl_mulai))}}</td>
+                            <td>{{ date('Y-m-d',strtotime($item->tgl_selesai))}}</td>
                             <td>{{ $item->lokasi}}</td>
                             <td>{{ $item->data_komwil->name??''}}</td>
                             <td>

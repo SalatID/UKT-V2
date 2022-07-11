@@ -18,6 +18,7 @@
                         <th>Tingkatan</th>
                         <th>Tempat Lahir</th>
                         <th>Tanggal Lahir</th>
+                        <th>Aktif Event</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -34,6 +35,7 @@
                         <td>{{$item->tingkat}}</td>
                         <td>{{$item->tempat_lahir}}</td>
                         <td>{{$item->tgl_lahir}}</td>
+                        <td>{{$item->data_event->name??'No Event'}} - {{$item->data_event->penyelenggara??'No Event'}}</td>
                         <td>
                             <div class="dropdown">
                                 <button class="btn dropdown-toggle" type="button" id="dropDownOption"
@@ -67,7 +69,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xl-12">
-                            <form action="{{ route('store-peserta') }}" method="POST" id="formPeserta">
+                            <form action="{{ route('store-peserta') }}" method="POST" id="formPeserta" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="nama">Nama</label>
@@ -88,7 +90,7 @@
                                     <div class="col-xl-6">
                                         <div class="form-group">
                                             <label for="komwil">Komwil</label>
-                                            <select name="komwil_id" class="form-control" id="komwil">
+                                            <select name="komwil_id" class="form-control" id="komwil" data-href="{{route('get-json-unit')}}">
                                                 <option value="">Pilih Komwil</option>
                                                 @foreach ($komwil as $item)
                                                     <option value="{{$item->id}}">{{$item->name}}</option>
@@ -99,11 +101,9 @@
                                     <div class="col-xl-6">
                                         <div class="form-group">
                                             <label for="unit_id">Unit</label>
-                                            <select name="unit_id" class="form-control" id="unit_id">
+                                            <select name="unit_id" class="form-control" disabled id="unit_id">
                                                 <option value="">Pilih Unit</option>
-                                                @foreach ($unit as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>
-                                                @endforeach
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -137,7 +137,18 @@
                                             {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
                                         </div>
                                     </div>
-                                </div>                               
+                                </div>     
+                                <div class="form-group">
+                                    <label for="foto">Foto 3x4</label>
+                                    <input type="file" class="form-control" name="foto" id="foto"
+                                        placeholder="Foto 3x4">
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
+                                <div class="row foto">
+                                    <div class="col-12">
+                                        <img src="" class="img-fluid foto" alt="Event Banner">
+                                    </div>
+                                </div>                          
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </form>
                         </div>
@@ -164,9 +175,13 @@
                     $('input[name="tempat_lahir"]', form).val(data.tempat_lahir)
                     $('input[name="tgl_lahir"]', form).val(data.tgl_lahir)
                     $('select[name="ts_awal_id"]',form).val(data.ts_awal_id)
-                    $('select[name="komwil_id"]',form).val(data.data_komwil.id)
+                    $('select[name="komwil_id"]',form).val(data.komwil_id)
+                    $('select[name="komwil_id"]',form).attr('data-unit_id',data.unit_id)
+                    $('select[name="komwil_id"]',form).change()
                     $('select[name="unit_id"]',form).val(data.unit_id)
                     $('select[name="tingkat"]',form).val(data.tingkat)
+                    $('.foto').show()
+                    $('.foto').attr('src','/'+data.foto)
                     $('#addPeserta').modal('show')
                     return
                 }
@@ -187,6 +202,7 @@
             $('#addPesertaLabel').text('Tambah Peserta')
             form.attr('action', '{{ route('store-peserta') }}')
             $('input[name="id"]').remove()
+            $('.foto').hide()
             form.trigger("reset");
         })
     </script>

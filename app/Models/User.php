@@ -18,7 +18,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     public $fillable = [
-        'name','email','password','phone','role','unit_id','event_id','phone_verified_at','created_user'
+        'name','email','password','phone','role','unit_id','event_id','phone_verified_at','created_user','komwil_id'
     ];
 
     /**
@@ -46,7 +46,7 @@ class User extends Authenticatable
     }
     public function data_event()
     {
-        return $this->hasOne(Event::class,'id','event_id');
+        return $this->hasOne(EventMaster::class,'id','event_id');
     }
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)

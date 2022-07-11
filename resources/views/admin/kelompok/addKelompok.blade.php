@@ -24,6 +24,21 @@
             </div>
         </div>
     </div>
+    @if (auth()->user()->role==='SPADM')
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="form-group">
+                    <label for="event_id">Event</label>
+                    <select name="event_id" class="form-control" id="event_id">
+                        <option value="">Pilih Event</option>
+                        @foreach ($event as $item)
+                            <option value="{{$item->id}}" {{(session()->get(auth()->user()->id.'_'.'form_data')['event_id']??'')==$item->id?'selected':''}}>{{$item->name}} - {{$item->lokasi}} - {{$item->penyelenggara}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="row">
         <div class="col-xl-12">
             <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addPeserta" data-action="{{route('filtered-peserta')}}">Tambah Peserta</button>
@@ -181,12 +196,12 @@
 <script>
     $('.btn-close').click(function(){
         var url = window.location.href;   
-            if($('input[name="name"]').val()!=''){
-                url += (url.indexOf('?') > -1 && $('select[name="ts_id"]').val()!=''?'&':'?')+'name='+$('input[name="name"]').val()
-            }
-            if($('select[name="ts_id"]').val()!=''){
-                url += (url.indexOf('?') > -1 && $('input[name="name"]').val()!=''?'&':'?')+'ts_id='+$('select[name="ts_id"]').val()
-            }
+            // if($('input[name="name"]').val()!=''){
+            //     url += url.indexOf('?') > -1 ?(  $('select[name="ts_id"]').val()!=''?'&':'?')+'name='+$('input[name="name"]').val():''
+            // }
+            // if($('select[name="ts_id"]').val()!=''){
+            //     url += url.indexOf('?') > -1 ? ( $('input[name="name"]').val()!=''?'&':'?')+'ts_id='+$('select[name="ts_id"]').val():''
+            // }
         window.location.href = url;
     })
     $('.btn-filter').click(function(){

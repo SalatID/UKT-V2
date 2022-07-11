@@ -26,6 +26,7 @@ class CreatePesertaTable extends Migration
             $table->integer('kelompok_id')->unsigned()->nullable();
             $table->integer('event_id')->unsigned();
             $table->string('tingkat',20);
+            $table->string('foto')->nullable();
             $table->integer('created_user');
             $table->integer('updated_user')->nullable();
             $table->integer('deleted_user')->nullable();
