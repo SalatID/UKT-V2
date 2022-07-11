@@ -21,6 +21,9 @@ use App\Http\Controllers\NilaiController;
 Route::get('/event/run/{id}',[GuestController::class,'index']);
 Route::post('/process/kelompok',[GuestController::class,'setKelompok'])->name('proc-kelompok');
 Route::get('/login',[AuthController::class,'login'])->name('login');
+Route::group(['prefix'=>'auth'],function(){
+    Route::post('/login',[AuthController::class,'procLogin'])->name('proc-login');
+});
 
 Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
     Route::get('/home',[AdminController::class,'home'])->name('home');
@@ -62,6 +65,10 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'event'],function(){
         Route::get('/',[AdminController::class,'event'])->name('admin-event');
+        Route::post('/',[AdminController::class,'storeEvent'])->name('store-event');
+        Route::get('/json-data/{id}',[AdminController::class,'jsonEvent'])->name('json-event');
+        Route::get('/delete/{id}',[AdminController::class,'deleteEvent'])->name('delete-event');
+        Route::post('/update-event',[AdminController::class,'updateEvent'])->name('update-event');
     });
 
     Route::group(['prefix'=>'log'],function(){
@@ -111,7 +118,6 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
     });
 
     Route::group(['prefix'=>'auth'],function(){
-        Route::post('/login',[AuthController::class,'procLogin'])->name('proc-login');
         Route::get('/logout',[AuthController::class,'logout'])->name('logout');
     });
 });

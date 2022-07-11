@@ -20,7 +20,7 @@ class CreateEventTable extends Migration
             $table->dateTime('tgl_selesai');
             $table->string('lokasi',100);
             $table->string('penyelenggara',150);
-            $table->string('id_komwil')->nullable();
+            $table->string('komwil_id')->nullable();
             $table->string('gambar')->nullable();
             $table->integer('created_user');
             $table->integer('updated_user')->nullable();

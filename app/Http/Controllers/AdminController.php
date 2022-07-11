@@ -11,8 +11,10 @@ use App\Models\Jurus;
 use App\Models\Kelompok;
 use App\Models\Peserta;
 use App\Models\User;
+use App\Models\Event;
 use DB;
 use Validator;
+use Str;
 
 class AdminController extends Controller
 {
@@ -23,6 +25,7 @@ class AdminController extends Controller
     protected $kelompok;
     protected $jurus;
     protected $user;
+    protected $event;
 
     public function __construct()
     {
@@ -33,6 +36,7 @@ class AdminController extends Controller
         $this->kelompok = new Kelompok();
         $this->jurus = new Jurus();
         $this->user = new User();
+        $this->event = new Event();
     }
 
     public function home()
@@ -267,8 +271,8 @@ class AdminController extends Controller
             return in_array($key,$this->penilai->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
-        $event_data = session()->has('event_data')?session()->get('event_data'):null;
-        $params['event_id']=$event_data!==null?$event_data->id:0;
+        $event_data = auth()->user()->event_id;
+        $params['event_id']=$event_data;
         $ins = Penilai::create($params);
         return redirect()->back()->with([
             'error'=>!$ins,
@@ -423,8 +427,8 @@ class AdminController extends Controller
         ]);
         $notPeserta = session()->has(auth()->user()->id.'_'.'not_peserta')?session()->get(auth()->user()->id.'_'.'not_peserta'):[];
         if(!session()->has('filter_data')) session()->put('filter_data',$sessionFilter);
-        $event_data = session()->has('event_data')?session()->get('event_data'):null;
-        return response()->json(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNotIn('id',$notPeserta)->whereNull('kelompok_id')->where('event_id',($event_data!==null?$event_data->id:0))->get());
+        $event_data = auth()->user()->event_id;
+        return response()->json(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNotIn('id',$notPeserta)->whereNull('kelompok_id')->where('event_id',($event_data))->get());
     }
     public function resetFilteredPeserta()
     {
@@ -458,8 +462,8 @@ class AdminController extends Controller
             return in_array($key,$this->kelompok->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
-        $event_data = session()->has('event_data')?session()->get('event_data'):null;
-        $params['event_id']=$event_data!==null?$event_data->id:0;
+        $event_data = auth()->user()->event_id;
+        $params['event_id']=$event_data;
         return DB::transaction(function() use ($params){
             $ins = Kelompok::create($params);
             $id = $ins->id;
@@ -520,8 +524,8 @@ class AdminController extends Controller
             return in_array($key,$this->kelompok->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $event_data = session()->has('event_data')?session()->get('event_data'):null;
-        $params['event_id']=$event_data!==null?$event_data->id:0;
+        $event_data = auth()->user()->event_id;
+        $params['event_id']=$event_data;
         return DB::transaction(function() use ($params){
             $upd = Kelompok::where('id',request('id'))->update($params);
             $id = request('id');
@@ -576,7 +580,8 @@ class AdminController extends Controller
         $dataUser = User::get();
         $komwil = Komwil::get();
         $unit = Unit::get();
-        return view('admin.user.index',compact('dataUser','komwil','unit'));
+        $event = Event::get();
+        return view('admin.user.index',compact('dataUser','komwil','unit','event'));
     }
     public function storeUser()
     {
@@ -585,6 +590,7 @@ class AdminController extends Controller
             'email'=>'required|email',
             'komwil_id'=>'required',
             'unit_id'=>'required',
+            'event_id'=>'required',
         ];
         if(!request()->has('validasi_email')){
             $filter['password'] = 'required';
@@ -638,6 +644,91 @@ class AdminController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
         $ins = User::where('id',request('id'))->update($params);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Update Berhasil':'Update Gagal'
+        ]);
+    }
+    public function event()
+    {
+        $dataEvent = Event::all();
+        $dataKomwil = Komwil::all();
+        return view('admin.event.index',compact('dataEvent','dataKomwil'));
+    }
+    public function storeEvent()
+    {
+        $filter = [
+            'name'=>'required|max:200',
+            'penyelenggara'=>'required',
+            'tgl_mulai'=>'required',
+            'tgl_selesai'=>'required',
+            'lokasi'=>'required',
+            'komwil_id'=>'required',
+        ];
+        $validate = Validator::make(request()->all(),$filter);
+        
+        if($validate->fails()){
+            foreach($validate->errors()->getMessages() as $key =>$data){
+                array_push($this->error,[
+                    "name"=>$key,
+                    "message"=>$data[0]
+                ]);
+            }
+            return redirect()->back()->with([
+                'error'=>true,
+                'message'=>'The given data was invalid',
+                'data'=>$this->error
+            ]);
+        }
+        
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->event->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        $params['created_user']=auth()->user()->id;
+        $dir ='banner_event/';
+        $gambar = request()->file('gambar');
+        if($gambar){
+            $fielName = Str::random(15).'_'.request('name').".".$gambar->getClientOriginalExtension();
+            $gambar->move($dir,$fielName);
+            $params['gambar']=$dir.$fielName;
+        }
+        // dd($params);
+        $ins = Event::create($params);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Tambah Berhasil':'Tambah Gagal'
+        ]);
+    }
+    public function jsonEvent($id)
+    {
+        return response()->json(Event::where('id',$id)->first());
+    }
+    public function deleteEvent($id)
+    {
+        $ins = Event::where('id',$id)->update([
+            'deleted_at'=>date('Y-m-d H:i:s'),
+            'deleted_user'=>auth()->user()->id
+        ]);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Update Berhasil':'Update Gagal'
+        ]);
+    }
+    public function updateEvent()
+    {
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->event->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        $params['updated_user']=auth()->user()->id;
+        $dir ='banner_event/';
+        $gambar = request()->file('gambar');
+        if($gambar){
+            $fielName = Str::random(15).'_'.request('name').".".$gambar->getClientOriginalExtension();
+            $gambar->move($dir,$fielName);
+            $params['gambar']=$dir.$fielName;
+        }
+        $ins = Event::where('id',request('id'))->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'

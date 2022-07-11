@@ -135,6 +135,16 @@
                                     </select>
                                     {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
                                 </div>
+                                <div class="form-group">
+                                    <label for="event_id">Aktif Event</label>
+                                    <select name="event_id" class="form-control" id="event_id">
+                                        <option value="">Pilih Event</option>
+                                       @foreach ($event as $item)
+                                        <option value="{{$item->id}}">{{$item->name}} - {{$item->lokasi}} - {{$item->penyelenggara}}</option>
+                                       @endforeach
+                                    </select>
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </form>
                         </div>

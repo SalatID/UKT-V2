@@ -22,7 +22,8 @@ class AuthController extends Controller
               "name"=>auth()->user()->name,
               "email"=>auth()->user()->email,
               "role"=>auth()->user()->role,
-              "komwil_id"=>auth()->user()->komwil_id
+              "komwil_id"=>auth()->user()->komwil_id,
+              "event_id"=>auth()->user()->event_id
             ]
           ];
           request()->session()->put("userData",$sessionValue);

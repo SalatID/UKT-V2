@@ -54,7 +54,7 @@ class PesertaController extends Controller
             return in_array($key,$this->peserta->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
-        $event_data = session()->has('event_data')?json_encode(session()->get('event_data')):null;
+        $event_data = auth()->user()->event_id;
         $params['event_id']=$event_data!==null?$event_data->id:0;
         $params['no_peserta']=sprintf("%03d", (Peserta::max('id')??0)+1);
         $ins = Peserta::create($params);
