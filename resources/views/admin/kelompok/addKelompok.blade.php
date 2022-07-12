@@ -211,6 +211,7 @@
             'ts_id':$('select[name="ts_awal_id"]').val(),
             'tingkat':$('select[name="tingkat"]').val(),
             'name':$('input[name="name"]').val(),
+            'event_id':$('select[name="event_id"]').val(),
         },function(data){
             parseTable(data)
         })

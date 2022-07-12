@@ -50,6 +50,6 @@ class User extends Authenticatable
     }
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)
-            ->whereNull('deleted_at');
+            ->whereNull('users.deleted_at');
     }
 }

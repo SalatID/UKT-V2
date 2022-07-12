@@ -19,6 +19,6 @@ class Unit extends Model
     }
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)
-            ->whereNull('deleted_at');
+            ->whereNull('unit.deleted_at');
     }
 }

@@ -7,6 +7,7 @@ use App\Models\Peserta;
 use App\Models\Komwil;
 use App\Models\Unit;
 use App\Models\Ts;
+use App\Models\EventMaster;
 use Validator;
 use Str;
 
@@ -25,7 +26,8 @@ class PesertaController extends Controller
         $komwil = Komwil::get();
         $unit = Unit::get();
         $ts = Ts::whereNotIn('id',[1])->get();
-        return view('admin.peserta.index',compact('dataPeserta','komwil','unit','ts'));
+        $event = EventMaster::all();
+        return view('admin.peserta.index',compact('dataPeserta','komwil','unit','ts','event'));
     }
     public function storePeserta()
     {
@@ -58,7 +60,7 @@ class PesertaController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
         $event_data = auth()->user()->event_id;
-        $params['event_id']=$event_data;
+        $params['event_id']=request()->has('event_id')?request('event_id'):$event_data;
         $params['no_peserta']=sprintf("%03d", (Peserta::where('event_id',$params['event_id'])->max('no_peserta')??0)+1);
         $foto = request()->file('foto');
         if($foto){

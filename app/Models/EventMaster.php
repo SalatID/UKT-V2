@@ -14,7 +14,7 @@ class EventMaster extends Model
     ];
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)
-            ->whereNull('deleted_at');
+            ->whereNull('event.deleted_at');
     }
     public function data_komwil()
     {

@@ -83,6 +83,24 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                @if (auth()->user()->role === 'SPADM')
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="form-group">
+                                                <label for="event_id">Event</label>
+                                                <select name="event_id" class="form-control" id="event_id">
+                                                    <option value="">Pilih Event</option>
+                                                    @foreach ($event as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ (session()->get(auth()->user()->id . '_' . 'form_data')['event_id'] ?? '') == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->name }} - {{ $item->lokasi }} -
+                                                            {{ $item->penyelenggara }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </form>
                         </div>

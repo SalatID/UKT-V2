@@ -15,8 +15,8 @@ class Kelompok extends Model
 
     public function newQuery($excludeDeleted = true) {
         $query = parent::newQuery($excludeDeleted)
-        ->whereNull('deleted_at');
-        if(auth()->user()->role!='SPADM')$query->where(['event_id'=>auth()->user()->event_id,'komwil_id'=>auth()->user()->komwil_id]);
+        ->whereNull('kelompok.deleted_at');
+        if(auth()->user()->role!='SPADM')$query->where(['kelompok.event_id'=>auth()->user()->event_id,'kelompok.komwil_id'=>auth()->user()->komwil_id]);
         return $query;
     }
     public function data_peserta()
@@ -30,5 +30,9 @@ class Kelompok extends Model
     public function data_event()
     {
         return $this->hasOne(EventMaster::class,'id','event_id');
+    }
+    public function data_penilai()
+    {
+        return $this->hasOne(Penilai::class,'id','penilai_id');
     }
 }

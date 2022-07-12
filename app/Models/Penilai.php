@@ -23,6 +23,6 @@ class Penilai extends Model
     }
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)
-            ->whereNull('deleted_at');
+            ->whereNull('penilai.deleted_at');
     }
 }

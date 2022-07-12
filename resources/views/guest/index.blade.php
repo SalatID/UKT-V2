@@ -1,10 +1,11 @@
  <!DOCTYPE html>
  <html lang="en">
  <head>
-   <title>Bootstrap Example</title>
+   <title>UKT Online</title>
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+   <script type="text/javascript" src="/assets/js/jquery.js"></script>
    <style>
      /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
      .row.content {height: 1500px}
@@ -47,7 +48,7 @@
 
  </body>
  </html>
- <script type="text/javascript" src="/assets/js/jquery.js"></script>
+
  <script type="text/javascript">
 
  </script>

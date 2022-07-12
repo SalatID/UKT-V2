@@ -18,8 +18,12 @@ use App\Http\Controllers\NilaiController;
 |
 */
 
-Route::get('/event/run/{id}',[GuestController::class,'index']);
+Route::get('/event/run/{alias}',[GuestController::class,'index'])->name('run-event');
 Route::post('/process/kelompok',[GuestController::class,'setKelompok'])->name('proc-kelompok');
+Route::post('/process/jurus',[GuestController::class,'setJurus'])->name('proc-jurus');
+Route::get('/process/get-sub-jurus',[GuestController::class,'getSubJurus'])->name('get-sub-jurus');
+Route::get('/jurus',[GuestController::class,'pilihJurus'])->name('jurus');
+Route::get('/penilaian',[GuestController::class,'nilai'])->name('penilaian');
 Route::get('/login',[AuthController::class,'login'])->name('login');
 Route::group(['prefix'=>'auth'],function(){
     Route::post('/login',[AuthController::class,'procLogin'])->name('proc-login');

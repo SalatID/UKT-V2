@@ -14,6 +14,7 @@ class CreateNilaiTable extends Migration
     public function up()
     {
         Schema::create('nilai', function (Blueprint $table) {
+            $table->index(['jurus_id', 'kelompok_id','peserta_id','event_id'],'unique');
             $table->id();
             $table->integer('jurus_id')->unsigned();
             $table->integer('nilai')->unsigned();

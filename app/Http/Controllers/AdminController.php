@@ -245,7 +245,8 @@ class AdminController extends Controller
         $dataPenilai = Penilai::with(['data_komwil','data_ts'])->get();
         $komwil = Komwil::get();
         $ts = Ts::whereNotIn('id',[1])->get();
-        return view('admin.penilai.index',compact('dataPenilai','komwil','ts'));
+        $event = EventMaster::all();
+        return view('admin.penilai.index',compact('dataPenilai','komwil','ts','event'));
     }
     public function storePenilai()
     {
@@ -691,7 +692,7 @@ class AdminController extends Controller
             return in_array($key,$this->event->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
-        $params['event_alias']=str_replace(' ','-',request('name'));
+        $params['event_alias']=strtolower(str_replace(' ','-',request('name')).'-'.str_replace(' ','-',request('peyelenggara')));
         $dir ='banner_event/';
         $gambar = request()->file('gambar');
         if($gambar){

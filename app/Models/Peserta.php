@@ -35,8 +35,8 @@ class Peserta extends Model
     }
     public function newQuery($excludeDeleted = true) {
         $query = parent::newQuery($excludeDeleted)
-        ->whereNull('deleted_at');
-        if(auth()->user()->role!='SPADM')$query->where(['event_id'=>auth()->user()->event_id]);
+        ->whereNull('peserta.deleted_at');
+        if(auth()->user()->role!='SPADM')$query->where(['peserta.event_id'=>auth()->user()->event_id]);
         return $query;
     }
 }

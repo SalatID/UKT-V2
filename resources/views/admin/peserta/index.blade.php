@@ -1,8 +1,9 @@
 @extends('admin.index')
-@section('title','List Peserta')
+@section('title', 'List Peserta')
 @section('content')
     <div class="row d-flex justify-content-start mb-3">
-        <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addPeserta">Tambah Peserta</button>
+        <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addPeserta">Tambah
+            Peserta</button>
     </div>
     <div class="row">
         <div class="col-xl-12 table-responsive">
@@ -23,33 +24,35 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @php($no=1)
+                    @php($no = 1)
                     @foreach ($dataPeserta as $item)
-                    <tr>
-                        <td>{{$no++}}</td>
-                        <td>{{$item->no_peserta}}</td>
-                        <td>{{$item->name}}</td>
-                        <td>{{$item->data_komwil->name}}</td>
-                        <td>{{$item->data_unit->name}}</td>
-                        <td>{{$item->data_ts->name}}</td>
-                        <td>{{$item->tingkat}}</td>
-                        <td>{{$item->tempat_lahir}}</td>
-                        <td>{{$item->tgl_lahir}}</td>
-                        <td>{{$item->data_event->name??'No Event'}} - {{$item->data_event->penyelenggara??'No Event'}}</td>
-                        <td>
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" id="dropDownOption"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v"></i>
-                                </button>
-                                <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                    <a class="dropdown-item btn-edit" href="#"
-                                        data-action="{{ route('json-peserta', $item->id) }}">Edit</a>
-                                    <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-peserta', $item->id) }}">Delete</a>
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $item->no_peserta }}</td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->data_komwil->name }}</td>
+                            <td>{{ $item->data_unit->name }}</td>
+                            <td>{{ $item->data_ts->name }}</td>
+                            <td>{{ $item->tingkat }}</td>
+                            <td>{{ $item->tempat_lahir }}</td>
+                            <td>{{ $item->tgl_lahir }}</td>
+                            <td>{{ $item->data_event->name ?? 'No Event' }} -
+                                {{ $item->data_event->penyelenggara ?? 'No Event' }}</td>
+                            <td>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle" type="button" id="dropDownOption"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropDownOption">
+                                        <a class="dropdown-item btn-edit" href="#"
+                                            data-action="{{ route('json-peserta', $item->id) }}">Edit</a>
+                                        <a class="dropdown-item btn-delete" href="#"
+                                            data-action="{{ route('delete-peserta', $item->id) }}">Delete</a>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>
@@ -69,7 +72,8 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-xl-12">
-                            <form action="{{ route('store-peserta') }}" method="POST" id="formPeserta" enctype="multipart/form-data">
+                            <form action="{{ route('store-peserta') }}" method="POST" id="formPeserta"
+                                enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="nama">Nama</label>
@@ -82,7 +86,7 @@
                                     <select name="ts_awal_id" class="form-control" id="ts_awal_id">
                                         <option value="">Pilih Tingkat</option>
                                         @foreach ($ts as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
+                                            <option value="{{ $item->id }}">{{ $item->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -90,10 +94,11 @@
                                     <div class="col-xl-6">
                                         <div class="form-group">
                                             <label for="komwil">Komwil</label>
-                                            <select name="komwil_id" class="form-control" id="komwil" data-href="{{route('get-json-unit')}}">
+                                            <select name="komwil_id" class="form-control" id="komwil"
+                                                data-href="{{ route('get-json-unit') }}">
                                                 <option value="">Pilih Komwil</option>
                                                 @foreach ($komwil as $item)
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>
+                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -103,7 +108,7 @@
                                             <label for="unit_id">Unit</label>
                                             <select name="unit_id" class="form-control" disabled id="unit_id">
                                                 <option value="">Pilih Unit</option>
-                                                
+
                                             </select>
                                         </div>
                                     </div>
@@ -137,7 +142,25 @@
                                             {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
                                         </div>
                                     </div>
-                                </div>     
+                                </div>
+                                @if (auth()->user()->role === 'SPADM')
+                                    <div class="row">
+                                        <div class="col-xl-12">
+                                            <div class="form-group">
+                                                <label for="event_id">Event</label>
+                                                <select name="event_id" class="form-control" id="event_id">
+                                                    <option value="">Pilih Event</option>
+                                                    @foreach ($event as $item)
+                                                        <option value="{{ $item->id }}"
+                                                            {{ (session()->get(auth()->user()->id . '_' . 'form_data')['event_id'] ?? '') == $item->id ? 'selected' : '' }}>
+                                                            {{ $item->name }} - {{ $item->lokasi }} -
+                                                            {{ $item->penyelenggara }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="form-group">
                                     <label for="foto">Foto 3x4</label>
                                     <input type="file" class="form-control" name="foto" id="foto"
@@ -148,7 +171,7 @@
                                     <div class="col-12">
                                         <img src="" class="img-fluid foto" alt="Event Banner">
                                     </div>
-                                </div>                          
+                                </div>
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </form>
                         </div>
@@ -169,36 +192,37 @@
                     $('<input>').attr({
                         type: 'hidden',
                         name: 'id',
-                        value:data.id
+                        value: data.id
                     }).appendTo('#formPeserta');
                     $('input[name="name"]', form).val(data.name)
                     $('input[name="tempat_lahir"]', form).val(data.tempat_lahir)
                     $('input[name="tgl_lahir"]', form).val(data.tgl_lahir)
-                    $('select[name="ts_awal_id"]',form).val(data.ts_awal_id)
-                    $('select[name="komwil_id"]',form).val(data.komwil_id)
-                    $('select[name="komwil_id"]',form).attr('data-unit_id',data.unit_id)
-                    $('select[name="komwil_id"]',form).change()
-                    $('select[name="unit_id"]',form).val(data.unit_id)
-                    $('select[name="tingkat"]',form).val(data.tingkat)
+                    $('select[name="ts_awal_id"]', form).val(data.ts_awal_id)
+                    $('select[name="komwil_id"]', form).val(data.komwil_id)
+                    $('select[name="komwil_id"]', form).attr('data-unit_id', data.unit_id)
+                    $('select[name="komwil_id"]', form).change()
+                    $('select[name="unit_id"]', form).val(data.unit_id)
+                    $('select[name="tingkat"]', form).val(data.tingkat)
+                    $('select[name="event_id"]', form).val(data.event_id)
                     $('.foto').show()
-                    $('.foto').attr('src','/'+data.foto)
+                    $('.foto').attr('src', '/' + data.foto)
                     $('#addPeserta').modal('show')
                     return
                 }
                 showAllerJs({
-                    error:true,
-                    message:'Data Tidak Ditemukan'
+                    error: true,
+                    message: 'Data Tidak Ditemukan'
                 })
             })
         });
-        $('.btn-delete').click(function(){
-            if(confirm('Hapus User?')){
-                $.get($(this).data('action'),function(){
+        $('.btn-delete').click(function() {
+            if (confirm('Hapus User?')) {
+                $.get($(this).data('action'), function() {
                     location.reload()
                 })
             }
         })
-        $('.btn-add').click(function(){
+        $('.btn-add').click(function() {
             $('#addPesertaLabel').text('Tambah Peserta')
             form.attr('action', '{{ route('store-peserta') }}')
             $('input[name="id"]').remove()
