@@ -14,6 +14,7 @@ class GuestController extends Controller
 {
     public function index($alias)
     {
+        session()->forget('sNilai');
         $alias =  $alias;
         $event = EventMaster::where('event_alias',$alias)->first();
         if($event==null) return redirect()->back()->with(["error"=>true,"message"=>"Event Tidak Ditemukan"]);
@@ -88,6 +89,7 @@ class GuestController extends Controller
             }
         }
         if($successCnt==request('count')){
+            
             return redirect()->route('run-event',[request('alias')])->with([
                 'error'=>false,
                 'message'=>'Tambah Berhasil'

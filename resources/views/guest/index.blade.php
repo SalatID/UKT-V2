@@ -34,6 +34,24 @@
      <div class="col-xl-12">
        <div class="table-responsive">
          <div class="container">
+          @if(Session::has('error'))
+          <div class="row">
+              <div class="col-sm-12">
+                  <div class="alert alert-{{Session::get('error')?'danger':'success'}} alert-dismissible">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                  <h5><i class="icon fas fa-check"></i> {{Session::get('error')?'Failed':'Succes'}}!</h5>
+                  {{Session::get('message')}}
+                  @if(is_array(Session::get('data')))
+                  <p>
+                    @foreach (Session::get('data') as $item)
+                        {{$item['message']}}, 
+                    @endforeach
+                  </p>
+                  @endif
+                  </div>
+              </div>
+          </div>
+        @endif
            @yield('content')
          </div>
        </div>
