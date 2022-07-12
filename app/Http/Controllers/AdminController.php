@@ -274,7 +274,7 @@ class AdminController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
         $event_data = auth()->user()->event_id;
-        $params['event_id']=$event_data;
+        $params['event_id']=request()->has('event_id')?request('event_id'):$event_data;
         $ins = Penilai::create($params);
         return redirect()->back()->with([
             'error'=>!$ins,

@@ -16,11 +16,11 @@ class CreateSummaryNilaiTable extends Migration
         Schema::create('summary_nilai', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id')->unsigned();
-            $table->integer('nilai')->unsigned();
-            $table->integer('rata_rata')->unsigned();
+            $table->integer('nilai')->unsigned()->nullable();
+            $table->integer('rata_rata')->unsigned()->nullable();
             $table->integer('peserta_id')->unsigned();
-            $table->string('kriteria',10);
-            $table->float('total',5,2);
+            $table->string('kriteria',10)->nullable();
+            $table->float('total',5,2)->nullable();
             $table->integer('created_user');
             $table->integer('updated_user')->nullable();
             $table->integer('deleted_user')->nullable();
