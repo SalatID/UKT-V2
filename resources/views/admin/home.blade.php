@@ -17,7 +17,9 @@
                 <div class="info-box-content">
                     <span class="info-box-text">Jurus Sudah Dinilai</span>
                     <span class="info-box-number">
+                        @if($totalJurus != null)
                         {{round(($totalJurus->jurus_dinilai/$totalJurus->total_jurus)*100,1)}}
+                        @endif
                         <small>%</small>
                     </span>
                 </div>
@@ -66,7 +68,7 @@
                                     </div>  
                                         @endif
 
-                                    <div class="col-md-4">
+                                    <div class="col-md-4 table-responsive">
                                         <p class="text-center">
                                             <strong>{{$item->name}} {{$ts_name != '' || count($top3) == $row}}</strong>
                                         </p>

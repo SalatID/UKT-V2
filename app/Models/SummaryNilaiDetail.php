@@ -10,7 +10,7 @@ class SummaryNilaiDetail extends Model
     use HasFactory;
     protected $table = 'summary_nilai_detail';
     public $fillable = [
-        'summary_id','nama_jurus','jurus_id','nilai','peserta_id','kriteria','created_user','jurus_dinilai','total_jurus'
+        'summary_id','nama_jurus','jurus_id','nilai','peserta_id','kriteria','created_user','jurus_dinilai','total_jurus','event_id'
     ];
 
     public function criteria($nilai)

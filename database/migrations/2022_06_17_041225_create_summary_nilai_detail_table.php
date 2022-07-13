@@ -18,6 +18,7 @@ class CreateSummaryNilaiDetailTable extends Migration
             $table->integer('summary_id')->unsigned();
             $table->string('nama_jurus',150);
             $table->integer('jurus_id')->unsigned();
+            $table->integer('event_id')->unsigned();
             $table->integer('jurus_dinilai')->unsigned();
             $table->integer('total_jurus')->unsigned();
             $table->float('nilai',3,2)->unsigned();

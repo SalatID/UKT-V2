@@ -85,7 +85,20 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">@yield('title')</h1>
+            <div class="row justify-content-start">
+              <h1 class="m-0 mr-2">@yield('title')</h1>
+              @if(auth()->user()->role=='SPADM')
+              @php($eventSelect = \App\Models\EventMaster::all())
+              <select name="event_select" class="form-contro form-control-sm" data-src={{route('home')}}>
+                <option value="">Pilih Event</option>
+                @foreach ($eventSelect as $item)
+                <option value="{{ $item->event_alias }}" {{(request('event_alias')??'')==$item->event_alias?'selected':''}}>
+                  {{ $item->name }} - {{ $item->lokasi }} -
+                  {{ $item->penyelenggara }}</option>
+                @endforeach
+              </select>
+              @endif
+            </div>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -199,6 +212,13 @@
 
         return [year, month, day].join(separator);
     }
+    $('select[name="event_select"]').change(function(){
+      if($(this).val()=='') {
+        window.location.href = $(this).data('src')
+        return
+      }
+      window.location.href = $(this).data('src')+'?event_alias='+$(this).val()
+    })
 </script>
 </body>
 </html>

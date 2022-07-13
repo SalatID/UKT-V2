@@ -43,140 +43,151 @@ class AdminController extends Controller
 
     public function home()
     {
-        $totalPeserta = Peserta::count();
-        $totalJurus = SummaryNilaiDetail::selectRaw('sum(jurus_dinilai)jurus_dinilai,sum(total_jurus)total_jurus')->first();
-        $totalPenilai = Penilai::count();
-        $totalKelompok = Kelompok::count();
-
-        $jurusDinilai =DB::select("
-        SELECT name,IFNULL(b.total_peserta,0)total_peserta
-            FROM jurus a
+        $totalPeserta = 0;
+        $totalJurus =null;
+        $totalPenilai = 0;
+        $totalKelompok = 0;
+        $jurusDinilai = [];
+        $top3 = [];
+        $dataNilai = [];
+        if(request()->has('event_alias')){
+            $event = EventMaster::where('event_alias',request('event_alias'))->first();
+            $totalPeserta = Peserta::where('event_id',$event->id)->count();
+            $totalJurus = SummaryNilaiDetail::selectRaw('sum(jurus_dinilai)jurus_dinilai,sum(total_jurus)total_jurus')->where('event_id',$event->id)->first();
+            $totalPenilai = Penilai::where('event_id',$event->id)->count();
+            $totalKelompok = Kelompok::where('event_id',$event->id)->count();
+    
+            $jurusDinilai =DB::select("
+            SELECT name,IFNULL(b.total_peserta,0)total_peserta
+                FROM jurus a
+                LEFT JOIN (
+                    SELECT COUNT(peserta_id)total_peserta, jurus_id
+                    FROM summary_nilai_detail
+                    where event_id = :event_id
+                    GROUP BY jurus_id
+                ) b ON a.id = b.jurus_id
+                WHERE a.parent_id=0",['event_id'=>$event->id]);
+    
+            $top3 = DB::select("
+            SELECT a.name,b.name nama_peserta,c.name komwil, d.name unit, pt.*
+            FROM ts a
             LEFT JOIN (
-                SELECT COUNT(peserta_id)total_peserta, jurus_id
-                FROM summary_nilai_detail
-                GROUP BY jurus_id
-            ) b ON a.id = b.jurus_id
-            WHERE a.parent_id=0");
-
-        $top3 = DB::select("
-        SELECT a.name,b.name nama_peserta,c.name komwil, d.name unit, pt.*
-        FROM ts a
-        LEFT JOIN (
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 2
-            GROUP BY peserta_id,a.ts_awal_id
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 8
-            GROUP BY peserta_id,a.ts_awal_id
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 9
-            GROUP BY peserta_id,a.ts_awal_id
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 10
-            GROUP BY peserta_id,a.ts_awal_id
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 3
-            GROUP BY peserta_id,a.ts_awal_id
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 4
-            GROUP BY peserta_id,a.ts_awal_id
-            ORDER BY nilai
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 5
-            GROUP BY peserta_id,a.ts_awal_id
-            ORDER BY nilai
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 6
-            GROUP BY peserta_id,a.ts_awal_id
-            ORDER BY nilai
-            LIMIT 3)
-            
-            UNION
-            
-            (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id
-            FROM summary_nilai_detail b
-            JOIN peserta a ON b.peserta_id = a.id
-            WHERE a.ts_awal_id = 7
-            GROUP BY peserta_id,a.ts_awal_id
-            ORDER BY nilai
-            LIMIT 3)
-
-            order by nilai desc
-        ) pt ON pt.ts_awal_id = a.id
-        LEFT JOIN peserta b ON b.id = pt.peserta_id
-        LEFT JOIN komwil c ON c.id = b.komwil_id
-        LEFT JOIN unit d ON d.id = b.unit_id
-        WHERE a.id NOT IN(1,11)
-        order by a.id,nilai desc
-        ");
-
-        $dataNilai = DB::select("
-        SELECT a.name,c.name unit, d.name komwil,e.name ts, b.*
-        FROM peserta a
-        JOIN unit c ON a.unit_id = c.id
-        JOIN komwil d ON a.komwil_id = d.id
-        JOIN ts e ON e.id = a.ts_awal_id
-        LEFT JOIN (
-            SELECT 
-            SUM(CASE WHEN jurus_id = 1 THEN nilai END) standar_smi,
-            SUM(CASE WHEN jurus_id = 2 THEN nilai END) tradisional,
-            SUM(CASE WHEN jurus_id = 12 THEN nilai END) prasetya,
-            SUM(CASE WHEN jurus_id = 14 THEN nilai END) beladiri_praktis,
-            SUM(CASE WHEN jurus_id = 15 THEN nilai END) aerobik,
-            SUM(CASE WHEN jurus_id = 16 THEN nilai END) fisik_teknik,
-            SUM(CASE WHEN jurus_id = 17 THEN nilai END) kuda_kuda,
-            SUM(CASE WHEN jurus_id = 18 THEN nilai END) serang_hindar,
-            sum(nilai) total_nilai,
-            peserta_id
-            FROM `summary_nilai_detail`
-            GROUP BY peserta_id
-        ) b ON a.id = b.peserta_id
-            order by a.name
-        ");
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 2
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 8
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 9
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 10
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 3
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 4
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                ORDER BY nilai
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 5
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                ORDER BY nilai
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 6
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                ORDER BY nilai
+                LIMIT 3)
+                
+                UNION
+                
+                (SELECT SUM(nilai)nilai,peserta_id,a.ts_awal_id,b.event_id
+                FROM summary_nilai_detail b
+                JOIN peserta a ON b.peserta_id = a.id
+                WHERE a.ts_awal_id = 7
+                GROUP BY peserta_id,a.ts_awal_id,b.event_id
+                ORDER BY nilai
+                LIMIT 3)
+                order by nilai desc
+            ) pt ON pt.ts_awal_id = a.id and pt.event_id = :event_id
+            LEFT JOIN peserta b ON b.id = pt.peserta_id
+            LEFT JOIN komwil c ON c.id = b.komwil_id
+            LEFT JOIN unit d ON d.id = b.unit_id
+            WHERE a.id NOT IN(1,11) 
+            order by a.id,nilai desc
+            ",['event_id'=>$event->id]);
+    
+            $dataNilai = DB::select("
+            SELECT a.name,c.name unit, d.name komwil,e.name ts, b.*
+            FROM peserta a
+            JOIN unit c ON a.unit_id = c.id
+            JOIN komwil d ON a.komwil_id = d.id
+            JOIN ts e ON e.id = a.ts_awal_id
+            LEFT JOIN (
+                SELECT 
+                SUM(CASE WHEN jurus_id = 1 THEN nilai END) standar_smi,
+                SUM(CASE WHEN jurus_id = 2 THEN nilai END) tradisional,
+                SUM(CASE WHEN jurus_id = 12 THEN nilai END) prasetya,
+                SUM(CASE WHEN jurus_id = 14 THEN nilai END) beladiri_praktis,
+                SUM(CASE WHEN jurus_id = 15 THEN nilai END) aerobik,
+                SUM(CASE WHEN jurus_id = 16 THEN nilai END) fisik_teknik,
+                SUM(CASE WHEN jurus_id = 17 THEN nilai END) kuda_kuda,
+                SUM(CASE WHEN jurus_id = 18 THEN nilai END) serang_hindar,
+                sum(nilai) total_nilai,
+                peserta_id
+                FROM `summary_nilai_detail`
+                where event_id=:event_id
+                GROUP BY peserta_id
+            ) b ON a.id = b.peserta_id
+                order by a.name
+            ",['event_id'=>$event->id]);
+        }
 
         return view('admin.home',compact('totalPeserta','totalJurus','totalPenilai','totalKelompok','jurusDinilai','top3','dataNilai'));
     }
