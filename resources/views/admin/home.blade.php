@@ -18,7 +18,10 @@
                     <span class="info-box-text">Jurus Sudah Dinilai</span>
                     <span class="info-box-number">
                         @if($totalJurus != null)
-                        {{round(($totalJurus->jurus_dinilai/$totalJurus->total_jurus)*100,1)}}
+                            @if ($totalJurus->jurus_dinilai!=0 || $totalJurus->total_jurus!=0)
+                            {{round(($totalJurus->jurus_dinilai/$totalJurus->total_jurus)*100,1)}}
+                                
+                            @endif
                         @endif
                         <small>%</small>
                     </span>
