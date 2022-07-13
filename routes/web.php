@@ -21,6 +21,7 @@ use App\Http\Controllers\NilaiController;
 Route::get('/event/run/{alias}',[GuestController::class,'index'])->name('run-event');
 Route::post('/process/kelompok',[GuestController::class,'setKelompok'])->name('proc-kelompok');
 Route::get('/event/registration/{alias}',[GuestController::class,'selfRegistration'])->name('self-registration');
+Route::get('/registration/peserta/{no_peserta}',[GuestController::class,'peserta'])->name('self-peserta');
 Route::group(['middleware'=>'guestSession'],function(){
     Route::post('/process/jurus',[GuestController::class,'setJurus'])->name('proc-jurus');
     Route::get('/process/get-sub-jurus',[GuestController::class,'getSubJurus'])->name('get-sub-jurus');
@@ -31,13 +32,19 @@ Route::get('/login',[AuthController::class,'login'])->name('login');
 Route::group(['prefix'=>'auth'],function(){
     Route::post('/login',[AuthController::class,'procLogin'])->name('proc-login');
 });
+Route::group(['prefix'=>'peserta'],function(){
+    Route::post('/',[PesertaController::class,'storePeserta'])->name('store-peserta');
+});
+Route::group(['prefix'=>'komwil'],function(){
+    Route::get('/get-json-unit',[AdminController::class,'getJsonUnit'])->name('get-json-unit');
+});
 
 Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
     Route::get('/home',[AdminController::class,'home'])->name('home');
 
     Route::group(['prefix'=>'peserta'],function(){
         Route::get('/',[PesertaController::class,'index'])->name('peserta');
-        Route::post('/',[PesertaController::class,'storePeserta'])->name('store-peserta');
+        
             Route::get('/json-data/{id}',[PesertaController::class,'jsonPeserta'])->name('json-peserta');
             Route::post('/update-peserta',[PesertaController::class,'updatePeserta'])->name('update-peserta');
             Route::get('/delete/{id}',[PesertaController::class,'deletePeserta'])->name('delete-peserta');
@@ -83,9 +90,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::get('/',[AdminController::class,'log'])->name('admin-log');
     });
 
-    Route::group(['prefix'=>'komwil'],function(){
-        Route::get('/get-json-unit',[AdminController::class,'getJsonUnit'])->name('get-json-unit');
-    });
+    
 
     Route::group(['prefix'=>'master'],function(){
         Route::group(['prefix'=>'komwil'],function(){

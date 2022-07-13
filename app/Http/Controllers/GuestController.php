@@ -11,7 +11,10 @@ use App\Models\Nilai;
 use App\Models\Komwil;
 use App\Models\Unit;
 use App\Models\Ts;
+use App\Models\Peserta;
 use DB;
+use Crypt;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class GuestController extends Controller
 {
@@ -113,5 +116,18 @@ class GuestController extends Controller
             ]);
         }
         
+    }
+    public function peserta($no_peserta)
+    {
+        try {
+            $decrypted = Crypt::decrypt($no_peserta);
+            $peserta = Peserta::where('no_peserta',$decrypted)->first();
+            $event = EventMaster::where('id',$peserta->event_id)->first();
+            $qrCode = QrCode::size(100)->generate(route('run-event',[$event->event_alias]));
+            return view('guest.peserta',compact('event','peserta','qrCode'));
+        } catch (Illuminate\Contracts\Encryption\DecryptException $e) {
+            return false ;
+        }
+       
     }
 }

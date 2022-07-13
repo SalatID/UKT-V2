@@ -2,12 +2,12 @@
     @csrf
     <div class="form-group">
         <label for="nama">Nama</label>
-        <input type="text" class="form-control" name="name" id="nama" placeholder="Nama" required>
+        <input type="text" class="form-control" required name="name" id="nama" placeholder="Nama" required>
         {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
     </div>
     <div class="form-group">
         <label for="ts_awal_id">Tingkat Sabuk</label>
-        <select name="ts_awal_id" class="form-control" id="ts_awal_id">
+        <select name="ts_awal_id" class="form-control" required id="ts_awal_id">
             <option value="">Pilih Tingkat</option>
             @foreach ($ts as $item)
                 <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -18,7 +18,7 @@
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="komwil">Komwil</label>
-                <select name="komwil_id" class="form-control" id="komwil"
+                <select name="komwil_id" class="form-control" required id="komwil"
                     data-href="{{ route('get-json-unit') }}">
                     <option value="">Pilih Komwil</option>
                     @foreach ($komwil as $item)
@@ -30,7 +30,7 @@
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="unit_id">Unit</label>
-                <select name="unit_id" class="form-control" disabled id="unit_id">
+                <select name="unit_id" class="form-control" required disabled id="unit_id">
                     <option value="">Pilih Unit</option>
 
                 </select>
@@ -39,7 +39,7 @@
     </div>
     <div class="form-group">
         <label for="tingkat">Tingkat</label>
-        <select name="tingkat" class="form-control" id="tingkat">
+        <select name="tingkat" class="form-control" required id="tingkat">
             <option value="">Pilih Tingkat</option>
             <option value="TK">TK</option>
             <option value="SD">SD</option>
@@ -53,7 +53,7 @@
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="tempat_lahir">Tempat Lahir</label>
-                <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
+                <input type="text" class="form-control" required name="tempat_lahir" id="tempat_lahir"
                     placeholder="Tempat Lahir" required>
                 {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             </div>
@@ -61,7 +61,7 @@
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="tgl_lahir">Tanggal Lahir</label>
-                <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
+                <input type="date" class="form-control" required name="tgl_lahir" id="tgl_lahir"
                     placeholder="Tanggal Lahir" required>
                 {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             </div>
@@ -71,7 +71,7 @@
             <div class="col-xl-12">
                 <div class="form-group">
                     <label for="event_id">Event</label>
-                    <select name="event_id" class="form-control" id="event_id" readonly>
+                    <select name="event_id" class="form-control" required id="event_id" readonly>
                             <option value="{{ $event->id }}" selected>
                                 {{ $event->name }} - {{ $event->lokasi }} -
                                 {{ $event->penyelenggara }}</option>
@@ -81,7 +81,7 @@
         </div>
     <div class="form-group">
         <label for="foto">Foto 3x4</label>
-        <input type="file" class="form-control" name="foto" id="foto" placeholder="Foto 3x4">
+        <input type="file" class="form-control" required name="foto" id="foto" placeholder="Foto 3x4">
         {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
     </div>
     <div class="row foto">

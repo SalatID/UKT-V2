@@ -21,7 +21,7 @@ class Komwil extends Model
     public function newQuery($excludeDeleted = true) {
         $query = parent::newQuery($excludeDeleted)
         ->whereNull('komwil.deleted_at');
-        if((auth()->user()->role??'')!='SPADM')$query->where(['komwil.id'=>auth()->user()->komwil_id??'']);
+        if((auth()->user()->role??'SPADM')!='SPADM')$query->where(['komwil.id'=>auth()->user()->komwil_id??'']);
         return $query;
     }
 }

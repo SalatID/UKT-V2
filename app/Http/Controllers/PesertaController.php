@@ -10,6 +10,7 @@ use App\Models\Ts;
 use App\Models\EventMaster;
 use Validator;
 use Str;
+use Crypt;
 
 class PesertaController extends Controller
 {
@@ -58,8 +59,8 @@ class PesertaController extends Controller
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->peserta->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
-        $params['created_user']=auth()->user()->id;
-        $event_data = auth()->user()->event_id;
+        $params['created_user']=auth()->user()->id??0;
+        $event_data = auth()->user()->event_id??0;
         $params['event_id']=request()->has('event_id')?request('event_id'):$event_data;
         $params['no_peserta']=sprintf("%03d", (Peserta::where('event_id',$params['event_id'])->max('no_peserta')??0)+1);
         $foto = request()->file('foto');
@@ -70,6 +71,9 @@ class PesertaController extends Controller
             $params['foto']=$dir.$fielName;
         }
         $ins = Peserta::create($params);
+        if(auth()->user()==null){
+            return redirect()->route('self-peserta',[Crypt::encrypt($params['no_peserta'])]);
+        }
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Tambah Berhasil':'Tambah Gagal'
