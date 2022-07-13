@@ -8,6 +8,9 @@ use App\Models\Kelompok;
 use App\Models\Jurus;
 use App\Models\EventMaster;
 use App\Models\Nilai;
+use App\Models\Komwil;
+use App\Models\Unit;
+use App\Models\Ts;
 use DB;
 
 class GuestController extends Controller
@@ -22,6 +25,14 @@ class GuestController extends Controller
         $kelompok = Kelompok::where('event_id',$event->id)->get();
         $event_id = $event->id;
         return view('guest.firstPage',compact('penilai','kelompok','event_id','alias'));
+    }
+    public function selfRegistration($alias)
+    {
+        $komwil = Komwil::get();
+        $unit = Unit::get();
+        $ts = Ts::whereNotIn('id',[1])->get();
+        $event = EventMaster::where('event_alias',$alias)->first();
+      return view('guest.registration',compact('komwil','unit','ts','event'));
     }
     public function setKelompok()
     {

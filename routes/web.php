@@ -20,6 +20,7 @@ use App\Http\Controllers\NilaiController;
 
 Route::get('/event/run/{alias}',[GuestController::class,'index'])->name('run-event');
 Route::post('/process/kelompok',[GuestController::class,'setKelompok'])->name('proc-kelompok');
+Route::get('/event/registration/{alias}',[GuestController::class,'selfRegistration'])->name('self-registration');
 Route::group(['middleware'=>'guestSession'],function(){
     Route::post('/process/jurus',[GuestController::class,'setJurus'])->name('proc-jurus');
     Route::get('/process/get-sub-jurus',[GuestController::class,'getSubJurus'])->name('get-sub-jurus');
