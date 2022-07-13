@@ -121,7 +121,7 @@ class GuestController extends Controller
     {
         try {
             $decrypted = Crypt::decrypt($no_peserta);
-            $peserta = Peserta::where('no_peserta',$decrypted)->first();
+            $peserta = Peserta::where('no_peserta','=',$decrypted)->first();
             dd($peserta);
             $event = EventMaster::where('id',$peserta->event_id)->first();
             $qrCode = QrCode::size(100)->generate(route('self-peserta',[$event->event_alias]));
