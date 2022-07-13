@@ -389,7 +389,7 @@ class AdminController extends Controller
     }
     public function penilai()
     {
-        $dataPenilai = Penilai::with(['data_komwil','data_ts'])->get();
+        $dataPenilai = Penilai::with(['data_komwil','data_ts'])->orderBy('name')->get();
         $komwil = Komwil::get();
         $ts = Ts::whereNotIn('id',[1])->get();
         $event = EventMaster::all();

@@ -1,0 +1,42 @@
+/*
+SQLyog Community v13.1.9 (64 bit)
+MySQL - 10.4.22-MariaDB : Database - uktv2
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+/*Data for the table `jurus` */
+
+insert  into `jurus`(`id`,`parent_id`,`name`,`ts_id`,`created_user`,`updated_user`,`deleted_user`,`deleted_at`,`created_at`,`updated_at`) values 
+(1,0,'Standar SMI',1,1,NULL,NULL,NULL,'2022-06-18 17:07:55','2022-06-18 17:07:55'),
+(2,0,'Tradisional',1,1,NULL,NULL,NULL,'2022-06-18 17:10:36','2022-06-18 17:10:36'),
+(3,1,'Kaidah',1,1,NULL,NULL,NULL,'2022-06-18 17:10:56','2022-06-18 17:10:56'),
+(4,2,'Test',1,1,1,1,'2022-06-18 17:22:14','2022-06-18 17:11:42','2022-06-18 17:22:14'),
+(5,1,'Pukulan 9',1,3,NULL,NULL,NULL,'2022-07-12 04:41:03','2022-07-12 04:41:03'),
+(6,1,'Pancer',1,3,NULL,NULL,NULL,'2022-07-12 04:41:18','2022-07-12 04:41:18'),
+(7,1,'Dua Sejalan',1,3,NULL,NULL,NULL,'2022-07-12 04:41:33','2022-07-12 04:41:33'),
+(8,1,'Kombinasi 1',3,3,NULL,NULL,NULL,'2022-07-12 04:41:48','2022-07-12 04:41:48'),
+(9,1,'Kombinasi 2',4,3,NULL,NULL,NULL,'2022-07-12 04:42:07','2022-07-12 04:42:07'),
+(10,2,'Karimadi 1',1,3,NULL,NULL,NULL,'2022-07-12 07:03:00','2022-07-12 07:03:00'),
+(11,2,'Double Sabandar',3,3,NULL,NULL,NULL,'2022-07-12 07:03:18','2022-07-12 07:03:18'),
+(12,0,'Prasetya Pesilat',1,3,NULL,NULL,NULL,'2022-07-12 07:04:00','2022-07-12 07:04:00'),
+(13,12,'Prasetya 1',1,3,NULL,NULL,NULL,'2022-07-12 07:04:20','2022-07-12 07:04:20'),
+(14,0,'Beladiri Praktis',1,3,NULL,NULL,NULL,'2022-07-12 10:40:37','2022-07-12 10:40:37'),
+(15,0,'Aerobik',1,3,NULL,NULL,NULL,'2022-07-12 10:40:52','2022-07-12 10:40:52'),
+(16,0,'Fisik Teknik',1,3,NULL,NULL,NULL,'2022-07-12 10:41:05','2022-07-12 10:41:05'),
+(17,0,'Kuda-kuda Dasar',1,3,NULL,NULL,NULL,'2022-07-12 10:41:20','2022-07-12 10:41:20'),
+(18,0,'Serang Hindar',1,3,NULL,NULL,NULL,'2022-07-12 10:41:32','2022-07-12 10:41:32'),
+(19,0,'Serang Hindar',1,3,NULL,3,'2022-07-12 10:46:14','2022-07-12 10:41:33','2022-07-12 10:46:14');
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
