@@ -67,18 +67,28 @@
             </div>
         </div>
     </div>
+    @if ((auth()->user()->role ?? 'SPADM') == 'SPADM')
         <div class="row">
             <div class="col-xl-12">
                 <div class="form-group">
                     <label for="event_id">Event</label>
                     <select name="event_id" class="form-control" required id="event_id" readonly>
-                            <option value="{{ $event->id }}" selected>
-                                {{ $event->name }} - {{ $event->lokasi }} -
-                                {{ $event->penyelenggara }}</option>
+                        @if(count($event) > 0)
+                            @foreach ($event as $item)
+                            <option value="{{ $item->id }}" selected>
+                                {{ $item->name }} - {{ $item->lokasi }} -
+                                {{ $item->penyelenggara }}</option>
+                            @endforeach
+                        @else
+                        <option value="{{ $event->id }}" selected>
+                            {{ $event->name }} - {{ $event->lokasi }} -
+                            {{ $event->penyelenggara }}</option>
+                            @endif
                     </select>
                 </div>
             </div>
         </div>
+    @endif
     <div class="form-group">
         <label for="foto">Foto 3x4</label>
         <input type="file" class="form-control" required name="foto" id="foto" placeholder="Foto 3x4">
@@ -89,7 +99,7 @@
             <strong class="text-center">Foto Anda</strong>
             <br>
             <img src="" class="img-fluid foto" id="prev-foto" width="192cm" height="256cm" alt="Event Banner">
-            
+
         </div>
         <div class="col-6">
             <strong class="text-center">Sample Foto</strong>
