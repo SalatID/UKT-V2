@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Peserta extends Model
 {
     use HasFactory;
-    protected $table = 'peserta_event';
+    protected $table = 'peserta';
     public $fillable =[
         'no_peserta','name','ts_awal_id','tempat_lahir','tgl_lahir','komwil_id','unit_id','event_id','tingkat','created_user','foto'
     ];
