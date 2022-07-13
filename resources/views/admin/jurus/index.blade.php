@@ -94,7 +94,9 @@
     </div>
     <script>
         var form = $('#formJurus')
-        $('#tableJurus').dataTable()
+        $('#tableJurus').dataTable({
+            paging:false
+        })
         $('.btn-edit').click(function() {
             $.get($(this).data('action'), function(data) {
                 console.log(data.data_parent===null)

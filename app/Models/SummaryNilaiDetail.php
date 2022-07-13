@@ -27,4 +27,8 @@ class SummaryNilaiDetail extends Model
     {
         return Jurus::where('parent_id',$id)->count();
     }
+    public function data_peserta()
+    {
+        return $this->hasOne(Peserta::class,'id','peserta_id');
+    }
 }
