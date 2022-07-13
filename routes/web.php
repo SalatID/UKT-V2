@@ -22,7 +22,7 @@ Route::get('/',function(){
 });
 Route::get('/event/run/{alias}',[GuestController::class,'index'])->name('run-event');
 Route::post('/process/kelompok',[GuestController::class,'setKelompok'])->name('proc-kelompok');
-Route::get('/event/e/{alias}',[GuestController::class,'selfRegistration'])->name('self-registration');
+Route::get('/event/registration/{alias}',[GuestController::class,'selfRegistration'])->name('self-registration');
 Route::get('/registration/peserta/{no_peserta}',[GuestController::class,'peserta'])->name('self-peserta');
 Route::group(['middleware'=>'guestSession'],function(){
     Route::post('/process/jurus',[GuestController::class,'setJurus'])->name('proc-jurus');
