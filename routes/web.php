@@ -46,10 +46,10 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'peserta'],function(){
         Route::get('/',[PesertaController::class,'index'])->name('peserta');
-        
-            Route::get('/json-data/{id}',[PesertaController::class,'jsonPeserta'])->name('json-peserta');
-            Route::post('/update-peserta',[PesertaController::class,'updatePeserta'])->name('update-peserta');
-            Route::get('/delete/{id}',[PesertaController::class,'deletePeserta'])->name('delete-peserta');
+        Route::get('/json-data/{id}',[PesertaController::class,'jsonPeserta'])->name('json-peserta');
+        Route::post('/update-peserta',[PesertaController::class,'updatePeserta'])->name('update-peserta');
+        Route::get('/delete/{id}',[PesertaController::class,'deletePeserta'])->name('delete-peserta');
+        Route::post('/cetak/kartu',[PesertaController::class,'cetakKartu'])->name('cetak-kartu');
     });
 
     Route::group(['prefix'=>'kelompok'],function(){
