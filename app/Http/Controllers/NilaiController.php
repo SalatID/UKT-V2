@@ -21,11 +21,12 @@ class NilaiController extends Controller
         if(count(request()->all())>0){
             $this->nilai = new Nilai();
             $params = array_filter(request()->all(),function($key){
-                return in_array($key,$this->nilai->fillable)!==false;
+                return in_array($key,$this->nilai->fillable)!==false && request($key)!==null;
             },ARRAY_FILTER_USE_KEY);
-            $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
+            // dd($params);
+            // $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
             $dataNilai = Nilai::select('nilai.*')->where($params);
-            if(request()->has('ts_id')) $dataNilai = $dataNilai->join('peserta','peserta.id','nilai.peserta_id')->where('peserta.ts_awal_id',request('ts_id'));
+            // if(request('ts_id')!=null) $dataNilai = $dataNilai->join('peserta','peserta.id','nilai.peserta_id')->where('peserta.ts_awal_id',request('ts_id'));
             $dataNilai = $dataNilai->get();
         }
         $ts = Ts::all();

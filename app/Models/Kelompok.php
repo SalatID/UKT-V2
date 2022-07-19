@@ -16,7 +16,7 @@ class Kelompok extends Model
     public function newQuery($excludeDeleted = true) {
         $query = parent::newQuery($excludeDeleted)
         ->whereNull('kelompok.deleted_at');
-        if(auth()->user()->role!='SPADM')$query->where(['kelompok.event_id'=>auth()->user()->event_id,'kelompok.komwil_id'=>auth()->user()->komwil_id]);
+        if((auth()->user()->role??'SPADM')!='SPADM')$query->where(['kelompok.event_id'=>auth()->user()->event_id,'kelompok.komwil_id'=>auth()->user()->komwil_id]);
         return $query;
     }
     public function data_peserta()

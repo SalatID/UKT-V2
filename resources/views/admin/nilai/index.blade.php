@@ -93,7 +93,7 @@
                             <td>{{ $item->data_peserta->data_ts->name }}</td>
                             <td>{{ $item->data_peserta->data_unit->name }}</td>
                             <td>{{ $item->data_peserta->data_komwil->name }}</td>
-                            <td>{{ $item->data_kelompok->name }}</td>
+                            <td>{{ $item->data_kelompok->name??'' }}</td>
                             <td>{{ $item->data_event->name }}</td>
                             <td>{{ $item->data_penilai->name }}</td>
                             <td>{{ $item->data_jurus->name }}</td>
