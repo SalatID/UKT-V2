@@ -62,13 +62,36 @@
             </a>
           </li>
           @endif
-          <li class="nav-item">
-            <a href="{{route('nilai')}}" class="nav-link {{ url()->current() == route('nilai') ? 'active' : '' }}">
+          <li class="nav-item {{ explode('/', url()->current())[4] == 'nilai'  ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ explode('/', url()->current())[4] == 'nilai' ? 'active' : '' }}">
               <i class="nav-icon fas fa-sort-numeric-up"></i>
               <p>
                 Nilai
+                <i class="right fas fa-angle-left"></i>
               </p>
             </a>
+            <ul class="nav nav-treeview bg-secondary">
+              <li class="nav-item">
+                <a href="{{route('nilai')}}" class="nav-link {{ url()->current() == route('nilai') ? 'active' : '' }}">
+                  <i class="nav-icon fas fa-sort-numeric-up"></i>
+                  <p>
+                    Nilai Awal
+                  </p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('summary-nilai')}}" class="nav-link {{ url()->current() == route('summary-nilai') ? 'active' : '' }}">
+                  <i class="fas fa-calendar nav-icon"></i>
+                  <p>Summary Nilai</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{route('cetak-sertifikat')}}" class="nav-link {{ url()->current() == route('cetak-sertifikat') ? 'active' : '' }}">
+                  <i class="fas fa-history nav-icon"></i>
+                  <p>Cetak Sertifikat</p>
+                </a>
+              </li>
+            </ul>
           </li>
           {{-- <li class="nav-item">
             <a href="{{route('invoice')}}" class="nav-link {{ url()->current() == route('invoice') ? 'active' : '' }}">

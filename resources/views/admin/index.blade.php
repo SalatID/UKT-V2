@@ -89,7 +89,7 @@
               <h1 class="m-0 mr-2">@yield('title')</h1>
               @if(auth()->user()->role=='SPADM')
               @php($eventSelect = \App\Models\EventMaster::all())
-              <select name="event_select" class="form-contro form-control-sm" data-src={{route('home')}}>
+              <select name="event_select" class="form-contro form-control-sm" data-src={{url()->current()}}>
                 <option value="">Pilih Event</option>
                 @foreach ($eventSelect as $item)
                 <option value="{{ $item->event_alias }}" {{(request('event_alias')??'')==$item->event_alias?'selected':''}}>
@@ -217,8 +217,9 @@
         window.location.href = $(this).data('src')
         return
       }
-      window.location.href = $(this).data('src')+'?event_alias='+$(this).val()
+      window.location.href =$(this).data('src')+'?event_alias='+$(this).val()
     })
+    
 </script>
 </body>
 </html>

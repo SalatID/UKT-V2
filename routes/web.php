@@ -69,6 +69,8 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'nilai'],function(){
         Route::get('/',[NilaiController::class,'index'])->name('nilai');
+        Route::get('/summary',[NilaiController::class,'summaryNilai'])->name('summary-nilai');
+        Route::get('/sertifikat',[NilaiController::class,'cetakSertifikat'])->name('cetak-sertifikat');
         Route::get('/calculate',[NilaiController::class,'calculateNilai'])->name('calculate-nilai');
     });
 
