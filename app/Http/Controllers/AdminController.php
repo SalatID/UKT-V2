@@ -13,6 +13,8 @@ use App\Models\Peserta;
 use App\Models\User;
 use App\Models\EventMaster;
 use App\Models\SummaryNilaiDetail;
+use App\Models\SummaryNilai;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DB;
 use Validator;
 use Str;
@@ -888,5 +890,19 @@ class AdminController extends Controller
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
         ]);
+    }
+
+    public function sertifikat()
+    {
+        return view('admin.sertifikat.index');
+    }
+
+    public function cetakSertifikat()
+    {
+        $dataSertifikat = SummaryNilai::orderBy('peserta_id')->get();
+        $pdf = Pdf::loadView('admin.sertifikat.blangko.jakartabarat',compact('dataSertifikat'));
+        $pdf->setBasePath(public_path());
+        return $pdf->setPaper('a4')->stream('sertifikat.pdf');
+        return view('admin.sertifikat.blangko.jakartabarat',compact('dataSertifikat'));
     }
 }

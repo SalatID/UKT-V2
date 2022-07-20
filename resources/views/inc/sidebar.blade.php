@@ -81,13 +81,13 @@
               </li>
               <li class="nav-item">
                 <a href="{{route('summary-nilai')}}" class="nav-link {{ url()->current() == route('summary-nilai') ? 'active' : '' }}">
-                  <i class="fas fa-calendar nav-icon"></i>
+                  <i class="fas fa-trophy nav-icon"></i>
                   <p>Summary Nilai</p>
                 </a>
               </li>
               <li class="nav-item">
                 <a href="{{route('cetak-sertifikat')}}" class="nav-link {{ url()->current() == route('cetak-sertifikat') ? 'active' : '' }}">
-                  <i class="fas fa-history nav-icon"></i>
+                  <i class="fas fa-certificate nav-icon"></i>
                   <p>Cetak Sertifikat</p>
                 </a>
               </li>
@@ -149,7 +149,12 @@
                   <p>Master Penilai</p>
                 </a>
               </li>
-              
+              <li class="nav-item">
+                <a href="{{route('master-sertifikat')}}" class="nav-link {{ url()->current() == route('master-sertifikat') ? 'active' : '' }}">
+                  <i class="fas fa-certificate nav-icon"></i>
+                  <p>Master Sertifikat</p>
+                </a>
+              </li>
             </ul>
           </li>
           

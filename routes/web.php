@@ -94,7 +94,9 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::get('/',[AdminController::class,'log'])->name('admin-log');
     });
 
-    
+    Route::group(['prefix'=>'sertifikat'],function(){
+        Route::get('/cetak',[AdminController::class,'cetakSertifikat'])->name('cetak-sertifikat');
+    });
 
     Route::group(['prefix'=>'master'],function(){
         Route::group(['prefix'=>'komwil'],function(){
@@ -131,6 +133,13 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
             Route::get('/json-data/{id}',[AdminController::class,'jsonTs'])->name('json-ts');
             Route::post('/update-ts',[AdminController::class,'updateTs'])->name('update-ts');
             Route::get('/delete/{id}',[AdminController::class,'deleteTs'])->name('delete-ts');
+        });
+        Route::group(['prefix'=>'sertifikat'],function(){
+            Route::get('/',[AdminController::class,'sertifikat'])->name('master-sertifikat');
+            Route::post('/',[AdminController::class,'storeSertifikat'])->name('store-sertifikat');
+            Route::get('/json-data/{id}',[AdminController::class,'jsonSertifikat'])->name('json-sertifikat');
+            Route::post('/update-sertifikat',[AdminController::class,'updateSertifikat'])->name('update-sertifikat');
+            Route::get('/delete/{id}',[AdminController::class,'deleteSertifikat'])->name('delete-sertifikat');
         });
     });
 
