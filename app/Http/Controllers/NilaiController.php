@@ -49,7 +49,7 @@ class NilaiController extends Controller
         if(request()->has('event_alias')){
             $event = EventMaster::where('event_alias',request('event_alias'))->first();
             $dataNilai = DB::select("
-                SELECT a.name,c.name unit, d.name komwil,e.name ts, F.name ts_akhir,b.*
+                SELECT a.name,c.name unit, d.name komwil,e.name ts,f.name ts_akhir,b.*
                 FROM peserta a
                 JOIN unit c ON a.unit_id = c.id
                 JOIN komwil d ON a.komwil_id = d.id
