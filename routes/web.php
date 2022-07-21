@@ -71,6 +71,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::get('/',[NilaiController::class,'index'])->name('nilai');
         Route::get('/summary',[NilaiController::class,'summaryNilai'])->name('summary-nilai');
         Route::get('/sertifikat',[NilaiController::class,'cetakSertifikat'])->name('cetak-sertifikat');
+        Route::get('/sertifikat/cetak',[NilaiController::class,'previewSertifikat'])->name('preview-sertifikat');
         Route::get('/calculate',[NilaiController::class,'calculateNilai'])->name('calculate-nilai');
     });
 
@@ -92,10 +93,6 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'log'],function(){
         Route::get('/',[AdminController::class,'log'])->name('admin-log');
-    });
-
-    Route::group(['prefix'=>'sertifikat'],function(){
-        Route::get('/cetak',[AdminController::class,'cetakSertifikat'])->name('cetak-sertifikat');
     });
 
     Route::group(['prefix'=>'master'],function(){
@@ -133,13 +130,6 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
             Route::get('/json-data/{id}',[AdminController::class,'jsonTs'])->name('json-ts');
             Route::post('/update-ts',[AdminController::class,'updateTs'])->name('update-ts');
             Route::get('/delete/{id}',[AdminController::class,'deleteTs'])->name('delete-ts');
-        });
-        Route::group(['prefix'=>'sertifikat'],function(){
-            Route::get('/',[AdminController::class,'sertifikat'])->name('master-sertifikat');
-            Route::post('/',[AdminController::class,'storeSertifikat'])->name('store-sertifikat');
-            Route::get('/json-data/{id}',[AdminController::class,'jsonSertifikat'])->name('json-sertifikat');
-            Route::post('/update-sertifikat',[AdminController::class,'updateSertifikat'])->name('update-sertifikat');
-            Route::get('/delete/{id}',[AdminController::class,'deleteSertifikat'])->name('delete-sertifikat');
         });
     });
 

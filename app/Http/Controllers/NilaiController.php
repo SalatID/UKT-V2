@@ -11,8 +11,10 @@ use App\Models\Jurus;
 use App\Models\SummaryNilai;
 use App\Models\SummaryNilaiDetail;
 use App\Models\EventMaster;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DB;
 use Queue;
+use Validator;
 
 class NilaiController extends Controller
 {
@@ -47,11 +49,12 @@ class NilaiController extends Controller
         if(request()->has('event_alias')){
             $event = EventMaster::where('event_alias',request('event_alias'))->first();
             $dataNilai = DB::select("
-                SELECT a.name,c.name unit, d.name komwil,e.name ts, b.*
+                SELECT a.name,c.name unit, d.name komwil,e.name ts, F.name ts_akhir,b.*
                 FROM peserta a
                 JOIN unit c ON a.unit_id = c.id
                 JOIN komwil d ON a.komwil_id = d.id
                 JOIN ts e ON e.id = a.ts_awal_id
+                LEFT JOIN ts f ON e.id = a.ts_akhir_id
                 LEFT JOIN (
                     SELECT 
                     SUM(CASE WHEN jurus_id = 1 THEN nilai END) standar_smi,
@@ -72,5 +75,43 @@ class NilaiController extends Controller
                 ",['event_id'=>$event->id]);
         }
         return view('admin.nilai.summaryNilai',compact('dataNilai'));
+    }
+    public function cetakSertifikat()
+    {
+        $event = EventMaster::all();
+        return view('admin.nilai.sertifikat',compact('event'));
+    }
+    public function previewSertifikat()
+    {
+        $validate = Validator::make(request()->all(),[
+            'event_id'=>'required',
+        ]);
+        
+        if($validate->fails()){
+            foreach($validate->errors()->getMessages() as $key =>$data){
+                array_push($this->error,[
+                    "name"=>$key,
+                    "message"=>$data[0]
+                ]);
+            }
+            return redirect()->back()->with([
+                'error'=>true,
+                'message'=>'The given data was invalid',
+                'data'=>$this->error
+            ]);
+        }
+        $dataEvent = EventMaster::where('id',request('event_id'))->first();
+        $muka = request('muka')??'depan';
+        $blangko = request('blangko')??'off';
+        $data = request('data')??'off';
+        $foto = request('foto')??'off';
+        if($muka=='depan'){
+            $dataSertifikat = SummaryNilai::where('event_id',request('event_id'))->orderBy('peserta_id')->get();
+            $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
+        } else {
+            return;
+        }
+        $pdf->setBasePath(public_path());
+        return $pdf->setPaper('a4')->stream('sertifikat.pdf');
     }
 }

@@ -10,7 +10,8 @@
             <thead>
                 <tr class="bg-info">
                     <th class="text-center">Nama Peserta</th>
-                    <th class="text-center">Tingkatan Sabuk</th>
+                    <th class="text-center">TS Awal</th>
+                    <th class="text-center">TS Akhir</th>
                     <th class="text-center">Unit</th>
                     <th class="text-center">Komwil</th>
                     <th class="text-center">Standar SMI</th>
@@ -29,6 +30,7 @@
                     <tr>
                         <td class="text-center">{{$item->name}}</td>
                         <td class="text-center">{{$item->ts}}</td>
+                        <td class="text-center">{{$item->ts_akhir}}</td>
                         <td class="text-center">{{$item->unit}}</td>
                         <td class="text-center">{{$item->komwil}}</td>
                         <td class="text-center">{{$item->standar_smi}}</td>

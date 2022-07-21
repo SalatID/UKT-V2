@@ -149,12 +149,6 @@
                   <p>Master Penilai</p>
                 </a>
               </li>
-              <li class="nav-item">
-                <a href="{{route('master-sertifikat')}}" class="nav-link {{ url()->current() == route('master-sertifikat') ? 'active' : '' }}">
-                  <i class="fas fa-certificate nav-icon"></i>
-                  <p>Master Sertifikat</p>
-                </a>
-              </li>
             </ul>
           </li>
           

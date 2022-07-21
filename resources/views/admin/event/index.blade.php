@@ -108,6 +108,17 @@
                                     {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
                                 </div>
                                 <div class="form-group">
+                                    <label for="blangko_sertifikat">Komwil</label>
+                                    <select name="blangko_sertifikat" class="form-control" id="blangko_sertifikat">
+                                        <option value="">Pilih Blangko Sertifikat</option>
+                                       @foreach ($dataBlangko as $item)
+                                        @php($explode=explode('.',$item))
+                                        <option value="admin.sertifikat.blangko.{{$explode[0]}}">{{$item}}</option>
+                                       @endforeach
+                                    </select>
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
+                                <div class="form-group">
                                     <label for="gambar">Banner Event</label>
                                     <input type="file" class="form-control" name="gambar" id="gambar"
                                         placeholder="Banner Event">
