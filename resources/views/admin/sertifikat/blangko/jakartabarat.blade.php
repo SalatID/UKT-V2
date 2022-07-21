@@ -123,7 +123,7 @@
                             <tr>
                                 <td style="vertical-align: bottom;" class="p-2">
                                     <div style="width:3cm;height:4cm;">
-                                        <img src="{{ public_path() }}/{{ $foto == 'on' ? $item->data_peserta->foto : 'assets/img/3x4.png' }}"
+                                        <img src="{{ env('APP_ENV')=='production'?env('APP_URL'):public_path() }}/{{ $foto == 'on' ? $item->data_peserta->foto : 'assets/img/3x4.png' }}"
                                             alt="" style="width:3cm;height:4cm;object-fit:cover">
                                     </div>
                                 </td>
