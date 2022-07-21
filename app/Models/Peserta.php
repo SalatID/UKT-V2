@@ -25,6 +25,10 @@ class Peserta extends Model
     {
         return $this->hasOne(Ts::class,'id','ts_awal_id');
     }
+    public function data_ts_akhir()
+    {
+        return $this->hasOne(Ts::class,'id','ts_akhir_id');
+    }
     public function data_kelompok()
     {
         return $this->hasOne(Kelompok::class,'id','kelompok_id');
@@ -36,9 +40,7 @@ class Peserta extends Model
     public function newQuery($excludeDeleted = true) {
         $query = parent::newQuery($excludeDeleted)
         ->whereNull('peserta.deleted_at');
-        // if(auth()->user()!=null) {
-        //     if(auth()->user()->role??'SPADM'!='SPADM') $query->where(['peserta.event_id'=>auth()->user()->event_id]);
-        // }
+        if((auth()->user()->role??'SPADM')!='SPADM')$query->where(['peserta.event_id'=>auth()->user()->event_id]);
         return $query;
     }
 }

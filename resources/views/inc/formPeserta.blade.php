@@ -73,17 +73,18 @@
                 <div class="form-group">
                     <label for="event_id">Event</label>
                     <select name="event_id" class="form-control" required id="event_id" readonly>
-                        @if(count($event) > 0)
-                            @foreach ($event as $item)
+                        @if(is_a($event, 'Illuminate\Database\Eloquent\Collection'))
+                            @foreach($event as $item)
                             <option value="{{ $item->id }}" selected>
                                 {{ $item->name }} - {{ $item->lokasi }} -
                                 {{ $item->penyelenggara }}</option>
                             @endforeach
-                        @else
+                        @else 
+
                         <option value="{{ $event->id }}" selected>
                             {{ $event->name }} - {{ $event->lokasi }} -
                             {{ $event->penyelenggara }}</option>
-                            @endif
+                        @endif
                     </select>
                 </div>
             </div>

@@ -24,6 +24,18 @@ class PesertaController extends Controller
         $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts'])->orderBy('name');
         if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
         $dataPeserta = $dataPeserta->get();
+        if(count(request()->all())>0){
+            $this->peserta = new Peserta();
+            $params = array_filter(request()->all(),function($key){
+                return in_array($key,$this->peserta->fillable)!==false;
+            },ARRAY_FILTER_USE_KEY);
+            if(request()->has('ts_id')) $params['ts_awal_id']=request('ts_id');
+            $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
+            $dataPeserta = Peserta::where($params);
+            if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
+            $dataPeserta = $dataPeserta->get();
+        }
+        
         $komwil = Komwil::get();
         $unit = Unit::get();
         $ts = Ts::whereNotIn('id',[1])->get();
@@ -116,5 +128,11 @@ class PesertaController extends Controller
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
         ]);
+    }
+    public function cetakKartu()
+    {
+        if(!request()->has('id')) return false;
+        $dataPeserta = Peserta::whereIn('id',request('id'))->get();
+        return view('admin.peserta.kartuPeserta',compact('dataPeserta'));
     }
 }

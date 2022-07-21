@@ -2,15 +2,72 @@
 @section('title', 'List Peserta')
 @section('content')
     <div class="row d-flex justify-content-start mb-3">
-        <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addPeserta">Tambah
-            Peserta</button>
+        
     </div>
+    <form action="{{route('peserta')}}">
+        @csrf
+        <div class="row">
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="komwil_id">Komwil</label>
+                    <select name="komwil_id" class="form-control" id="komwil" data-href="{{ route('get-json-unit') }}">
+                        <option value="">Pilih Komwil</option>
+                        @foreach ($komwil as $item)
+                            <option value="{{$item->id}}" {{(request('komwil_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="unit_id">Unit</label>
+                    <select name="unit_id" class="form-control" id="unit_id" disabled>
+                        <option value="">Pilih Unit</option>
+                        {{-- @foreach ($unit as $item)
+                            <option value="{{$item->id}}" {{(request('unit_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
+                        @endforeach --}}
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="ts_id">Tingkat Sabuk</label>
+                    <select name="ts_id" class="form-control" id="ts_id">
+                        <option value="">Pilih Sabuk</option>
+                        @foreach ($ts as $item)
+                            <option value="{{$item->id}}" {{(request('ts_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="no_peserta">Nomor Peserta</label>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input type="number" name="no_peserta_from" class="form-control" value="{{request('no_peserta_from')??''}}" placeholder="Nomor Peserta Mulai">
+                        </div>
+                        <div class="col-sm-6">
+                            <input type="number" name="no_peserta_to" class="form-control" value="{{request('no_peserta_to')??''}}" placeholder="Nomor Peserta Sampai">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-start mb-2">
+                <button type="submit" class="btn btn-info mr-2">Filter</button>
+                <button type="button" class="btn btn-success btn-add mr-2" data-toggle="modal" data-target="#addPeserta">Tambah
+                    Peserta</button>
+                <button type="button" class="btn btn-primary mr-2 btn-cetak" data-src="{{route('cetak-kartu')}}">Cetak Kartu</button>
+        </div>
+    </form>
     <div class="row">
         <div class="col-xl-12 table-responsive">
             <table class="table table-striped" id="tablePeserta">
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th><input type="checkbox" name="check_all" > </th>
                         <th>No. Peserta</th>
                         <th>Nama Peserta</th>
                         <th>Komwil</th>
@@ -28,6 +85,7 @@
                     @foreach ($dataPeserta as $item)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td><input type="checkbox" name="check_item" data-id="{{$item->id}}"></td>
                             <td>{{ $item->no_peserta }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->data_komwil->name }}</td>
@@ -82,6 +140,9 @@
     <script>
         var form = $('#formPeserta')
         $('#tablePeserta').dataTable()
+        $(document).ready(function(){
+            if($('#komwil').val()!=='') $('#komwil').change();
+        })
         $('.btn-edit').click(function() {
             $.get($(this).data('action'), function(data) {
                 console.log(data.id)
@@ -127,6 +188,31 @@
             $('input[name="id"]').remove()
             $('.foto').hide()
             form.trigger("reset");
+        })
+        $("input[name='check_all']").click(function(){
+            $("input[name='check_item']").not(this).prop('checked', this.checked);
+        });
+        $('.btn-cetak').click(function() {
+            btn = $(this)
+            id = $("input[name='check_item']:checked").map(function() {
+                return $(this).data('id')
+            }).get()
+            $.ajax({
+                url: btn.data('src'),
+                data: {
+                    _token:$('input[name="_token"]').val(),
+                    id:id
+                },
+                method :'POST',
+                success: function(d) {
+                    console.log(d.length)
+                    if(d.length > 0){
+                        var newWindow = window.open('/admin/peserta', "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
+                        newWindow.document.write(d);
+
+                    }
+                }
+            })
         })
     </script>
 @endsection

@@ -17,4 +17,9 @@ class SummaryNilai extends Model
     {
         return $this->hasMany(SummaryNilaiDetail::class,'summary_id','id');
     }
+
+    public function data_peserta()
+    {
+        return $this->hasOne(Peserta::class,'id','peserta_id');
+    }
 }

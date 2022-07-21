@@ -13,6 +13,7 @@ use App\Models\Peserta;
 use App\Models\User;
 use App\Models\EventMaster;
 use App\Models\SummaryNilaiDetail;
+use App\Models\SummaryNilai;
 use DB;
 use Validator;
 use Str;
@@ -807,7 +808,9 @@ class AdminController extends Controller
     {
         $dataEvent = EventMaster::all();
         $dataKomwil = Komwil::all();
-        return view('admin.event.index',compact('dataEvent','dataKomwil'));
+        $dataBlangko = $listFile = array_values(array_diff(scandir(resource_path('views/admin/sertifikat/blangko')), array('.', '..')));
+        // dd($dataBlangko);
+        return view('admin.event.index',compact('dataEvent','dataKomwil','dataBlangko'));
     }
     public function storeEvent()
     {
@@ -839,7 +842,7 @@ class AdminController extends Controller
             return in_array($key,$this->event->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
-        $params['event_alias']=strtolower(str_replace(' ','-',request('name')).'-'.str_replace(' ','-',request('peyelenggara')));
+        $params['event_alias']=strtolower(str_replace(' ','-',rtrim(request('name'))).'-'.date('Y',strtotime($params['tgl_mulai'])));
         $dir ='banner_event/';
         $gambar = request()->file('gambar');
         if($gambar){
@@ -888,5 +891,5 @@ class AdminController extends Controller
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
         ]);
-    }
+    }    
 }

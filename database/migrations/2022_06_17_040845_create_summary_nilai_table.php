@@ -16,6 +16,8 @@ class CreateSummaryNilaiTable extends Migration
         Schema::create('summary_nilai', function (Blueprint $table) {
             $table->id();
             $table->integer('event_id')->unsigned();
+            $table->string('no_sertifikat')->nullable();
+            $table->date('valid_until')->nullable();
             $table->integer('nilai')->unsigned()->nullable();
             $table->integer('rata_rata')->unsigned()->nullable();
             $table->integer('peserta_id')->unsigned();

@@ -21,8 +21,14 @@ class Penilai extends Model
     {
         return $this->hasOne(Ts::class,'id','ts_id');
     }
+    public function data_event()
+    {
+        return $this->hasOne(EventMaster::class,'id','event_id');
+    }
     public function newQuery($excludeDeleted = true) {
-        return parent::newQuery($excludeDeleted)
-            ->whereNull('penilai.deleted_at');
+        $query = parent::newQuery($excludeDeleted)
+        ->whereNull('penilai.deleted_at');
+        if((auth()->user()->role??'SPADM')!='SPADM')$query->where(['komwil.id'=>auth()->user()->komwil_id??'']);
+        return $query;
     }
 }

@@ -46,10 +46,10 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'peserta'],function(){
         Route::get('/',[PesertaController::class,'index'])->name('peserta');
-        
-            Route::get('/json-data/{id}',[PesertaController::class,'jsonPeserta'])->name('json-peserta');
-            Route::post('/update-peserta',[PesertaController::class,'updatePeserta'])->name('update-peserta');
-            Route::get('/delete/{id}',[PesertaController::class,'deletePeserta'])->name('delete-peserta');
+        Route::get('/json-data/{id}',[PesertaController::class,'jsonPeserta'])->name('json-peserta');
+        Route::post('/update-peserta',[PesertaController::class,'updatePeserta'])->name('update-peserta');
+        Route::get('/delete/{id}',[PesertaController::class,'deletePeserta'])->name('delete-peserta');
+        Route::post('/cetak/kartu',[PesertaController::class,'cetakKartu'])->name('cetak-kartu');
     });
 
     Route::group(['prefix'=>'kelompok'],function(){
@@ -69,6 +69,9 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'nilai'],function(){
         Route::get('/',[NilaiController::class,'index'])->name('nilai');
+        Route::get('/summary',[NilaiController::class,'summaryNilai'])->name('summary-nilai');
+        Route::get('/sertifikat',[NilaiController::class,'cetakSertifikat'])->name('cetak-sertifikat');
+        Route::get('/sertifikat/cetak',[NilaiController::class,'previewSertifikat'])->name('preview-sertifikat');
         Route::get('/calculate',[NilaiController::class,'calculateNilai'])->name('calculate-nilai');
     });
 
@@ -91,8 +94,6 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
     Route::group(['prefix'=>'log'],function(){
         Route::get('/',[AdminController::class,'log'])->name('admin-log');
     });
-
-    
 
     Route::group(['prefix'=>'master'],function(){
         Route::group(['prefix'=>'komwil'],function(){
