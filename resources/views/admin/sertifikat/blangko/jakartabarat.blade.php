@@ -91,7 +91,7 @@
                                 <td width="5">:</td>
                                 <td width="300">{{ $item->data_peserta->tempat_lahir }},
                                     {{ date('d', strtotime($item->data_peserta->tgl_lahir)) }}
-                                    {{ $bulan[date('n', strtotime($item->data_peserta->tgl_lahir))] }}
+                                    {{ $bulan[date('n', strtotime($item->data_peserta->tgl_lahir))-1] }}
                                     {{ date('Y', strtotime($item->data_peserta->tgl_lahir)) }}</td>
                             </tr>
                             <tr>
