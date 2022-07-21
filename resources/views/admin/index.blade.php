@@ -183,7 +183,6 @@
     $('.div-error').removeClass('d-none')
   }
   $('#komwil').change(function(){
-    alert('a')
         e = $(this);
         changeKomwil(this)
     })
