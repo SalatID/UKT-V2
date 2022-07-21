@@ -183,8 +183,14 @@
     $('.div-error').removeClass('d-none')
   }
   $('#komwil').change(function(){
+    alert('a')
         e = $(this);
-        $.get(e.data('href')+'?id='+e.val(),function(data){
+        changeKomwil(this)
+    })
+    function changeKomwil(e)
+    {
+      e=$(e)
+      $.get(e.data('href')+'?id='+e.val(),function(data){
         if(data.length > 0){
             var html = '<option value="">Pilih Unit</option>'
             html += data.map(function(d){
@@ -198,7 +204,7 @@
         }
         $('select[name="unit_id"]').attr('disabled',true)
         })
-    })
+    }
     function formatDate(date,separator) {
         var d = new Date(date),
             month = '' + (d.getMonth() + 1),

@@ -40,6 +40,8 @@
                                         <a class="dropdown-item btn-edit" href="#"
                                             data-action="{{ route('json-event', $item->id) }}">Edit</a>
                                         <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-event', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item " href="{{route('run-event',[$item->event_alias])}}" target="_blank">Link Penilaian</a>
+                                        <a class="dropdown-item " href="{{route('self-registration',[$item->event_alias])}}" target="_blank">Link Pendaftaran</a>
                                     </div>
                                 </div>
                             </td>
