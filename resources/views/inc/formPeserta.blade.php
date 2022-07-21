@@ -18,7 +18,7 @@
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="komwil">Komwil</label>
-                <select name="komwil_id" class="form-control" required id="komwil"
+                <select name="komwil_id" class="form-control" required id="komwil" onchange="changeKomwil(this)"
                     data-href="{{ route('get-json-unit') }}">
                     <option value="">Pilih Komwil</option>
                     @foreach ($komwil as $item)
