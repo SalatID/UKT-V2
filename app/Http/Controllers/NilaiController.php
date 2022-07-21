@@ -54,7 +54,7 @@ class NilaiController extends Controller
                 JOIN unit c ON a.unit_id = c.id
                 JOIN komwil d ON a.komwil_id = d.id
                 JOIN ts e ON e.id = a.ts_awal_id
-                LEFT JOIN ts f ON e.id = a.ts_akhir_id
+                LEFT JOIN ts f ON f.id = a.ts_akhir_id
                 LEFT JOIN (
                     SELECT 
                     SUM(CASE WHEN jurus_id = 1 THEN nilai END) standar_smi,
