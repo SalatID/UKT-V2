@@ -11,7 +11,7 @@ use App\Models\Jurus;
 use App\Models\SummaryNilai;
 use App\Models\SummaryNilaiDetail;
 use App\Models\EventMaster;
-use Barryvdh\DomPDF\Facade\PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use DB;
 use Queue;
 use Validator;
@@ -107,7 +107,7 @@ class NilaiController extends Controller
         $foto = request('foto')??'off';
         if($muka=='depan'){
             $dataSertifikat = SummaryNilai::where('event_id',request('event_id'))->orderBy('peserta_id')->get();
-            $pdf = PDF::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
+            $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
         } else {
             return;
         }
