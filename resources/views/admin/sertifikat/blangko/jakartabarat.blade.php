@@ -112,7 +112,7 @@
                             pada tanggal : <span
                                 class="font-weight-bold">{{ date('d', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
                                 - {{ date('d', strtotime($item->data_peserta->data_event->tgl_selesai)) }}
-                                {{ $bulan[date('n', strtotime($item->data_peserta->data_event->tgl_selesai))] }}
+                                {{ $bulan[date('n', strtotime($item->data_peserta->data_event->tgl_selesai))-1] }}
                                 {{ date('Y', strtotime($item->data_peserta->data_event->tgl_selesai)) }}</span><br>
                             berhasil <span class="font-weight-bold">LULUS </span> Ke Tingkat Sabuk<br>
                             <span class="font-weight-bold">{{ $item->data_peserta->data_ts_akhir->name ?? '' }}</span>
