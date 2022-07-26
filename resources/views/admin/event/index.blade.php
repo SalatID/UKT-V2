@@ -109,17 +109,30 @@
                                     </select>
                                     {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
                                 </div>
-                                <div class="form-group">
-                                    <label for="blangko_sertifikat">Komwil</label>
-                                    <select name="blangko_sertifikat" class="form-control" id="blangko_sertifikat">
-                                        <option value="">Pilih Blangko Sertifikat</option>
-                                       @foreach ($dataBlangko as $item)
-                                        @php($explode=explode('.',$item))
-                                        <option value="admin.sertifikat.blangko.{{$explode[0]}}">{{$item}}</option>
-                                       @endforeach
-                                    </select>
-                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="blangko_sertifikat">Blangko Sertifikat</label>
+                                            <select name="blangko_sertifikat" class="form-control" id="blangko_sertifikat">
+                                                <option value="">Pilih Blangko Sertifikat</option>
+                                               @foreach ($dataBlangko as $item)
+                                                @php($explode=explode('.',$item))
+                                                <option value="admin.sertifikat.blangko.{{$explode[0]}}">{{$item}}</option>
+                                               @endforeach
+                                            </select>
+                                            {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="no_sertifikat">Nomor Sertifikat</label>
+                                            <input type="text" class="form-control" name="no_sertifikat" id="no_sertifikat"
+                                                placeholder="Nama" required>
+                                            {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                        </div>
+                                    </div>
                                 </div>
+                                
                                 <div class="form-group">
                                     <label for="gambar">Banner Event</label>
                                     <input type="file" class="form-control" name="gambar" id="gambar"
@@ -165,11 +178,13 @@
                         value:data.id
                     }).appendTo('#formEvent');
                     $('input[name="name"]', form).val(data.name)
+                    $('input[name="no_sertifikat"]', form).val(data.no_sertifikat)
                     $('input[name="penyelenggara"]', form).val(data.penyelenggara)
                     $('input[name="lokasi"]', form).val(data.lokasi)
                     $('input[name="tgl_mulai"]', form).val(formatDate(data.tgl_mulai,'-'))
                     $('input[name="tgl_selesai"]', form).val(formatDate(data.tgl_selesai,'-'))
                     $('select[name="komwil_id"]',form).val(data.komwil_id)
+                    $('select[name="blangko_sertifikat"]',form).val(data.blangko_sertifikat)
                     $('.gambar').show()
                     $('.gambar').attr('src','/'+data.gambar)
                     $('#addEvent').modal('show')

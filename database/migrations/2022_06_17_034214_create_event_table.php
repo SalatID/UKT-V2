@@ -24,6 +24,7 @@ class CreateEventTable extends Migration
             $table->string('komwil_id')->nullable();
             $table->string('gambar')->nullable();
             $table->string('blangko_sertifikat')->nullable();
+            $table->string('no_sertifikat')->nullable();
             $table->integer('created_user');
             $table->integer('updated_user')->nullable();
             $table->integer('deleted_user')->nullable();

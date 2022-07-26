@@ -35,11 +35,12 @@ class CalculateNilaiJob implements ShouldQueue
      */
     public function handle()
     {
-        $data = Nilai::select('peserta.name','peserta.id as peserta_id','d.name as nama_jurus','d.id as jurus_id','nilai.event_id',DB::raw('sum(nilai)nilai,COUNT(c.id)jurus_dinilai'))
+        $data = Nilai::select('peserta.name','peserta.no_peserta','peserta.id as peserta_id','peserta.ts_awal_id as ts_id','d.name as nama_jurus','d.id as jurus_id','nilai.event_id','e.no_sertifikat',DB::raw('sum(nilai)nilai,COUNT(c.id)jurus_dinilai'))
                 ->join('peserta','peserta.id','nilai.peserta_id')
                 ->join('jurus as c','c.id','nilai.jurus_id')
                 ->join('jurus as d','d.id','c.parent_id')
-                ->groupBy('peserta.id','peserta.name','d.name','d.id','nilai.event_id')
+                ->join('event as e','e.id','nilai.event_id')
+                ->groupBy('peserta.id','peserta.name','d.name','d.id','nilai.event_id','peserta.ts_awal_id','e.no_sertifikat','peserta.no_peserta')
                 ->orderBy('peserta.id')
                 ->get()->toArray();
         $sum_nilai=[];
@@ -54,7 +55,7 @@ class CalculateNilaiJob implements ShouldQueue
                 $p = array_filter($value,function($key){
                     return in_array($key,$this->summary_nilai->fillable)!==false;
                 },ARRAY_FILTER_USE_KEY);
-                
+                $p['no_sertifikat']=$value['no_peserta'].$p['no_sertifikat'];
                 // dd($p);
                 $summary = SummaryNilai::where(['event_id'=>$p['event_id'],'peserta_id'=>$p['peserta_id']]);
                 if($summary->exists()){
@@ -69,9 +70,10 @@ class CalculateNilaiJob implements ShouldQueue
                 return in_array($key,$this->summary_nilai_detail->fillable)!==false;
             },ARRAY_FILTER_USE_KEY);
             
-            $params['nilai']=round($params['nilai']/$this->summary_nilai_detail->averageParams($value['jurus_id']),1);
-            $params['total_jurus']=$this->summary_nilai_detail->averageParams($value['jurus_id']);
-            $params['kriteria']=$this->summary_nilai_detail->criteria(round($params['nilai']/$this->summary_nilai_detail->averageParams($value['jurus_id']),1));
+            $params['nilai']=round($params['nilai']/$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']),1);
+            $params['total_jurus']=$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']);
+            $params['kriteria']=$this->summary_nilai_detail->criteria($params['nilai']);
+            
             $summary_detail = SummaryNilaiDetail::where(['peserta_id'=>$params['peserta_id'],'jurus_id'=>$params['jurus_id']]);
             
             if($summary_detail->exists()){

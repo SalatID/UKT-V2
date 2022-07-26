@@ -2,7 +2,7 @@
     @csrf
     <div class="form-group">
         <label for="nama">Nama</label>
-        <input type="text" class="form-control" required name="name" id="nama" placeholder="Nama" required>
+        <input type="text" class="form-control" name="name" id="nama" placeholder="Nama" required>
         {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
     </div>
     <div class="form-group">
@@ -53,7 +53,7 @@
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="tempat_lahir">Tempat Lahir</label>
-                <input type="text" class="form-control" required name="tempat_lahir" id="tempat_lahir"
+                <input type="text" class="form-control" name="tempat_lahir" id="tempat_lahir"
                     placeholder="Tempat Lahir" required>
                 {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             </div>
@@ -61,7 +61,7 @@
         <div class="col-xl-6">
             <div class="form-group">
                 <label for="tgl_lahir">Tanggal Lahir</label>
-                <input type="date" class="form-control" required name="tgl_lahir" id="tgl_lahir"
+                <input type="date" class="form-control" name="tgl_lahir" id="tgl_lahir"
                     placeholder="Tanggal Lahir" required>
                 {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
             </div>

@@ -5,7 +5,7 @@
         @csrf
         <div class="row">
             <div class="col-xl-12 mb-3">
-                <select name="jurus_id" class="form-control" id="" data-src="{{ route('get-sub-jurus') }}">
+                <select name="jurus_id" class="form-control" required data-src="{{ route('get-sub-jurus') }}">
                     <option value="">--Pilih Jurus--</option>
                     @foreach ($masterJurus as $item)
                         <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -13,7 +13,7 @@
                 </select>
             </div>
             <div class="col-xl-12 mb-3">
-                <select name="sub_jurus_id" class="form-control" id="" disabled>
+                <select name="sub_jurus_id" class="form-control" required disabled>
                     <option value="">--Pilih Sub Jurus--</option>
 
                 </select>

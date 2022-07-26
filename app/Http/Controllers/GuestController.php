@@ -52,11 +52,12 @@ class GuestController extends Controller
     {
         if(!request()->has('parent_id')) return redirect()->back()->with(["error"=>true,"message"=>"Id tidak ditemukan"]);
         $sData = json_decode(session()->get('sNilai'));
+        $kelompok = Kelompok::where('id',$sData->kelompok_id)->first();
         $id = request('parent_id');
         $dataJurus = Jurus::select('jurus.*')->leftJoin('nilai',function($join) use ($sData){
             $join->on('nilai.jurus_id','jurus.id');
             $join->on('nilai.kelompok_id',DB::raw($sData->kelompok_id));
-        })->whereNull('nilai.jurus_id')->where('parent_id',$id)->get();
+        })->whereNull('nilai.jurus_id')->where('parent_id',$id)->where('ts_id','<=',$kelompok->ts_id)->orderBy('name')->get();
         return response()->json($dataJurus);
     }
     public function setJurus()

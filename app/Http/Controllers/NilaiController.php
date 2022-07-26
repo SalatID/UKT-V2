@@ -109,7 +109,9 @@ class NilaiController extends Controller
             $dataSertifikat = SummaryNilai::where('event_id',request('event_id'))->orderBy('peserta_id')->get();
             $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
         } else {
-            return;
+            // return view('admin.sertifikat.belakang');
+            $dataSertifikat = SummaryNilai::where('event_id',request('event_id'))->orderBy('peserta_id')->get();
+            $pdf = Pdf::loadView('admin.sertifikat.belakang',compact('dataSertifikat'));
         }
         $pdf->setBasePath(public_path());
         return $pdf->setPaper('a4')->stream('sertifikat.pdf');

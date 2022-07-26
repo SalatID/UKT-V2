@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Log;
 
 class SummaryNilaiDetail extends Model
 {
@@ -15,6 +16,7 @@ class SummaryNilaiDetail extends Model
 
     public function criteria($nilai)
     {
+        Log::info($nilai);
        if($nilai <6 ){
            return 'KURANG';
        }
@@ -23,9 +25,9 @@ class SummaryNilaiDetail extends Model
        }
        return 'AMAT BAIK';
     }
-    public function averageParams($id)
+    public function averageParams($id,$ts)
     {
-        return Jurus::where('parent_id',$id)->count();
+        return Jurus::where('parent_id',$id)->where('ts_id','<=',$ts)->count();
     }
     public function data_peserta()
     {

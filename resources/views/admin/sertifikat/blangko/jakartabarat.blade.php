@@ -73,7 +73,7 @@
                 <div style="margin-top:8.5cm;width:19cm;">
                     <div class="row justify-content-center">
                         <h1 class="w-100 text-center" style="font-size:16px;">Nomor :
-                            {{ $item->data_peserta->no_peserta }}{{ $item->no_sertifikat ?? '/UKT/SMI-JKB/' . $romawi[date('n', strtotime($item->data_peserta->data_event->tgl_mulai))] . '/' . date('Y', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
+                            {{ $item->no_sertifikat ?? $item->data_peserta->no_peserta.'/UKT/SMI-JKB/' . $romawi[date('n', strtotime($item->data_peserta->data_event->tgl_mulai))] . '/' . date('Y', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
                         </h1>
                     </div>
                     <div class="row justify-content-center">

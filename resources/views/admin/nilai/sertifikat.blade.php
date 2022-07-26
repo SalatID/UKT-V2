@@ -7,7 +7,7 @@
             <div class="col-xl-3">
                 <div class="form-group">
                     <label for="event_id">Event</label>
-                    <select name="event_id" class="form-control" id="komwil" data-href="{{ route('get-json-unit') }}" required>
+                    <select name="event_id" class="form-control" data-href="{{ route('get-json-unit') }}" required>
                         <option value="">Pilih Event</option>
                         @foreach ($event as $item)
                             <option value="{{ $item->id }}" {{ (request('event_id') ?? '') == $item->id ? 'selected' : '' }}>
