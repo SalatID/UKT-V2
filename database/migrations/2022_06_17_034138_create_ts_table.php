@@ -17,6 +17,8 @@ class CreateTsTable extends Migration
             $table->id();
             $table->string('name',200);
             $table->string('ts_code',5);
+            $table->integer('ts_next')->unsigned()->nullable();
+            $table->integer('ts_before')->unsigned()->nullable();
             $table->integer('created_user');
             $table->integer('updated_user')->nullable();
             $table->integer('deleted_user')->nullable();

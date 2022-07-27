@@ -10,7 +10,7 @@ class Ts extends Model
     use HasFactory;
     protected $table = 'ts';
     public $fillable =[
-        'name','ts_code','created_user'
+        'name','ts_code','created_user','id','ts_before','ts_next'
     ];
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)

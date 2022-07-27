@@ -67,6 +67,7 @@
             </div>
         </div>
     </div>
+    @if ((auth()->user()->role ?? 'SPADM') == 'SPADM')
         <div class="row">
             <div class="col-xl-12">
                 <div class="form-group">
@@ -88,6 +89,7 @@
                 </div>
             </div>
         </div>
+    @endif
     <div class="form-group">
         <label for="foto">Foto 3x4</label>
         <input type="file" class="form-control" required name="foto" id="foto" placeholder="Foto 3x4">
@@ -98,7 +100,7 @@
             <strong class="text-center">Foto Anda</strong>
             <br>
             <img src="" class="img-fluid foto" id="prev-foto" width="192cm" height="256cm" alt="Event Banner">
-            
+
         </div>
         <div class="col-6">
             <strong class="text-center">Sample Foto</strong>

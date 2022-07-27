@@ -91,7 +91,7 @@
                                 <td width="5">:</td>
                                 <td width="300">{{ $item->data_peserta->tempat_lahir }},
                                     {{ date('d', strtotime($item->data_peserta->tgl_lahir)) }}
-                                    {{ $bulan[date('n', strtotime($item->data_peserta->tgl_lahir))] }}
+                                    {{ $bulan[date('n', strtotime($item->data_peserta->tgl_lahir))-1] }}
                                     {{ date('Y', strtotime($item->data_peserta->tgl_lahir)) }}</td>
                             </tr>
                             <tr>
@@ -112,7 +112,7 @@
                             pada tanggal : <span
                                 class="font-weight-bold">{{ date('d', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
                                 - {{ date('d', strtotime($item->data_peserta->data_event->tgl_selesai)) }}
-                                {{ $bulan[date('n', strtotime($item->data_peserta->data_event->tgl_selesai))] }}
+                                {{ $bulan[date('n', strtotime($item->data_peserta->data_event->tgl_selesai))-1] }}
                                 {{ date('Y', strtotime($item->data_peserta->data_event->tgl_selesai)) }}</span><br>
                             berhasil <span class="font-weight-bold">LULUS </span> Ke Tingkat Sabuk<br>
                             <span class="font-weight-bold">{{ $item->data_peserta->data_ts_akhir->name ?? '' }}</span>
@@ -123,7 +123,7 @@
                             <tr>
                                 <td style="vertical-align: bottom;" class="p-2">
                                     <div style="width:3cm;height:4cm;">
-                                        <img src="{{ public_path() }}/{{ $foto == 'on' ? $item->data_peserta->foto : 'assets/img/3x4.png' }}"
+                                        <img src="{{ env('APP_ENV')=='production'?env('APP_URL'):public_path() }}/{{ $foto == 'on' ? $item->data_peserta->foto : 'assets/img/3x4.png' }}"
                                             alt="" style="width:3cm;height:4cm;object-fit:cover">
                                     </div>
                                 </td>

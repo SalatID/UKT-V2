@@ -11,6 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Models\SummaryNilai;
 use App\Models\SummaryNilaiDetail;
 use App\Models\Nilai;
+use App\Models\Peserta;
 use DB;
 
 class CalculateNilaiJob implements ShouldQueue
@@ -86,6 +87,13 @@ class CalculateNilaiJob implements ShouldQueue
             }
             
             $peserta_id=$params['peserta_id'];
+        }
+        $dataPeserta = Peserta::all();
+
+        foreach ( $dataPeserta as $value){
+            Peserta::where('id',$value->id)->update([
+                'ts_akhir_id'=>$value->data_ts->ts_next
+            ]);
         }
     }
 }

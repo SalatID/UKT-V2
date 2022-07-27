@@ -17,6 +17,7 @@ class CreateKelompokTable extends Migration
             $table->id();
             $table->string('name',200);
             $table->integer('event_id')->unsigned();
+            $table->integer('komwil_id')->unsigned()->nullable();
             $table->integer('ts_id')->unsigned();
             $table->integer('penilai_id')->unsigned()->nullable();
             $table->integer('created_user');
