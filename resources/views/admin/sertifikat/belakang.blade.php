@@ -113,7 +113,7 @@
                         <tr>
                             <td class="text-center font-weight-bold" colspan="2">TOTAL</td>
                             <td class="text-center font-weight-bold">{{number_format(round(array_sum($sumTs),1),1)}}</td>
-                            <td class="text-center font-weight-bold" rowspan="2">{{$detail->criteria(count($fJurus)>0?array_sum($sumTs)/count($fTd):0)}}</td>
+                            <td class="text-center font-weight-bold" rowspan="2">{{$detail->criteria(count($fTd)>0?array_sum($sumTs)/count($fTd):0)}}</td>
                         </tr>
                         <tr>
                             <td class="text-center font-weight-bold" colspan="2">NILAI RATA-RATA</td>
