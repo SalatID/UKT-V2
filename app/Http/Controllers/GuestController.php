@@ -24,16 +24,16 @@ class GuestController extends Controller
         $alias =  $alias;
         $event = EventMaster::where('event_alias',$alias)->first();
         if($event==null) return redirect()->back()->with(["error"=>true,"message"=>"Event Tidak Ditemukan"]);
-        $penilai = Penilai::where('event_id',$event->id)->get();
-        $kelompok = Kelompok::where('event_id',$event->id)->get();
+        $penilai = Penilai::where('event_id',$event->id)->orderBy('name')->get();
+        $kelompok = Kelompok::where('event_id',$event->id)->orderBy('name')->get();
         $event_id = $event->id;
         return view('guest.firstPage',compact('penilai','kelompok','event_id','alias'));
     }
     public function selfRegistration($alias)
     {
-        $komwil = Komwil::get();
-        $unit = Unit::get();
-        $ts = Ts::whereNotIn('id',[1])->get();
+        $komwil = Komwil::orderBy('name')->get();
+        $unit = Unit::orderBy('name')->get();
+        $ts = Ts::whereNotIn('id',[1])->orderBy('name')->get();
         $event = EventMaster::where('event_alias',$alias)->first();
       return view('guest.registration',compact('komwil','unit','ts','event'));
     }
@@ -45,7 +45,7 @@ class GuestController extends Controller
     }
     public function pilihJurus()
     {
-        $masterJurus = Jurus::where('parent_id',0)->get();
+        $masterJurus = Jurus::where('parent_id',0)->orderBy('name')->get();
         return view('guest.pilihJurus',compact('masterJurus'));
     }
     public function getSubJurus()

@@ -234,7 +234,7 @@ class AdminController extends Controller
     public function getJsonUnit()
     {
         if(!request()->has('id')) return response()->json([]);
-        return response()->json(Unit::where('komwil_id',request('id'))->get());
+        return response()->json(Unit::where('komwil_id',request('id'))->orderBy('name')->get());
     }
 
     public function updateKomwil()
@@ -536,7 +536,7 @@ class AdminController extends Controller
     {
         $ts = Ts::whereNotIn('id',[1])->get();
         $komwil = Komwil::get();
-        $unit = Unit::get();
+        $unit = Unit::orderBy('name')->get();
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
         $event = EventMaster::all();
         return view('admin.kelompok.addKelompok',compact('ts','unit','komwil','anggotaKelompok','event'));
@@ -665,7 +665,7 @@ class AdminController extends Controller
     { 
         $ts = Ts::whereNotIn('id',[1])->get();
         $komwil = Komwil::get();
-        $unit = Unit::get();
+        $unit = Unit::orderBy('name')->get();
         $dataKelompok = Kelompok::with('data_peserta')->where('id',$id)->first();
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
         // dd($anggotaKelompok);
@@ -733,7 +733,7 @@ class AdminController extends Controller
     {
         $dataUser = User::get();
         $komwil = Komwil::get();
-        $unit = Unit::get();
+        $unit = Unit::orderBy('name')->get();
         $event = EventMaster::get();
         return view('admin.user.index',compact('dataUser','komwil','unit','event'));
     }

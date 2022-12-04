@@ -36,8 +36,8 @@ class PesertaController extends Controller
             $dataPeserta = $dataPeserta->get();
         }
         
-        $komwil = Komwil::get();
-        $unit = Unit::get();
+        $komwil = Komwil::orderBy('name')->get();
+        $unit = Unit::orderBy('name')->get();
         $ts = Ts::whereNotIn('id',[1])->get();
         $event = EventMaster::all();
         return view('admin.peserta.index',compact('dataPeserta','komwil','unit','ts','event'));
