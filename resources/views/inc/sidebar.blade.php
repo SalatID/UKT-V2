@@ -79,6 +79,7 @@
                   </p>
                 </a>
               </li>
+              @if (auth()->user()->role==='SPADM')
               <li class="nav-item">
                 <a href="{{route('summary-nilai')}}" class="nav-link {{ url()->current() == route('summary-nilai') ? 'active' : '' }}">
                   <i class="fas fa-trophy nav-icon"></i>
@@ -91,6 +92,7 @@
                   <p>Cetak Sertifikat</p>
                 </a>
               </li>
+              @endif
             </ul>
           </li>
           {{-- <li class="nav-item">
