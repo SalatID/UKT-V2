@@ -84,7 +84,11 @@ class PesertaController extends Controller
         }
         $ins = Peserta::create($params);
         if(auth()->user()==null){
-            return redirect()->route('self-peserta',[Crypt::encrypt($params['no_peserta'])]);
+            $throw = [
+                "no_peserta"=>$params['no_peserta'],
+                "event_id"=>$params['event_id']
+            ];
+            return redirect()->route('self-peserta',[Crypt::encrypt(json_encode( $throw))]);
         }
         return redirect()->back()->with([
             'error'=>!$ins,

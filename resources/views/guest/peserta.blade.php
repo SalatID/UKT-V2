@@ -92,7 +92,7 @@
                         <div class="col-4 justity-content-center">
                             <strong class="text-center">Foto Anda</strong>
                             <br>
-                            <img src="/{{$peserta->foto}}" class="img-fluid foto" id="prev-foto" width="192cm" height="256cm"
+                            <img src="/{{$peserta->foto}}" class="img-fluid" width="192cm" height="256cm"
                                 alt="Event Banner">
 
                         </div>
