@@ -5,7 +5,7 @@
         <tr>
             <td colspan="2">
                 <br>
-                <a href="#" onclick="backToHome()">Kembali Ke Halaman Awal</a>
+                <a href="{{env('APP_URL')}}/event/run/{{$alias}}">Kembali Ke Halaman Awal</a>
                 <br>
                 <br>
                 <br>
@@ -78,9 +78,4 @@
             </tr>
         </table>
     </form>
-    <script>
-        function backToHome(){
-            location.reload()
-        }
-    </script>
 @endsection
