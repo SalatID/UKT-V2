@@ -15,7 +15,7 @@
         </div>
         <div class="info">
           <a href="#" class="d-block">{{auth()->user()->name}}</a>
-          <span class="text-white">{{\App\Models\EventMaster::where('id',auth()->user()->event_id)->first()->name??'No Event'}} {{\App\Models\EventMaster::where('id',auth()->user()->event_id)->first()->penyelenggara??'No Event'}}</span>
+          <p class="text-white text-wrap col-12">{{\App\Models\EventMaster::where('id',auth()->user()->event_id)->first()->name??'No Event'}} {{\App\Models\EventMaster::where('id',auth()->user()->event_id)->first()->penyelenggara??'No Event'}}</p>
         </div>
       </div>
 
