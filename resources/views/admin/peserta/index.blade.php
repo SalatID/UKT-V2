@@ -5,7 +5,6 @@
         
     </div>
     <form action="{{route('peserta')}}">
-        @csrf
         <div class="row">
             <div class="col-xl-3">
                 <div class="form-group">
@@ -54,6 +53,24 @@
                 </div>
             </div>
         </div>
+        @if (auth()->user()->role==='SPADM')
+        <div class="row">
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="ts_id">Tingkat Sabuk</label>
+                    @php($eventSelect = \App\Models\EventMaster::all())
+                    <select name="event_id" class="form-control" data-src={{url()->current()}}>
+                        <option value="">Pilih Event</option>
+                        @foreach ($eventSelect as $item)
+                        <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
+                        {{ $item->name }} - {{ $item->lokasi }} -
+                        {{ $item->penyelenggara }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        @endif
         <div class="row justify-content-start mb-2">
                 <button type="submit" class="btn btn-info mr-2">Filter</button>
                 <button type="button" class="btn btn-success btn-add mr-2" data-toggle="modal" data-target="#addPeserta">Tambah
@@ -165,6 +182,7 @@
                     $('select[name="unit_id"]', form).val(data.unit_id)
                     $('select[name="tingkat"]', form).val(data.tingkat)
                     $('select[name="event_id"]', form).val(data.event_id)
+                    $('input[name="foto"]', form).attr('required',false)
                     $('.foto').show()
                     $('.foto').attr('src', '/' + data.foto)
                     $('#addPeserta').modal('show')
@@ -188,6 +206,7 @@
             form.attr('action', '{{ route('store-peserta') }}')
             $('input[name="id"]').remove()
             $('.foto').hide()
+            $('input[name="foto"]', form).attr('required',true)
             form.trigger("reset");
         })
         $("input[name='check_all']").click(function(){

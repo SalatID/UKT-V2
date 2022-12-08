@@ -11,7 +11,6 @@
         ];
     @endphp
     <form action="{{route('nilai')}}">
-        @csrf
         <div class="row">
             <div class="col-xl-3">
                 <div class="form-group">
@@ -58,6 +57,24 @@
                 </div>
             </div>
         </div>
+        @if (auth()->user()->role==='SPADM')
+        <div class="row">
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="ts_id">Tingkat Sabuk</label>
+                    @php($eventSelect = \App\Models\EventMaster::all())
+                    <select name="event_id" class="form-control" data-src={{url()->current()}}>
+                        <option value="">Pilih Event</option>
+                        @foreach ($eventSelect as $item)
+                        <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
+                        {{ $item->name }} - {{ $item->lokasi }} -
+                        {{ $item->penyelenggara }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+        @endif
         <div class="row">
             <div class="col-xl-4">
                 <button type="submit" class="btn btn-success">Filter</button>

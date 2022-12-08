@@ -30,6 +30,10 @@ class NilaiController extends Controller
             // $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
             $dataNilai = Nilai::select('nilai.*')->where($params);
             // if(request('ts_id')!=null) $dataNilai = $dataNilai->join('peserta','peserta.id','nilai.peserta_id')->where('peserta.ts_awal_id',request('ts_id'));
+            if(request()->has('event_alias')){
+                $event = EventMaster::where('event_alias',request('event_alias'))->first();
+                $dataNilai = $dataNilai->where('event_id',$event->id);
+            }
             $dataNilai = $dataNilai->get();
         }
         $ts = Ts::all();
@@ -71,8 +75,9 @@ class NilaiController extends Controller
                     where event_id=:event_id
                     GROUP BY peserta_id
                 ) b ON a.id = b.peserta_id
+                where a.event_id=:event_id2
                     order by a.name
-                ",['event_id'=>$event->id]);
+                ",['event_id'=>$event->id,'event_id2'=>$event->id]);
         }
         return view('admin.nilai.summaryNilai',compact('dataNilai'));
     }
