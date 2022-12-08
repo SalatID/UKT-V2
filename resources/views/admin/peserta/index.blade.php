@@ -107,6 +107,7 @@
                                             data-action="{{ route('json-peserta', $item->id) }}">Edit</a>
                                         <a class="dropdown-item btn-delete" href="#"
                                             data-action="{{ route('delete-peserta', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" target="_blank" href="{{route('self-peserta',[Crypt::encrypt(json_encode( ['no_peserta'=>$item->no_peserta,'event_id'=>$item->event_id]))])}}">Cetak Kartu</a>
                                     </div>
                                 </div>
                             </td>
