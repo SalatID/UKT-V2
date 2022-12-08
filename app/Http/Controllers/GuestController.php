@@ -129,7 +129,7 @@ class GuestController extends Controller
                 "no_peserta"=>$peserta->no_peserta,
                 "event_id"=>$peserta->event_id
             ];
-            $qrCode = QrCode::size(200)->generate(route('self-peserta',[rypt::encrypt(json_encode( $throw))]));
+            $qrCode = QrCode::size(200)->generate(route('self-peserta',[Crypt::encrypt(json_encode( $throw))]));
             return view('guest.peserta',compact('event','peserta','qrCode'));
         } catch (Illuminate\Contracts\Encryption\DecryptException $e) {
             return false ;
