@@ -120,9 +120,9 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
+                                        <a class="dropdown-item" onclick="editData(this)" href="#"
                                             data-action="{{ route('json-peserta', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#"
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#"
                                             data-action="{{ route('delete-peserta', $item->id) }}">Delete</a>
                                         <a class="dropdown-item" target="_blank" href="{{route('self-peserta',[Crypt::encrypt(json_encode( ['no_peserta'=>$item->no_peserta,'event_id'=>$item->event_id]))])}}">Cetak Kartu</a>
                                     </div>
@@ -161,8 +161,8 @@
         $(document).ready(function(){
             if($('#komwil').val()!=='') $('#komwil').change();
         })
-        $('.btn-edit').click(function() {
-            $.get($(this).data('action'), function(data) {
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
                 console.log(data.id)
                 if (typeof data.id !== 'undefined') {
                     $('#addPesertaLabel').text('Edit Peserta')
@@ -193,14 +193,14 @@
                     message: 'Data Tidak Ditemukan'
                 })
             })
-        });
-        $('.btn-delete').click(function() {
+        }
+        function deleteData(e) {
             if (confirm('Hapus User?')) {
-                $.get($(this).data('action'), function() {
+                $.get($(e).data('action'), function() {
                     location.reload()
                 })
             }
-        })
+        }
         $('.btn-add').click(function() {
             $('#addPesertaLabel').text('Tambah Peserta')
             form.attr('action', '{{ route('store-peserta') }}')
