@@ -120,7 +120,7 @@ class PesertaController extends Controller
             $params['foto']=$dir.$fielName;
         }
         $params['updated_user']=auth()->user()->id;
-        $ins = Peserta::where('id',request('id'))->update($params);
+        $ins = Peserta::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -128,7 +128,7 @@ class PesertaController extends Controller
     }
     public function deletePeserta($id)
     {
-        $ins = Peserta::where('id',$id)->update([
+        $ins = Peserta::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);

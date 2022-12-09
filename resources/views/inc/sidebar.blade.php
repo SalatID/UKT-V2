@@ -181,6 +181,12 @@
                   <p>Log Program</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a href="{{route('activity-log')}}" class="nav-link {{ url()->current() == route('activity-log') ? 'active' : '' }}">
+                  <i class="fas fa-history nav-icon"></i>
+                  <p>Activity Log</p>
+                </a>
+              </li>
             </ul>
           </li>
           @endif

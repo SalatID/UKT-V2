@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Models\EventMaster;
 use App\Models\SummaryNilaiDetail;
 use App\Models\SummaryNilai;
+use App\Models\ActivityLog;
 use DB;
 use Validator;
 use Str;
@@ -245,7 +246,7 @@ class AdminController extends Controller
             return in_array($key,$this->komwil->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Komwil::where('id',request('id'))->update($params);
+        $ins = Komwil::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -253,7 +254,7 @@ class AdminController extends Controller
     }
     public function deleteKomwil($id)
     {
-        $ins = Komwil::where('id',$id)->update([
+        $ins = Komwil::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -309,7 +310,7 @@ class AdminController extends Controller
             return in_array($key,$this->unit->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Unit::where('id',request('id'))->update($params);
+        $ins = Unit::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -317,7 +318,7 @@ class AdminController extends Controller
     }
     public function deleteUnit($id)
     {
-        $ins = Unit::where('id',$id)->update([
+        $ins = Unit::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -372,7 +373,7 @@ class AdminController extends Controller
             return in_array($key,$this->ts->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Ts::where('id',request('id'))->update($params);
+        $ins = Ts::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -380,7 +381,7 @@ class AdminController extends Controller
     }
     public function deleteTs($id)
     {
-        $ins = Ts::where('id',$id)->update([
+        $ins = Ts::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -442,7 +443,7 @@ class AdminController extends Controller
             return in_array($key,$this->penilai->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Penilai::where('id',request('id'))->update($params);
+        $ins = Penilai::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -450,7 +451,7 @@ class AdminController extends Controller
     }
     public function deletePenilai($id)
     {
-        $ins = Penilai::where('id',$id)->update([
+        $ins = Penilai::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -509,7 +510,7 @@ class AdminController extends Controller
             return in_array($key,$this->jurus->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Jurus::where('id',request('id'))->update($params);
+        $ins = Jurus::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -517,7 +518,7 @@ class AdminController extends Controller
     }
     public function deleteJurus($id)
     {
-        $ins = Jurus::where('id',$id)->update([
+        $ins = Jurus::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -627,7 +628,7 @@ class AdminController extends Controller
                 $insSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $insSuccess++;
-                    Peserta::where('id',$val['id'])->update([
+                    Peserta::where('id',$val['id'])->firstOrFail()->update([
                         'kelompok_id'=>$id
                     ]);
                 }
@@ -656,7 +657,7 @@ class AdminController extends Controller
     }
     public function deleteAnggotaKel($id)
     {
-        $sts = Peserta::where('id',$id)->update([
+        $sts = Peserta::where('id',$id)->firstOrFail()->update([
             'kelompok_id'=>null,
             'updated_user'=>auth()->user()->id
         ]);
@@ -682,14 +683,14 @@ class AdminController extends Controller
         $event_data = auth()->user()->event_id;
         $params['event_id']=$event_data;
         return DB::transaction(function() use ($params){
-            $upd = Kelompok::where('id',request('id'))->update($params);
+            $upd = Kelompok::where('id',request('id'))->firstOrFail()->update($params);
             $id = request('id');
             if($upd){
                 $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
                 $updSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $updSuccess++;
-                    Peserta::where('id',$val['id'])->update([
+                    Peserta::where('id',$val['id'])->firstOrFail()->update([
                         'kelompok_id'=>$id
                     ]);
                 }
@@ -716,7 +717,7 @@ class AdminController extends Controller
                 $updSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $updSuccess++;
-                    Peserta::where('id',$val['id'])->update([
+                    Peserta::where('id',$val['id'])->firstOrFail()->update([
                         'kelompok_id'=>null
                     ]);
                 }
@@ -783,7 +784,7 @@ class AdminController extends Controller
     }
     public function deleteUser($id)
     {
-        $ins = User::where('id',$id)->update([
+        $ins = User::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -799,7 +800,7 @@ class AdminController extends Controller
             return in_array($key,$this->user->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = User::where('id',request('id'))->update($params);
+        $ins = User::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -864,7 +865,7 @@ class AdminController extends Controller
     }
     public function deleteEvent($id)
     {
-        $ins = EventMaster::where('id',$id)->update([
+        $ins = EventMaster::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -887,10 +888,19 @@ class AdminController extends Controller
             $gambar->move($dir,$fielName);
             $params['gambar']=$dir.$fielName;
         }
-        $ins = EventMaster::where('id',request('id'))->update($params);
+        $ins = EventMaster::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
         ]);
-    }    
+    } 
+    public function activityLog()
+    {
+        $this->activityLog = new ActivityLog();
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->activityLog->fillable)!==false && request($key)!=null;
+        },ARRAY_FILTER_USE_KEY);
+        $dataLog = $this->activityLog->where($params)->limit(50)->orderBy('id','desc')->get(); 
+        return view('admin.log.activity',compact('dataLog'));
+    }
 }

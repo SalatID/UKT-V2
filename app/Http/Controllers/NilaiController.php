@@ -150,10 +150,10 @@ class NilaiController extends Controller
         },ARRAY_FILTER_USE_KEY);
         if(request()->has('ts_akhir_id')){
             $dataNilai = Nilai::findOrFail(request('id'));
-            Peserta::where('id',$dataNilai->peserta_id)->update(['ts_akhir_id'=>request('ts_akhir_id')]);
+            Peserta::where('id',$dataNilai->peserta_id)->firstOrFail()->update(['ts_akhir_id'=>request('ts_akhir_id')]);
         }
         $params['updated_user']=auth()->user()->id;
-        $ins = Nilai::where('id',request('id'))->update($params);
+        $ins = Nilai::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'

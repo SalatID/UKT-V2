@@ -96,6 +96,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'log'],function(){
         Route::get('/',[AdminController::class,'log'])->name('admin-log');
+        Route::get('/activity',[AdminController::class,'activityLog'])->name('activity-log');
     });
 
     Route::group(['prefix'=>'master'],function(){

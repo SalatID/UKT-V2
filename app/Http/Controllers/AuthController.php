@@ -41,7 +41,7 @@ class AuthController extends Controller
 
     public function logout()
     {
-            // User::where(['userId'=>auth()->user()->userId])->update(['loginStatus'=>'N']);
+            // User::where(['userId'=>auth()->user()->userId])->firstOrFail()->update(['loginStatus'=>'N']);
             auth()->logout();
 
             request()->session()->invalidate();
