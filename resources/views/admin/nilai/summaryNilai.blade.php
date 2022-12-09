@@ -2,7 +2,7 @@
 @section('title', 'Summary Nilai')
 @section('content')
 <div class="row d-flex justify-content-start mb-3">
-    <button type="button" class="btn btn-success btn-calculate" data-src="{{route('calculate-nilai')}}">Kalkulasi Nilai</button>
+    <button type="button" class="btn btn-{{(\App\Models\QueueModel::count()>0?'warning':'success')}} btn-calculate" {{(\App\Models\QueueModel::count()>0?'disabled':'')}} data-src="{{route('calculate-nilai')}}">{{(\App\Models\QueueModel::count()>0?'Nilai Sedang Dikalkulasi':'Kalkulasi Nilai')}}</button>
 </div>
 <div class="row">
     <div class="col-xl-12 table-responsive">
@@ -53,7 +53,7 @@
     $('#table-nilai').dataTable()
     $('.btn-calculate').click(function(){
         $.get($(this).data('src'),function(data){
-
+            location.reload()
         })
     })
 </script>

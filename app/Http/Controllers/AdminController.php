@@ -186,8 +186,9 @@ class AdminController extends Controller
                 where event_id=:event_id
                 GROUP BY peserta_id
             ) b ON a.id = b.peserta_id
+            where a.event_id = :event_id2
                 order by a.name
-            ",['event_id'=>$event->id]);
+            ",['event_id'=>$event->id,'event_id2'=>$event->id]);
         }
 
         return view('admin.home',compact('totalPeserta','totalJurus','totalPenilai','totalKelompok','jurusDinilai','top3','dataNilai'));

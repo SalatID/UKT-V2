@@ -2,7 +2,6 @@
 @section('title', 'Cetak Sertifikat')
 @section('content')
     <form action="{{ route('preview-sertifikat') }}">
-        @csrf
         <div class="row">
             <div class="col-xl-3">
                 <div class="form-group">
@@ -10,8 +9,7 @@
                     <select name="event_id" class="form-control" data-href="{{ route('get-json-unit') }}" required>
                         <option value="">Pilih Event</option>
                         @foreach ($event as $item)
-                            <option value="{{ $item->id }}" {{ (request('event_id') ?? '') == $item->id ? 'selected' : '' }}>
-                                {{ $item->name }}</option>
+                        <option value="{{$item->id}}">{{$item->name}} - {{$item->lokasi}} - {{$item->penyelenggara}}</option>
                         @endforeach
                     </select>
                 </div>

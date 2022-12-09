@@ -37,9 +37,9 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
+                                        <a class="dropdown-item" onclick="editData(this)" href="#"
                                             data-action="{{ route('json-event', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-event', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-event', $item->id) }}">Delete</a>
                                         <a class="dropdown-item " href="{{route('run-event',[$item->event_alias])}}" target="_blank">Link Penilaian</a>
                                         <a class="dropdown-item " href="{{route('self-registration',[$item->event_alias])}}" target="_blank">Link Pendaftaran</a>
                                     </div>
@@ -166,8 +166,8 @@
                 $('.row_password').slideDown()
             }
         })
-        $('.btn-edit').click(function() {
-            $.get($(this).data('action'), function(data) {
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
                 console.log(data.id)
                 if (typeof data.id !== 'undefined') {
                     $('#addEventLabel').text('Edit Event')
@@ -195,7 +195,7 @@
                     message:'Data Tidak Ditemukan'
                 })
             })
-        });
+        };
         $('.btn-add').click(function(){
             $('#addEventLabel').text('Tambah Event')
             form.attr('action', '{{ route('store-event') }}')
@@ -205,12 +205,12 @@
             $('.gambar').hide()
             form.trigger("reset");
         })
-        $('.btn-delete').click(function(){
+        function deleteData(e) {
             if(confirm('Hapus Event?')){
-                $.get($(this).data('action'),function(){
+                $.get($(e).data('action'),function(){
                     location.reload()
                 })
             }
-        })
+        }
     </script>
 @endsection

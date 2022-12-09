@@ -61,7 +61,7 @@
         <div class="row">
             <div class="col-xl-3">
                 <div class="form-group">
-                    <label for="ts_id">Tingkat Sabuk</label>
+                    <label for="ts_id">Event</label>
                     @php($eventSelect = \App\Models\EventMaster::all())
                     <select name="event_id" class="form-control" data-src={{url()->current()}}>
                         <option value="">Pilih Event</option>
@@ -123,10 +123,10 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
-                                            data-action="{{ route('json-peserta', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#"
-                                            data-action="{{ route('delete-peserta', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="editData(this)" href="#"
+                                            data-action="{{ route('json-nilai', $item->id) }}">Edit</a>
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#"
+                                            data-action="{{ route('delete-nilai', $item->id) }}">Delete</a>
                                     </div>
                                 </div>
                             </td>
@@ -137,7 +137,94 @@
             </table>
         </div>
     </div>
+     <!-- Modal -->
+     <div class="modal fade" id="editNilai" tabindex="-1" role="dialog" aria-labelledby="editNilaiLabel"
+     aria-hidden="true">
+     <div class="modal-dialog" role="document">
+         <div class="modal-content">
+             <div class="modal-header">
+                 <h5 class="modal-title" id="editNilaiLabel">Tambah Unit</h5>
+                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                     <span aria-hidden="true">&times;</span>
+                 </button>
+             </div>
+             <div class="modal-body">
+                 <div class="row">
+                     <div class="col-xl-12">
+                         <form action="{{ route('store-unit') }}" method="POST" id="formNilai">
+                             @csrf
+                             <div class="form-group">
+                                 <label for="nama">Nama</label>
+                                 <input type="text" class="form-control" name="name" id="nama"
+                                     placeholder="Nama" disabled>
+                                 {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                             </div>
+                             <div class="form-group">
+                                <label for="ts_awal_id">Tingkat Sabuk Awal</label>
+                                <select name="ts_awal_id" class="form-control" required id="ts_awal_id" disabled>
+                                    <option value="">Pilih Tingkat</option>
+                                    @foreach (\App\Models\Ts::all() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="ts_akhir_id">Tingkat Sabuk Akhir</label>
+                                <select name="ts_akhir_id" class="form-control" required id="ts_akhir_id">
+                                    <option value="">Pilih Tingkat</option>
+                                    @foreach (\App\Models\Ts::all() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="penguji_id">Penguji</label>
+                                <select name="penguji_id" class="form-control" required id="penguji_id">
+                                    <option value="">Pilih Tingkat</option>
+                                    @foreach (\App\Models\Penilai::all() as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="penguji_id">Nilai</label>
+                                <input type="number" name="nilai" class="form-control">
+                            </div>
+                             <button type="submit" class="btn btn-success">Simpan</button>
+                         </form>
+                     </div>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
     <script>
+        var form = $('#formNilai')
         $('#tableNilai').dataTable()
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
+                console.log(data.id)
+                if (typeof data.id !== 'undefined') {
+                    $('#editNilaiLabel').text('Edit Nilai')
+                    form.attr('action', '{{ route('update-nilai') }}')
+                    $('<input>').attr({
+                        type: 'hidden',
+                        name: 'id',
+                        value:data.id
+                    }).appendTo('#formNilai');
+                    $('input[name="name"]', form).val(data.data_peserta.name)
+                    $('select[name="ts_awal_id"]',form).val(data.data_peserta.ts_awal_id)
+                    $('select[name="ts_akhir_id"]',form).val(data.data_peserta.ts_akhir_id)
+                    $('select[name="penguji_id"]',form).val(data.penguji_id)
+                    $('input[name="nilai"]',form).val(data.nilai)
+                    $('#editNilai').modal('show')
+                    return
+                }
+                showAllerJs({
+                    error:true,
+                    message:'Data Tidak Ditemukan'
+                })
+            })
+        };
     </script>
 @endsection

@@ -196,7 +196,9 @@
     </div>
     <script>
         $('#table-nilai').dataTable({
-            paging:false
+            paging:false,
+            scrollY: '800px',
+            scrollCollapse: true,
         })
     </script>
 @endsection

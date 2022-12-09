@@ -73,6 +73,9 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::get('/sertifikat',[NilaiController::class,'cetakSertifikat'])->name('cetak-sertifikat');
         Route::get('/sertifikat/cetak',[NilaiController::class,'previewSertifikat'])->name('preview-sertifikat');
         Route::get('/calculate',[NilaiController::class,'calculateNilai'])->name('calculate-nilai');
+        Route::get('/json-data/{id}',[NilaiController::class,'jsonNilai'])->name('json-nilai');
+        Route::get('/delete/{id}',[NilaiController::class,'deleteNilai'])->name('delete-nilai');
+        Route::post('/update-nilai',[NilaiController::class,'updateNilai'])->name('update-nilai');
     });
 
     Route::group(['prefix'=>'user'],function(){

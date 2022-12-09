@@ -27,7 +27,7 @@
                             <td>{{ $item->email }}</td>
                             <td>{{ $item->data_unit->name??'' }}</td>
                             <td>{{ $item->data_unit->data_komwil->name??'' }}</td>
-                            <td>{{ $item->data_event->name??'' }}</td>
+                            <td>{{$item->data_event->name??''}} - {{$item->data_event->lokasi??''}} - {{$item->data_event->penyelenggara??''}} </td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"
@@ -35,9 +35,9 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
+                                        <a class="dropdown-item" onclick="editData(this)" href="#"
                                             data-action="{{ route('json-user', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-user', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-user', $item->id) }}">Delete</a>
                                     </div>
                                 </div>
                             </td>
@@ -163,8 +163,8 @@
                 $('.row_password').slideDown()
             }
         })
-        $('.btn-edit').click(function() {
-            $.get($(this).data('action'), function(data) {
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
                 console.log(data.id)
                 if (typeof data.id !== 'undefined') {
                     $('#addUserLabel').text('Edit User')
@@ -182,6 +182,7 @@
                     $('select[name="komwil_id"]',form).change()
                     $('select[name="unit_id"]',form).val(data.unit_id)
                     $('select[name="role"]',form).val(data.role)
+                    $('select[name="event_id"]',form).val(data.event_id)
                     $('.row_password').hide()
                     $('.validasi_email').hide()
                     $('#addUser').modal('show')
@@ -192,7 +193,7 @@
                     message:'Data Tidak Ditemukan'
                 })
             })
-        });
+        };
         $('.btn-add').click(function(){
             $('#addUserLabel').text('Tambah User')
             form.attr('action', '{{ route('store-user') }}')
@@ -201,12 +202,12 @@
             $('.validasi_email').show()
             form.trigger("reset");
         })
-        $('.btn-delete').click(function(){
+        function deleteData(e) {
             if(confirm('Hapus Peserta?')){
-                $.get($(this).data('action'),function(){
+                $.get($(e).data('action'),function(){
                     location.reload()
                 })
             }
-        })
+        }
     </script>
 @endsection

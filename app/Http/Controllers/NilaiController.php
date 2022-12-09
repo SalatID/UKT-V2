@@ -10,6 +10,7 @@ use App\Models\Penilai;
 use App\Models\Jurus;
 use App\Models\SummaryNilai;
 use App\Models\SummaryNilaiDetail;
+use App\Models\Peserta;
 use App\Models\EventMaster;
 use Barryvdh\DomPDF\Facade\Pdf;
 use DB;
@@ -120,5 +121,42 @@ class NilaiController extends Controller
         }
         $pdf->setBasePath(public_path());
         return $pdf->setPaper('a4')->stream('sertifikat.pdf');
+    }
+    public function jsonNilai($id)
+    {
+        $dataNilai = Nilai::select('nilai.*')->with(['data_peserta'])->where('id',$id);
+        // if(request('ts_id')!=null) $dataNilai = $dataNilai->join('peserta','peserta.id','nilai.peserta_id')->where('peserta.ts_awal_id',request('ts_id'));
+        if(request()->has('event_alias')){
+            $event = EventMaster::where('event_alias',request('event_alias'))->first();
+            $dataNilai = $dataNilai->where('event_id',$event->id);
+        }
+        $dataNilai = $dataNilai->first();
+        return response()->json($dataNilai);
+    }
+    public function deleteNilai($id)
+    {
+        $delete = Nilai::where('id',$id)->delete();
+        return redirect()->back()->with([
+            'error'=>!$delete,
+            'message'=>$delete?'Update Berhasil':'Update Gagal'
+        ]);
+    }
+    public function updateNilai()
+    {
+        $this->nilai = new Nilai();
+        if(!request()->has('id')) return redirect()->back()->with(['error'=>!$ins,'message'=>'Id tidak ditemukan']); 
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->nilai->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        if(request()->has('ts_akhir_id')){
+            $dataNilai = Nilai::findOrFail(request('id'));
+            Peserta::where('id',$dataNilai->peserta_id)->update(['ts_akhir_id'=>request('ts_akhir_id')]);
+        }
+        $params['updated_user']=auth()->user()->id;
+        $ins = Nilai::where('id',request('id'))->update($params);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Update Berhasil':'Update Gagal'
+        ]);
     }
 }
