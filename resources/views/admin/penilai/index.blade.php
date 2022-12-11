@@ -24,8 +24,8 @@
                             <td>{{ $no++ }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->data_ts->name }}</td>
-                            <td>{{ $item->data_komwil->name }}</td>
-                            <td>{{ $item->data_event->name }}</td>
+                            <td>{{ $item->data_komwil->name??'' }}</td>
+                            <td>{{ $item->data_event->name??'' }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"
