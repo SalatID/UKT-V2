@@ -56,6 +56,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::get('/',[AdminController::class,'kelompok'])->name('kelompok');
         Route::get('/reset-filter',[AdminController::class,'resetFilteredPeserta'])->name('reset-filter');
         Route::get('/filtered-peserta',[AdminController::class,'getFilteredPeserta'])->name('filtered-peserta');
+        Route::get('/autogenerate-kelompok',[AdminController::class,'autogenerateKelompok'])->name('autogenerate-kelompok');
         Route::get('/set-anggota-kelompok/{id}',[AdminController::class,'setAnggotaKelompok'])->name('set-anggota-kelompok');
         Route::get('/delete-tmp-anggota-kelompok/{id}',[AdminController::class,'deleteTmpAnggotaKel'])->name('delete-tmp-anggota-kelompok');
         Route::get('/delete-anggota-kelompok/{id}',[AdminController::class,'deleteAnggotaKel'])->name('delete-anggota-kelompok');

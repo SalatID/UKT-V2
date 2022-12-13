@@ -1,6 +1,11 @@
 @extends('admin.index')
 @section('title', 'List Peserta')
 @section('content')
+<style>
+    .buttons-excel,.buttons-pdf{
+        display: none;
+    }
+</style>
     <div class="row d-flex justify-content-start mb-3">
         
     </div>
@@ -76,6 +81,8 @@
                 <button type="button" class="btn btn-success btn-add mr-2" data-toggle="modal" data-target="#addPeserta">Tambah
                     Peserta</button>
                 <button type="button" class="btn btn-primary mr-2 btn-cetak" data-src="{{route('cetak-kartu')}}">Cetak Kartu</button>
+                <button class="btn btn-secondary mr-2" onclick="$('.buttons-excel').click()" tabindex="0" aria-controls="tablePeserta" type="button"><span>Excel</span></button>
+                <button class="btn btn-secondary mr-2" onclick="$('.buttons-pdf').click()" tabindex="0" aria-controls="tablePeserta" type="button"><span>PDF</span></button>
         </div>
     </form>
     <div class="row">
@@ -157,7 +164,23 @@
     </div>
     <script>
         var form = $('#formPeserta')
-        $('#tablePeserta').dataTable()
+        $('#tablePeserta').dataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: [ 0, 2,3,4,5,6,7,8,9 ]
+                    }
+                },{
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [ 0, 2,3,4,5,6,7,8,9 ]
+                    }
+                }
+            ],
+            
+        })
         $(document).ready(function(){
             if($('#komwil').val()!=='') $('#komwil').change();
         })

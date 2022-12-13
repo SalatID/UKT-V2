@@ -529,7 +529,12 @@ class AdminController extends Controller
     }
     public function kelompok()
     {
-        $dataKelompok = Kelompok::with(['data_peserta','data_ts'])->get();
+        $dataKelompok = Kelompok::with(['data_peserta','data_ts']);
+        if(request()->has('event_alias')){
+            $event = EventMaster::where('event_alias',request('event_alias'))->first();
+            $dataKelompok = $dataKelompok->where('event_id',$event->id);
+        }
+        $dataKelompok = $dataKelompok->get();
         $komwil = Komwil::get();
         $ts = Ts::whereNotIn('id',[1])->get();
         return view('admin.kelompok.index',compact('dataKelompok','komwil','ts'));
@@ -557,6 +562,7 @@ class AdminController extends Controller
             'unit'=>$dataPeserta->data_unit->name,
             'ts'=>$dataPeserta->data_ts->name,
             'tingkat'=>$dataPeserta->tingkat,
+            'event_id'=>$dataPeserta->event_id,
         ]);
         $notPeserta = session()->has(auth()->user()->id.'_'.'not_peserta')?session()->get(auth()->user()->id.'_'.'not_peserta'):[];
         array_push($notPeserta,$id);
@@ -573,6 +579,7 @@ class AdminController extends Controller
             ['unit_id','like',request('unit_id')??'%'],
             ['ts_awal_id','like',request('ts_id')??'%'],
             ['tingkat','like',request('tingkat')??'%'],
+            ['event_id','=',request('event_id')],
         ];
         session()->put(auth()->user()->id.'_'.'form_data',[
             'name'=>request('name'),
@@ -621,18 +628,42 @@ class AdminController extends Controller
         $event_data = auth()->user()->event_id;
         $params['event_id']=request()->has('event_id')?request('event_id'):$event_data;
         return DB::transaction(function() use ($params){
-            $ins = Kelompok::create($params);
-            $id = $ins->id;
-            if($ins){
-                $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok');
-                $insSuccess = 0;
-                foreach($anggotaKelompok as $val){
-                    $insSuccess++;
-                    Peserta::where('id',$val['id'])->firstOrFail()->update([
-                        'kelompok_id'=>$id
-                    ]);
+            $peserta=[];
+            $sessionFilter=[];
+            if(request()->has('jumlah')){
+                $sessionFilter = [
+                    ['komwil_id','like',request('komwil_id')??'%'],
+                    ['unit_id','like',request('unit_id')??'%'],
+                    ['ts_awal_id','like',request('ts_id')??'%'],
+                    ['tingkat','like',request('tingkat')??'%'],
+                    ['event_id','=',request('event_id')],
+                ];
+                // dd(ceil(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->count()/(request('jumlah')??10)));
+            }
+            $name = $params['name'];
+            $z=1;
+            $totalRow = (request()->has('jumlah')?ceil(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->count()/(request('jumlah')??10)):1);
+            for($i=0;$i<$totalRow;$i++){
+                if(request()->has('jumlah')) $params['name'] =  $name.' '.($z++);
+                $ins = Kelompok::create($params);
+                $id = $ins->id;
+                if($ins){
+                        if(request()->has('jumlah')){
+                            $latest =Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->take((request('jumlah')??10))->get();
+                            $peserta = $latest->random(min($latest->count(), (request('jumlah')??10)));
+                        }
+                        $anggotaKelompok = count($peserta)>0?$peserta:session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
+                        $insSuccess = 0;
+                        foreach(($anggotaKelompok) as $val){
+                            $insPeserta = Peserta::where('id',$val['id'])->where('event_id',$params['event_id'])->update([
+                                'kelompok_id'=>$id
+                            ]);
+                            if($insPeserta)  $insSuccess++;
+                        }
+                    
                 }
             }
+            // dd($i);
             $this->resetFilteredPeserta();
             return redirect()->route('kelompok')->with([
                 'error'=>count($anggotaKelompok)!=$insSuccess,
@@ -641,6 +672,7 @@ class AdminController extends Controller
 
         });
     }
+
     public function deleteTmpAnggotaKel($id)
     {
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok');
@@ -707,21 +739,22 @@ class AdminController extends Controller
     {
         return DB::transaction(function() {
             $kelompok = Kelompok::with('data_peserta')->where('id',request('id'));
-            $upd = $kelompok->update([
-                'deleted_at'=>date('Y-m-d H:i:s'),
-                'deleted_user'=>auth()->user()->id
-            ]);
-            $id = request('id');
-            if($upd){
-                $anggotaKelompok = $kelompok->first()->data_peserta;
+            
+            // if($upd){
+                $anggotaKelompok = $kelompok->first()->data_peserta??[];
                 $updSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $updSuccess++;
-                    Peserta::where('id',$val['id'])->firstOrFail()->update([
+                    Peserta::where('id',$val['id'])->update([
                         'kelompok_id'=>null
                     ]);
                 }
-            }
+                $upd = $kelompok->update([
+                    'deleted_at'=>date('Y-m-d H:i:s'),
+                    'deleted_user'=>auth()->user()->id
+                ]);
+                $id = request('id');
+            // }
             $this->resetFilteredPeserta();
             return redirect()->route('kelompok')->with([
                 'error'=>count($anggotaKelompok)!=$updSuccess,

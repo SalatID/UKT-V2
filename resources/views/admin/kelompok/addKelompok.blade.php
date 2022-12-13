@@ -41,7 +41,7 @@
     @endif
     <div class="row">
         <div class="col-xl-12">
-            <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addPeserta" data-action="{{route('filtered-peserta')}}">Tambah Peserta</button>
+            <button type="button" class="btn btn-success btn-add" data-action="{{route('filtered-peserta')}}">Tambah Peserta</button>
         </div>
     </div>
     <div  class="row pt-3">
@@ -147,7 +147,17 @@
                     </div>
                 </div>
                 <div class="col-xl-12">
-                    <button type="button" class="btn btn-primary btn-filter" data-action="{{route('filtered-peserta')}}">Filter</button>
+                    <div class="row">
+                        <div class="input-group mb-3 col-md-1">
+                            <button type="button" class="btn btn-primary btn-filter" data-action="{{route('filtered-peserta')}}">Filter</button>
+                        </div>
+                        <div class="input-group mb-3 col-md-4">
+                            <input type="text" class="form-control" name="jumlah" placeholder="Jumlah Peserta Kelompok" aria-label="Jumlah Peserta Kelompok" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button type="button" class="input-group-text btn btn-secondary btn-random" data-action="{{route('store-kelompok')}}" id="basic-addon2">Auto Generate</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
              </div>
              <div class="row">
@@ -216,6 +226,21 @@
             parseTable(data)
         })
     })
+    $('.btn-random').click(function(){
+        $.post($(this).data('action'),{
+            '_token':$('input[name="_token"]').val(),
+            'name':$('input[name="name"]').val(),
+            'komwil_id':$('select[name="komwil_id"]').val(),
+            'unit_id':$('select[name="unit_id"]').val(),
+            'ts_id':$('select[name="ts_awal_id"]').val(),
+            'tingkat':$('select[name="tingkat"]').val(),
+            'name':$('input[name="name"]').val(),
+            'event_id':$('select[name="event_id"]').val(),
+            'jumlah':$('input[name="jumlah"]').val(),
+        },function(data){
+            window.location.href = '/admin/kelompok'
+        })
+    })
     $('.btn-reset').click(function(){
         $.get($(this).data('action'),function(){
             $.get($('.btn-add').data('action'),function(data){
@@ -227,8 +252,19 @@
         paging:false
     })
     $('.btn-add').click(function(){
+        if($('select[name="event_id"]').val()=='') {
+            alert('Pilih Event Terlebih Dahulu');
+            $('select[name="event_id"]').focus()
+            return;
+        }
+        if($('select[name="ts_id"]').val()=='') {
+            $('select[name="ts_id"]').focus()
+            alert('Pilih Tingkat Sabuk Terlebih Dahulu');
+            return;
+        }
         $('select[name="ts_awal_id"]').val($('select[name="ts_id"]').val())
         $('.btn-filter').click()
+        $('#addPeserta').modal('show')
         // $.get($(this).data('action'),function(data){
         //     parseTable(data)
         // })

@@ -128,7 +128,7 @@ class PesertaController extends Controller
     }
     public function deletePeserta($id)
     {
-        $ins = Peserta::where('id',$id)->firstOrFail()->update([
+        $ins = Peserta::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
