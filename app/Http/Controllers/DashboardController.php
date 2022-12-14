@@ -21,7 +21,7 @@ class DashboardController extends Controller
                         ->join('komwil as b','b.id','peserta.komwil_id')
                         ->where('event_id',$event->id)
                         ->groupBy('b.name')->get(); 
-                        dd($sumKomwil);
+                        // dd($sumKomwil);
             $sumTs =  Peserta::selectRaw('cast(count(*) as int) as y,b.name')
                         ->join('ts as b','b.id','peserta.ts_awal_id')
                         ->where('event_id',$event->id)
