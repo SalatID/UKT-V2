@@ -52,9 +52,12 @@ class AdminController extends Controller
         $jurusDinilai = [];
         $top3 = [];
         $dataNilai = [];
-        if(request()->has('event_alias')){
-            $event = EventMaster::where('event_alias',request('event_alias'))->first();
-            $totalPeserta = Peserta::where('event_id',$event->id)->count();
+        if(request()->has('event_alias') || auth()->user()->event_id!=null){
+            if(request()->has('event_alias')) $event = EventMaster::where('event_alias',request('event_alias'))->first();
+            if(auth()->user()->event_id!=null) $event = EventMaster::where('id',auth()->user()->event_id)->first();
+            $totalPeserta = Peserta::where('event_id',$event->id);
+            if(auth()->user()->event_id!=null) $totalPeserta = $totalPeserta->where('komwil_id',auth()->user()->komwil_id);
+            $totalPeserta = $totalPeserta->count();
             $totalJurus = SummaryNilaiDetail::selectRaw('sum(jurus_dinilai)jurus_dinilai,sum(total_jurus)total_jurus')->where('event_id',$event->id)->first();
             $totalPenilai = Penilai::where('event_id',$event->id)->count();
             $totalKelompok = Kelompok::where('event_id',$event->id)->count();
@@ -64,8 +67,9 @@ class AdminController extends Controller
                 FROM jurus a
                 LEFT JOIN (
                     SELECT COUNT(peserta_id)total_peserta, jurus_id
-                    FROM summary_nilai_detail
-                    where event_id = :event_id
+                    FROM summary_nilai_detail a
+                    ".(auth()->user()->event_id!=null?" join peserta b on b.id = a.peserta_id and b.komwil_id=".auth()->user()->komwil_id:"")."
+                    where a.event_id = :event_id
                     GROUP BY jurus_id
                 ) b ON a.id = b.jurus_id
                 WHERE a.parent_id=0",['event_id'=>$event->id]);
@@ -188,6 +192,7 @@ class AdminController extends Controller
                 GROUP BY peserta_id
             ) b ON a.id = b.peserta_id
             where a.event_id = :event_id2
+            ".(auth()->user()->event_id!=null?" and a.komwil_id=".auth()->user()->komwil_id:"")."
                 order by a.name
             ",['event_id'=>$event->id,'event_id2'=>$event->id]);
         }

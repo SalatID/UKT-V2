@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,6 +44,10 @@ Route::group(['prefix'=>'komwil'],function(){
 
 Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
     Route::get('/home',[AdminController::class,'home'])->name('home');
+
+    Route::group(['prefix'=>'dashboard'],function(){
+        Route::get('/peserta',[DashboardController::class,'peserta'])->name('dashboard.peserta');
+    });
 
     Route::group(['prefix'=>'peserta'],function(){
         Route::get('/',[PesertaController::class,'index'])->name('peserta');

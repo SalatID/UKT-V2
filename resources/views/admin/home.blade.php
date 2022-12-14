@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-12 col-sm-6 col-md-3">
-            <div class="info-box">
+            <div class="info-box" data-src="{{route('dashboard.peserta')}}" onclick="{{(auth()->user()->role=='SPADM'?'redirect(this)':'')}}">
                 <span class="info-box-icon bg-info elevation-1"><i class="fas fa-user"></i></span>
                 <div class="info-box-content">
                     <span class="info-box-text">Total Peserta Ujian</span>
@@ -200,5 +200,8 @@
             scrollY: '800px',
             scrollCollapse: true,
         })
+        function redirect(e){
+            window.location.href = $(e).data('src')
+        }
     </script>
 @endsection

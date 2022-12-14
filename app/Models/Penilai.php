@@ -33,7 +33,7 @@ class Penilai extends Model
     public function newQuery($excludeDeleted = true) {
         $query = parent::newQuery($excludeDeleted)
         ->whereNull('penilai.deleted_at');
-        if((auth()->user()->role??'SPADM')!='SPADM')$query->where(['komwil.id'=>auth()->user()->komwil_id??'']);
+        if((auth()->user()->role??'SPADM')!='SPADM')$query->where(['komwil_id'=>auth()->user()->komwil_id??'']);
         return $query;
     }
 }

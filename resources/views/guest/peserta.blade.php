@@ -65,7 +65,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tingkat">Tingkat</label>
+                        <label for="tingkat">Jenjang</label>
                         <select name="tingkat" class="form-control" disabled id="tingkat">
                             <option value="">{{$peserta->tingkat}}</option>
                         </select>
