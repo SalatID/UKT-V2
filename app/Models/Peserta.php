@@ -14,6 +14,9 @@ class Peserta extends Model
     public $fillable =[
         'no_peserta','name','ts_awal_id','tempat_lahir','tgl_lahir','komwil_id','unit_id','event_id','tingkat','created_user','foto'
     ];
+    protected $casts = [
+        'y' => 'integer',
+    ];
 
     public function getActivitylogOptions(): LogOptions
     {
