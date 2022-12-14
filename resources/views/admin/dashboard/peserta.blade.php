@@ -93,6 +93,7 @@
     </div>
 </div>
 <script>
+    
     console.log($('#sumKomwil').data('val'))
     document.addEventListener('DOMContentLoaded', function () {
         Highcharts.chart('sumKomwil', {
@@ -126,7 +127,7 @@
             series: [{
                 name: 'Jumlah',
                 colorByPoint: true,
-                data: $('#sumKomwil').data('val')
+                data: JSON.parse(JSON.stringify($('#sumKomwil').data('val')))
             }]
         });
 
@@ -161,7 +162,7 @@
             series: [{
                 name: 'Jumlah',
                 colorByPoint: true,
-                data: $('#sumTs').data('val')
+                data: JSON.parse(JSON.stringify($('#sumTs').data('val')))
             }]
         });
 
@@ -196,7 +197,7 @@
             series: [{
                 name: 'Jumlah',
                 colorByPoint: true,
-                data: $('#sumJenjang').data('val')
+                data: JSON.parse(JSON.stringify($('#sumJenjang').data('val')))
             }]
         });
     });
