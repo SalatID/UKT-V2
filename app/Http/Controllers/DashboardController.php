@@ -12,6 +12,8 @@ class DashboardController extends Controller
     public function peserta()
     {
         $sumKomwil = [];
+        $sumTs = [];
+        $sumJenjang = [];
         if(request()->has('event_alias') || auth()->user()->event_id!=null){
             if(request()->has('event_alias')) $event = EventMaster::where('event_alias',request('event_alias'))->first();
             if(auth()->user()->event_id!=null) $event = EventMaster::where('id',auth()->user()->event_id)->first();
