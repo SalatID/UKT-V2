@@ -5,7 +5,7 @@
     <div class="col-md-4">
         <div class="card">
             <div class="card-body">
-                <div id="sumKomwil" style="width:100%; height:400px;" data-val="{{json_encode($sumKomwil->toArray())}}"></div>
+                <div id="sumKomwil" style="width:100%; height:400px;" data-val="{{json_encode($sumKomwil)}}"></div>
             </div>
         </div>
     </div>
