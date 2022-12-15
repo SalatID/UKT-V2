@@ -62,7 +62,7 @@
         <div class="row">
             <div class="col-xl-3">
                 <div class="form-group">
-                    <label for="ts_id">Tingkat Sabuk</label>
+                    <label for="ts_id">Event</label>
                     @php($eventSelect = \App\Models\EventMaster::all())
                     <select name="event_id" class="form-control" data-src={{url()->current()}}>
                         <option value="">Pilih Event</option>
@@ -178,6 +178,12 @@
                         columns: [ 0, 2,3,4,5,6,7,8,9 ]
                     }
                 }
+            ],
+            columnDefs: [
+                {
+                    targets: [5],
+                    orderData: [3, 5],
+                },
             ],
             
         })

@@ -141,6 +141,10 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
             Route::post('/update-ts',[AdminController::class,'updateTs'])->name('update-ts');
             Route::get('/delete/{id}',[AdminController::class,'deleteTs'])->name('delete-ts');
         });
+        Route::group(['prefix'=>'shortcut'],function(){
+            Route::get('/copy-data',[AdminController::class,'copyData'])->name('copy-data');
+            Route::post('/copy-jurus',[AdminController::class,'copyJurus'])->name('copy-jurus');
+        });
     });
 
     Route::group(['prefix'=>'auth'],function(){

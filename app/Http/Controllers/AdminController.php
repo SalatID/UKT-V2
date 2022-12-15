@@ -259,7 +259,7 @@ class AdminController extends Controller
     }
     public function deleteKomwil($id)
     {
-        $ins = Komwil::where('id',$id)->firstOrFail()->update([
+        $ins = Komwil::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -323,7 +323,7 @@ class AdminController extends Controller
     }
     public function deleteUnit($id)
     {
-        $ins = Unit::where('id',$id)->firstOrFail()->update([
+        $ins = Unit::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -386,7 +386,7 @@ class AdminController extends Controller
     }
     public function deleteTs($id)
     {
-        $ins = Ts::where('id',$id)->firstOrFail()->update([
+        $ins = Ts::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -456,7 +456,7 @@ class AdminController extends Controller
     }
     public function deletePenilai($id)
     {
-        $ins = Penilai::where('id',$id)->firstOrFail()->update([
+        $ins = Penilai::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -467,8 +467,14 @@ class AdminController extends Controller
     }
     public function jurus()
     {
-        $dataJurus = Jurus::with(['data_parent','data_ts'])->get();
-        $parent = Jurus::where('parent_id',0)->get();
+        $this->jurus = new Jurus();
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->jurus->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        if(!array_key_exists('event_id',$params)) return redirect()->back()->with(['error'=>true,'message'=>'Harap Pilih Event']);
+        $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
+        $dataJurus = Jurus::with(['data_parent','data_ts'])->where($params)->get();
+        $parent = Jurus::where('parent_id',0)->where('event_id',$params['event_id'])->get();
         $ts = Ts::get();
         return view('admin.jurus.index',compact('dataJurus','parent','ts'));
     }
@@ -497,6 +503,7 @@ class AdminController extends Controller
             return in_array($key,$this->jurus->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
+        if(auth()->user()->role!='SPADM') $params['event_id'] = auth()->user()->event_id;
         $ins = Jurus::create($params);
         return redirect()->back()->with([
             'error'=>!$ins,
@@ -523,7 +530,7 @@ class AdminController extends Controller
     }
     public function deleteJurus($id)
     {
-        $ins = Jurus::where('id',$id)->firstOrFail()->update([
+        $ins = Jurus::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -694,7 +701,7 @@ class AdminController extends Controller
     }
     public function deleteAnggotaKel($id)
     {
-        $sts = Peserta::where('id',$id)->firstOrFail()->update([
+        $sts = Peserta::where('id',$id)->update([
             'kelompok_id'=>null,
             'updated_user'=>auth()->user()->id
         ]);
@@ -903,7 +910,7 @@ class AdminController extends Controller
     }
     public function deleteEvent($id)
     {
-        $ins = EventMaster::where('id',$id)->firstOrFail()->update([
+        $ins = EventMaster::where('id',$id)->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -940,5 +947,39 @@ class AdminController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $dataLog = $this->activityLog->where($params)->limit(50)->orderBy('id','desc')->get(); 
         return view('admin.log.activity',compact('dataLog'));
+    }
+    public function copyData()
+    {
+        return view('admin.shortcut.copyData');
+    }
+    public function copyJurus()
+    {
+        $event_sumber = Jurus::where('event_id',request('event_sumber'))->where('parent_id',0);
+        if($event_sumber->count()==0) return redirect()->back()->with(['error'=>true,'message'=>'Jurus Event Sumber Tidak ditemukan']);
+        $event_sumber = $event_sumber->get()->toArray();
+        $insCnt = 0;
+        foreach($event_sumber as $value){
+            $parent_before = $value['id'];
+            $value['event_id']=request('event_tujuan');
+            $ins = Jurus::create($value);
+            if($ins) {
+                $insCnt++;
+                $childs = Jurus::where('event_id',request('event_sumber'))->where('parent_id',$parent_before);
+                if(!$childs->count()==0) {
+                    $childs = $childs->get()->toArray();
+                    foreach($childs as $child){
+                        $insCnt++;
+                        $child['event_id']=request('event_tujuan');
+                        $child['parent_id']=$ins->id;
+                        $insC = Jurus::create($child);
+                    }
+                }
+            }
+        }
+        $event_sumber = Jurus::where('event_id',request('event_sumber'))->get();
+        return redirect()->back()->with([
+            'error'=>!($insCnt==count($event_sumber??[])),
+            'message'=>$insCnt==count($event_sumber??[])?'Copy Berhasil '.$insCnt.' row':'Copy Gagal'
+        ]);
     }
 }

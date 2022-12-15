@@ -1,9 +1,44 @@
 @extends('admin.index')
 @section('title', 'List Jurus')
 @section('content')
-    <div class="row d-flex justify-content-start mb-3">
-        <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addJurus">Tambah Jurus</button>
-    </div>
+    <form action="{{route('master-jurus')}}">
+        <div class="row">
+            @if (auth()->user()->role==='SPADM')
+                <div class="col-xl-3">
+                    <div class="form-group">
+                        <label for="ts_id">Event</label>
+                        @php($eventSelect = \App\Models\EventMaster::all())
+                        <select name="event_id" class="form-control" data-src={{url()->current()}}>
+                            <option value="">Pilih Event</option>
+                            @foreach ($eventSelect as $item)
+                            <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
+                            {{ $item->name }} - {{ $item->lokasi }} -
+                            {{ $item->penyelenggara }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            @endif
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="parent_id">Master Jurus</label>
+                    <select name="parent_id" class="form-control" id="parent">
+                        <option value="">Pilih Jurus</option>
+                        <option value="0">Tidak Ada Parent</option>
+                        @foreach ($parent as $item)
+                            <option value="{{$item->id}}" {{request('parent_id')==$item->id?'selected':''}}>{{$item->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            
+        </div>
+        <div class="row d-flex justify-content-start mb-3">
+            <button type="button" class="btn btn-success btn-add mr-2" data-toggle="modal" data-target="#addJurus">Tambah Jurus</button>
+            <button type="submit" class="btn btn-info mr-2">Filter</button>
+        </div>
+    </form>
+    
     <div class="row">
         <div class="col-xl-12 table-responsive">
             <table class="table table-striped table-bordered" id="tableJurus">
@@ -13,6 +48,7 @@
                         <th>Nama Jurus</th>
                         <th>TS</th>
                         <th>Parent</th>
+                        <th>Event</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -23,7 +59,8 @@
                             <td>{{ $no++ }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->data_ts->name }}</td>
-                            <td>{{ $item->data_parent->name??'' }}</td>
+                            <td>{{ $item->data_parent->name??'' }} </td>
+                            <td>{{ $item->data_event->name??'' }} {{ $item->data_event->lokasi??'' }} {{ $item->data_event->penyelenggara??'' }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"
@@ -84,6 +121,20 @@
                                         @endforeach
                                     </select>
                                 </div>
+                                @if (auth()->user()->role==='SPADM')
+                                <div class="form-group">
+                                    <label for="ts_id">Event</label>
+                                    @php($eventSelect = \App\Models\EventMaster::all())
+                                    <select name="event_id" class="form-control" data-src={{url()->current()}}>
+                                        <option value="">Pilih Event</option>
+                                        @foreach ($eventSelect as $item)
+                                        <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
+                                        {{ $item->name }} - {{ $item->lokasi }} -
+                                        {{ $item->penyelenggara }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endif
                                 <button type="submit" class="btn btn-success">Simpan</button>
                             </form>
                         </div>

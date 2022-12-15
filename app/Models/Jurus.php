@@ -12,7 +12,7 @@ class Jurus extends Model
     use HasFactory,LogsActivity;
     protected $table = 'jurus';
     public $fillable = [
-        'parent_id','name','ts_id','created_user'
+        'parent_id','name','ts_id','created_user','event_id'
     ];
     public function getActivitylogOptions(): LogOptions
     {
@@ -29,5 +29,9 @@ class Jurus extends Model
     public function newQuery($excludeDeleted = true) {
         return parent::newQuery($excludeDeleted)
             ->whereNull('jurus.deleted_at');
+    }
+    public function data_event()
+    {
+        return $this->hasOne(EventMaster::class,'id','event_id');
     }
 }
