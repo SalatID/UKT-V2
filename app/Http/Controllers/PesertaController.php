@@ -21,7 +21,7 @@ class PesertaController extends Controller
     }
     public function index()
     {
-        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts'])->orderBy('name');
+        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
         if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
         
         if(count(request()->all())>0){
@@ -38,7 +38,28 @@ class PesertaController extends Controller
             $event = EventMaster::where('event_alias',request('event_alias'))->first();
             $dataPeserta = $dataPeserta->where('event_id',$event->id);
         }
-        $dataPeserta = $dataPeserta->get();
+        
+        $dataPeserta = $dataPeserta->orderBy('name')->get();
+        if(request()->has('order_by')){
+            switch (request('order_by')) {
+                case 'unit':
+                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                        return $query->data_unit->name;
+                     })->all();
+                  break;
+                case 'komwil':
+                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                        return $query->data_komwil->name;
+                     })->all();
+                  break;
+                case 'ts':
+                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                        return $query->data_ts->name;
+                     })->all();
+                  break;
+                default:
+              }
+        }
         
         $komwil = Komwil::orderBy('name')->get();
         $unit = Unit::orderBy('name')->get();

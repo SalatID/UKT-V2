@@ -74,6 +74,16 @@
                     </select>
                 </div>
             </div>
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="order_by">Order By</label>
+                    <select name="order_by" class="form-control" id="">
+                        <option value="name" {{(request('order_by')??'')=='name'?'selected':''}}>Nama</option>
+                        <option value="komwil" {{(request('order_by')??'')=='komwil'?'selected':''}}>Komwil</option>
+                        <option value="unit" {{(request('order_by')??'')=='unit'?'selected':''}}>Unit</option>
+                    </select>
+                </div>
+            </div>
         </div>
         @endif
         <div class="row justify-content-start mb-2">
