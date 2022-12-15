@@ -182,7 +182,7 @@
             columnDefs: [
                 {
                     targets: [5],
-                    orderData: [3, 5],
+                    orderData: [5,3],
                 },
             ],
             
