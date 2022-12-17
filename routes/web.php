@@ -144,6 +144,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::group(['prefix'=>'shortcut'],function(){
             Route::get('/copy-data',[AdminController::class,'copyData'])->name('copy-data');
             Route::post('/copy-jurus',[AdminController::class,'copyJurus'])->name('copy-jurus');
+            Route::post('/copy-peserta',[AdminController::class,'copyPeserta'])->name('copy-peserta');
         });
     });
 

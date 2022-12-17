@@ -21,44 +21,50 @@ class PesertaController extends Controller
     }
     public function index()
     {
-        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
-        if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
-        
+        $dataPeserta = [];
         if(count(request()->all())>0){
-            $this->peserta = new Peserta();
-            $params = array_filter(request()->all(),function($key){
-                return in_array($key,$this->peserta->fillable)!==false;
-            },ARRAY_FILTER_USE_KEY);
-            if(request()->has('ts_id')) $params['ts_awal_id']=request('ts_id');
-            $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
-            $dataPeserta = Peserta::where($params);
-            if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
-        }
-        if(request()->has('event_alias')){
-            $event = EventMaster::where('event_alias',request('event_alias'))->first();
-            $dataPeserta = $dataPeserta->where('event_id',$event->id);
-        }
-        
-        $dataPeserta = $dataPeserta->orderBy('name')->get();
-        if(request()->has('order_by')){
-            switch (request('order_by')) {
-                case 'unit':
-                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
-                        return $query->data_unit->name;
-                     })->all();
-                  break;
-                case 'komwil':
-                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
-                        return $query->data_komwil->name;
-                     })->all();
-                  break;
-                case 'ts':
-                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
-                        return $query->data_ts->name;
-                     })->all();
-                  break;
-                default:
-              }
+
+            // $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
+            if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+            
+            if(count(request()->all())>0){
+                // $dataPeserta = Peserta::all();
+                // dd($dataPeserta);
+                $this->peserta = new Peserta();
+                $params = request()->all();
+                if(request()->has('ts_id')) $params['ts_awal_id']=request('ts_id');
+                $params = array_filter(request()->all(),function($key) use($params){
+                    return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
+                },ARRAY_FILTER_USE_KEY);
+                $dataPeserta = Peserta::where($params);
+                if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
+            }
+            if(request()->has('event_alias')){
+                $event = EventMaster::where('event_alias',request('event_alias'))->first();
+                $dataPeserta = $dataPeserta->where('event_id',$event->id);
+            }
+            
+            $dataPeserta = $dataPeserta->orderBy('name')->get();
+            if(request()->has('order_by')){
+                    switch (request('order_by')) {
+                            case 'unit':
+                                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                            return $query->data_unit->name;
+                                         })->all();
+                                      break;
+                                    case 'komwil':
+                                            $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                                    return $query->data_komwil->name;
+                         })->all();
+                      break;
+                    case 'ts':
+                        $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                            return $query->data_ts->name;
+                         })->all();
+                      break;
+                    default:
+                  }
+            }
         }
         
         $komwil = Komwil::orderBy('name')->get();

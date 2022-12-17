@@ -982,4 +982,26 @@ class AdminController extends Controller
             'message'=>$insCnt==count($event_sumber??[])?'Copy Berhasil '.$insCnt.' row':'Copy Gagal'
         ]);
     }
+    public function copyPeserta()
+    {
+        $insCnt = 0;
+        $pesertaAsal =  Peserta::where('event_id',request('event_sumber'))->get();
+        if($pesertaAsal->count()==0) return redirect()->back()->with(['error'=>true,'message'=>'Peserta tidak ditemukan']);
+        $pesertaAsal = $pesertaAsal->toArray();
+        foreach($pesertaAsal as $val){
+            $peserta = Peserta::where('event_id',request('event_tujuan'))->where([
+                ['name',$val['name']],
+                ['tgl_lahir',$val['tgl_lahir']]
+            ]);
+            if(!$peserta->exists()){
+                $val['event_id'] = request('event_tujuan');
+                Peserta::create($val);
+                $insCnt++;
+            }
+        }
+        return redirect()->back()->with([
+            'error'=>false,
+            'message'=>'Copy Berhasil '.$insCnt.' row'
+        ]);
+    }
 }

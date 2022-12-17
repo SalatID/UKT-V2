@@ -45,7 +45,8 @@ class GuestController extends Controller
     }
     public function pilihJurus()
     {
-        $masterJurus = Jurus::where('parent_id',0)->orderBy('name')->get();
+        $sData = json_decode(session()->get('sNilai'));
+        $masterJurus = Jurus::where('parent_id',0)->where('event_id',$sData->event_id)->orderBy('name')->get();
         return view('guest.pilihJurus',compact('masterJurus'));
     }
     public function getSubJurus()
@@ -57,7 +58,7 @@ class GuestController extends Controller
         $dataJurus = Jurus::select('jurus.*')->leftJoin('nilai',function($join) use ($sData){
             $join->on('nilai.jurus_id','jurus.id');
             $join->on('nilai.kelompok_id',DB::raw($sData->kelompok_id));
-        })->whereNull('nilai.jurus_id')->where('parent_id',$id)->where('ts_id','<=',$kelompok->ts_id)->orderBy('name')->get();
+        })->whereNull('nilai.jurus_id')->where('event_id',$sData->event_id)->where('parent_id',$id)->where('ts_id','<=',$kelompok->ts_id)->orderBy('name')->get();
         return response()->json($dataJurus);
     }
     public function setJurus()
