@@ -113,6 +113,7 @@ class NilaiController extends Controller
         $foto = request('foto')??'off';
         if($muka=='depan'){
             $dataSertifikat = SummaryNilai::where('event_id',request('event_id'))->orderBy('peserta_id')->get();
+            // return view($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
             $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
         } else {
             // return view('admin.sertifikat.belakang');

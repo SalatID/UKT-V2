@@ -471,10 +471,10 @@ class AdminController extends Controller
         $params = array_filter(request()->all(),function($key){
             return in_array($key,$this->jurus->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
-        if(!array_key_exists('event_id',$params)) return redirect()->back()->with(['error'=>true,'message'=>'Harap Pilih Event']);
+        // if(!array_key_exists('event_id',$params)) return redirect()->back()->with(['error'=>true,'message'=>'Harap Pilih Event']);
         $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
         $dataJurus = Jurus::with(['data_parent','data_ts'])->where($params)->get();
-        $parent = Jurus::where('parent_id',0)->where('event_id',$params['event_id'])->get();
+        $parent = Jurus::where('parent_id',0)->where('event_id',$params['event_id']??'')->get();
         $ts = Ts::get();
         return view('admin.jurus.index',compact('dataJurus','parent','ts'));
     }
@@ -661,7 +661,7 @@ class AdminController extends Controller
                 $id = $ins->id;
                 if($ins){
                         if(request()->has('jumlah')){
-                            $latest =Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->take((request('jumlah')??10))->get();
+                            $latest =Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->get();
                             $peserta = $latest->random(min($latest->count(), (request('jumlah')??10)));
                         }
                         $anggotaKelompok = count($peserta)>0?$peserta:session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];

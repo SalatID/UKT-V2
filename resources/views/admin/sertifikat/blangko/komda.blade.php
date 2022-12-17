@@ -24,9 +24,11 @@
             width: 100% !important;
             text-align: 'center';
         }
+        @page { margin: 20px; }
+        body { margin: 0px; }
 
         #blangko {
-            /* background-image: url(/blangko_sertifikat/jakartabarat.png); */
+            /* background-image: url(/blangko_sertifikat/komda-dki.png); */
             background-size: contain;
             background-repeat: no-repeat;
         }
@@ -38,7 +40,7 @@
             }
 
             #blangko {
-                /* background-image: url(/blangko_sertifikat/jakartabarat.png); */
+                /* background-image: url(/blangko_sertifikat/komda-dki.png); */
                 background-size: contain;
                 background-repeat: no-repeat;
 
@@ -56,8 +58,8 @@
 <body style="padding:0;margin:0;">
     @if ($data == 'off')
         <div class="text-center d-table mb-3" id="blangko" style="display: inline-block;position: relative;">
-            <img src="{{ public_path() }}/blangko_sertifikat/komda.png"
-                style="width:19cm;height:27cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
+            <img src="{{ public_path() }}/blangko_sertifikat/komda-dki.png"
+                style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                 alt="">
         </div>
     @else
@@ -66,11 +68,11 @@
         @foreach ($dataSertifikat as $item)
             <div class="text-center d-table mb-3" id="blangko" style="display: inline-block;position: relative;">
                 @if ($blangko == 'on')
-                    <img src="{{ public_path() }}/blangko_sertifikat/jakartabarat.png"
-                        style="width:19cm;height:27cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
+                    <img src="{{ public_path() }}/blangko_sertifikat/komda-dki.png"
+                        style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
-                <div style="margin-top:8.5cm;width:19cm;">
+                <div style="margin-top:8cm;margin-left:0.5cm;width:19cm;">
                     <div class="row justify-content-center">
                         <h1 class="w-100 text-center" style="font-size:16px;">Nomor :
                             {{ $item->no_sertifikat ?? $item->data_peserta->no_peserta.'/UKT/SMI-JKB/' . $romawi[date('n', strtotime($item->data_peserta->data_event->tgl_mulai))] . '/' . date('Y', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
@@ -109,11 +111,19 @@
                             </span>
                             yang diselenggarakan di : <span
                                 class="font-weight-bold">{{ $item->data_peserta->data_event->lokasi }}</span><br>
-                            pada tanggal : <span
+                            pada tanggal : 
+                            @if($item->data_peserta->data_event->tgl_mulai==$item->data_peserta->data_event->tgl_selesai)
+                                <span
+                                class="font-weight-bold">{{ date('d', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
+                                {{ $bulan[date('n', strtotime($item->data_peserta->data_event->tgl_selesai))-1] }}
+                                {{ date('Y', strtotime($item->data_peserta->data_event->tgl_selesai)) }}</span><br>
+                            @else
+                            <span
                                 class="font-weight-bold">{{ date('d', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
                                 - {{ date('d', strtotime($item->data_peserta->data_event->tgl_selesai)) }}
                                 {{ $bulan[date('n', strtotime($item->data_peserta->data_event->tgl_selesai))-1] }}
                                 {{ date('Y', strtotime($item->data_peserta->data_event->tgl_selesai)) }}</span><br>
+                            @endif
                             berhasil <span class="font-weight-bold">LULUS </span> Ke Tingkat Sabuk<br>
                             <span class="font-weight-bold">{{ $item->data_peserta->data_ts_akhir->name ?? '' }}</span>
                         </p>
@@ -130,12 +140,12 @@
                                 <td class="text-center">
                                     Disahkan Oleh <br>
                                     Ketua PPS Satria Muda Indonesia<br>
-                                    Komwil Jakarta Barat
+                                    Komisariat Daerah DKI Jakarta
                                     <br>
                                     <br>
                                     <br>
                                     <br>
-                                    <strong>Ir. Indra Madya Permana</strong>
+                                    <strong>Dr. Ir. H. Sufmi Dasco Ahmad, S.H., M.H</strong>
                                 </td>
                             </tr>
                         </table>

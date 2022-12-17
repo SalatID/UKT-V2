@@ -58,7 +58,7 @@ class GuestController extends Controller
         $dataJurus = Jurus::select('jurus.*')->leftJoin('nilai',function($join) use ($sData){
             $join->on('nilai.jurus_id','jurus.id');
             $join->on('nilai.kelompok_id',DB::raw($sData->kelompok_id));
-        })->whereNull('nilai.jurus_id')->where('event_id',$sData->event_id)->where('parent_id',$id)->where('ts_id','<=',$kelompok->ts_id)->orderBy('name')->get();
+        })->whereNull('nilai.jurus_id')->where('jurus.event_id',$sData->event_id)->where('parent_id',$id)->where('ts_id','<=',$kelompok->ts_id)->orderBy('name')->get();
         return response()->json($dataJurus);
     }
     public function setJurus()
