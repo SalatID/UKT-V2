@@ -22,7 +22,7 @@ class PesertaController extends Controller
     public function index()
     {
         $dataPeserta = [];
-        if(count(request()->all())>0){
+        // if(count(request()->all())>0){
 
             // $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
             if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
@@ -65,7 +65,7 @@ class PesertaController extends Controller
                     default:
                   }
             }
-        }
+        // }
         
         $komwil = Komwil::orderBy('name')->get();
         $unit = Unit::orderBy('name')->get();
