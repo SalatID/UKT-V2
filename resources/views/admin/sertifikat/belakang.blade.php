@@ -71,7 +71,7 @@
             <div class="row col-12">
                 <h1 class="text-center">
                     {{ strtoupper('PERGURUAN PENCAK SILAT SATRIA MUDA INDONESIA') }}<br>
-                    {{ strtoupper('KOMISARIAT WILAYAH JAKARTA BARAT') }}
+                    {{ strtoupper('KOMISARIAT DAERAH DKI JAKARTA') }}
                 </h1>
             </div>
             <div class="row col-12 mt-3">
