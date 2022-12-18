@@ -24,7 +24,7 @@ class PesertaController extends Controller
         $dataPeserta = [];
         // if(count(request()->all())>0){
 
-            // $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
+            $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
             if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
             
             if(count(request()->all())>0){
@@ -36,7 +36,7 @@ class PesertaController extends Controller
                 $params = array_filter(request()->all(),function($key) use($params){
                     return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
                 },ARRAY_FILTER_USE_KEY);
-                $dataPeserta = Peserta::where($params);
+                $dataPeserta = $dataPeserta->where($params);
                 if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
             }
             if(request()->has('event_alias')){
