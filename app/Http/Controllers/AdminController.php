@@ -1009,4 +1009,25 @@ class AdminController extends Controller
             'message'=>'Copy Berhasil '.$insCnt.' row'
         ]);
     }
+    public function copyPenilai()
+    {
+        $insCnt = 0;
+        $penilaiAsal =  Penilai::where('event_id',request('event_sumber'))->get();
+        if($penilaiAsal->count()==0) return redirect()->back()->with(['error'=>true,'message'=>'Penilai tidak ditemukan']);
+        $penilaiAsal = $penilaiAsal->toArray();
+        foreach($penilaiAsal as $val){
+            $peserta = Penilai::where('event_id',request('event_tujuan'))->where([
+                ['name',$val['name']]
+            ]);
+            if(!$peserta->exists()){
+                $val['event_id'] = request('event_tujuan');
+                Penilai::create($val);
+                $insCnt++;
+            }
+        }
+        return redirect()->back()->with([
+            'error'=>false,
+            'message'=>'Copy Berhasil '.$insCnt.' row'
+        ]);
+    }
 }
