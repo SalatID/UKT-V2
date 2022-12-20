@@ -43,7 +43,6 @@ class CalculateNilaiJob implements ShouldQueue
                 ->join('event as e','e.id','nilai.event_id')
                 ->groupBy('peserta.id','peserta.name','d.name','d.id','nilai.event_id','peserta.ts_awal_id','e.no_sertifikat','peserta.no_peserta')
                 ->orderBy('peserta.id')
-                ->where('nilai.event_id',3)
                 ->get()->toArray();
         $sum_nilai=[];
         $peserta_id='';
@@ -52,6 +51,7 @@ class CalculateNilaiJob implements ShouldQueue
         $summary='';
         $this->summary_nilai = new SummaryNilai();
         $this->summary_nilai_detail = new SummaryNilaiDetail();
+        dd($data);
         foreach($data as $key =>$value){
             if( $peserta_id!=$value['peserta_id']){
                 $p = array_filter($value,function($key){

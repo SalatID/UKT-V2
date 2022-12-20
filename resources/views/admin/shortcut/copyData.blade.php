@@ -90,7 +90,7 @@
 <div class="row">
     <div class="card col-12">
         <div class="card-header">
-            <h3 class="card-title">Peserta</h3>
+            <h3 class="card-title">Penilai</h3>
         </div>
         <div class="card-body">
             <form action="{{route('copy-penilai')}}" method="POST">

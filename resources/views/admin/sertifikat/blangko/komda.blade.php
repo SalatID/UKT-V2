@@ -72,12 +72,13 @@
                         style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
-                <div style="margin-top:8cm;margin-left:0.5cm;width:19cm;">
+                <div style="margin-top:9cm;margin-left:0.5cm;width:19cm;">
                     <div class="row justify-content-center">
                         <h1 class="w-100 text-center" style="font-size:16px;">Nomor :
                             {{ $item->no_sertifikat ?? $item->data_peserta->no_peserta.'/UKT/SMI-JKB/' . $romawi[date('n', strtotime($item->data_peserta->data_event->tgl_mulai))] . '/' . date('Y', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
                         </h1>
                     </div>
+                    <br>
                     <div class="row justify-content-center">
                         <h1 class="w-100 text-center" style="font-size:16px;">Diberikan kepada :</h1>
                     </div>
@@ -100,6 +101,11 @@
                                 <td width="200">Tingkatan Sabuk</td>
                                 <td width="5">:</td>
                                 <td width="300">{{ $item->data_peserta->data_ts->name }}</td>
+                            </tr>
+                            <tr>
+                                <td width="200">Komwil</td>
+                                <td width="5">:</td>
+                                <td width="300">{{ $item->data_peserta->data_komwil->name }}</td>
                             </tr>
                         </table>
                     </div>
@@ -125,7 +131,7 @@
                                 {{ date('Y', strtotime($item->data_peserta->data_event->tgl_selesai)) }}</span><br>
                             @endif
                             berhasil <span class="font-weight-bold">LULUS </span> Ke Tingkat Sabuk<br>
-                            <span class="font-weight-bold">{{ $item->data_peserta->data_ts_akhir->name ?? '' }}</span>
+                            <span class="font-weight-bold">{{ strtoupper($item->data_peserta->data_ts_akhir->name ?? '') }}</span>
                         </p>
                     </div>
                     <div class="row justify-content-center mt-4">
@@ -145,7 +151,7 @@
                                     <br>
                                     <br>
                                     <br>
-                                    <strong>Dr. Ir. H. Sufmi Dasco Ahmad, S.H., M.H</strong>
+                                    <strong style="font-size:15px;">Prof. Dr. Ir. H. Sufmi Dasco Ahmad, S.H., M.H</strong>
                                 </td>
                             </tr>
                         </table>

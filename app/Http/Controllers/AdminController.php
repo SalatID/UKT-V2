@@ -52,6 +52,7 @@ class AdminController extends Controller
         $jurusDinilai = [];
         $top3 = [];
         $dataNilai = [];
+        $event = [];
         if(request()->has('event_alias') || auth()->user()->event_id!=null){
             if(request()->has('event_alias')) $event = EventMaster::where('event_alias',request('event_alias'))->first();
             if(auth()->user()->event_id!=null) $event = EventMaster::where('id',auth()->user()->event_id)->first();
@@ -168,36 +169,32 @@ class AdminController extends Controller
             WHERE a.id NOT IN(1,11) 
             order by a.id,nilai desc
             ",['event_id'=>$event->id]);
-    
-            $dataNilai = DB::select("
-            SELECT a.name,c.name unit, d.name komwil,e.name ts, b.*
-            FROM peserta a
-            JOIN unit c ON a.unit_id = c.id
-            JOIN komwil d ON a.komwil_id = d.id
-            JOIN ts e ON e.id = a.ts_awal_id
-            LEFT JOIN (
-                SELECT 
-                SUM(CASE WHEN jurus_id = 1 THEN nilai END) standar_smi,
-                SUM(CASE WHEN jurus_id = 2 THEN nilai END) tradisional,
-                SUM(CASE WHEN jurus_id = 12 THEN nilai END) prasetya,
-                SUM(CASE WHEN jurus_id = 14 THEN nilai END) beladiri_praktis,
-                SUM(CASE WHEN jurus_id = 15 THEN nilai END) aerobik,
-                SUM(CASE WHEN jurus_id = 16 THEN nilai END) fisik_teknik,
-                SUM(CASE WHEN jurus_id = 17 THEN nilai END) kuda_kuda,
-                SUM(CASE WHEN jurus_id = 18 THEN nilai END) serang_hindar,
-                sum(nilai) total_nilai,
-                peserta_id
-                FROM `summary_nilai_detail`
-                where event_id=:event_id
-                GROUP BY peserta_id
-            ) b ON a.id = b.peserta_id
-            where a.event_id = :event_id2
-            ".(auth()->user()->event_id!=null?" and a.komwil_id=".auth()->user()->komwil_id:"")."
-                order by a.name
-            ",['event_id'=>$event->id,'event_id2'=>$event->id]);
+            $jurus = Jurus::where('event_id',$event->id)->where('parent_id',0)->get();
+            $query = "
+                SELECT a.name,c.name unit, d.name komwil,e.name ts,f.name ts_akhir,b.*
+                FROM peserta a
+                JOIN unit c ON a.unit_id = c.id
+                JOIN komwil d ON a.komwil_id = d.id
+                JOIN ts e ON e.id = a.ts_awal_id
+                LEFT JOIN ts f ON f.id = a.ts_akhir_id
+                LEFT JOIN ( SELECT ";
+                    foreach($jurus as $val ){
+                        $query .= "SUM(CASE WHEN jurus_id = $val->id THEN nilai END) ".(str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )).",";
+                    }
+            $query .=  " sum(nilai) total_nilai,
+                    peserta_id
+                    FROM `summary_nilai_detail`
+                    where event_id=:event_id
+                    GROUP BY peserta_id
+                ) b ON a.id = b.peserta_id
+                where a.event_id=:event_id2
+                    order by a.name
+                ";
+                $dataNilai =DB::select( $query,['event_id'=>$event->id,'event_id2'=>$event->id]);
+            $event = $event->id;
         }
 
-        return view('admin.home',compact('totalPeserta','totalJurus','totalPenilai','totalKelompok','jurusDinilai','top3','dataNilai'));
+        return view('admin.home',compact('totalPeserta','totalJurus','totalPenilai','totalKelompok','jurusDinilai','top3','dataNilai','event'));
     }
     public function komwil()
     {

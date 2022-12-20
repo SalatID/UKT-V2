@@ -154,37 +154,30 @@
                                 <thead>
                                     <tr class="bg-info">
                                         <th class="text-center">Nama Peserta</th>
-                                        <th class="text-center">Tingkatan Sabuk</th>
+                                        <th class="text-center">TS Awal</th>
+                                        <th class="text-center">TS Akhir</th>
                                         <th class="text-center">Unit</th>
                                         <th class="text-center">Komwil</th>
-                                        <th class="text-center">Standar SMI</th>
-                                        <th class="text-center">Tradisional</th>
-                                        <th class="text-center">Prasetya Pesilat</th>
-                                        <th class="text-center">Beladiri Praktis</th>
-                                        <th class="text-center">Fisik Teknik</th>
-                                        <th class="text-center">Aerobik Tes</th>
-                                        <th class="text-center">Kuda-kuda Dasar</th>
-                                        <th class="text-center">Serang Hindar</th>
+                                        @foreach(\App\Models\Jurus::where('event_id',$event)->where('parent_id',0)->get() as $val)
+                                        <th class="text-center">{{strtoupper($val->name)}}</th>
+                                        @endforeach
                                         <th class="text-center">Total Nilai</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($dataNilai as $item)
-                                        <tr>
-                                            <td class="text-center">{{$item->name}}</td>
-                                            <td class="text-center">{{$item->ts}}</td>
-                                            <td class="text-center">{{$item->unit}}</td>
-                                            <td class="text-center">{{$item->komwil}}</td>
-                                            <td class="text-center">{{$item->standar_smi}}</td>
-                                            <td class="text-center">{{$item->tradisional}}</td>
-                                            <td class="text-center">{{$item->prasetya}}</td>
-                                            <td class="text-center">{{$item->beladiri_praktis}}</td>
-                                            <td class="text-center">{{$item->fisik_teknik}}</td>
-                                            <td class="text-center">{{$item->aerobik}}</td>
-                                            <td class="text-center">{{$item->kuda_kuda}}</td>
-                                            <td class="text-center">{{$item->serang_hindar}}</td>
-                                            <td class="text-center">{{number_format($item->total_nilai,1)}}</td>
-                                        </tr>
+                                    <tr>
+                                        <td class="text-center">{{$item->name}}</td>
+                                        <td class="text-center">{{$item->ts}}</td>
+                                        <td class="text-center">{{$item->ts_akhir}}</td>
+                                        <td class="text-center">{{$item->unit}}</td>
+                                        <td class="text-center">{{$item->komwil}}</td>
+                                        @php($jurus = (array)$item)
+                                        @foreach(\App\Models\Jurus::where('event_id',$event)->where('parent_id',0)->get() as $val)
+                                        <th class="text-center">{{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]}}</th>
+                                        @endforeach
+                                        <td class="text-center">{{number_format($item->total_nilai,1)}}</td>
+                                    </tr>
                                     @endforeach
                                 </tbody>
                             </table>
