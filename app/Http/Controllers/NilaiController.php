@@ -143,7 +143,14 @@ class NilaiController extends Controller
     public function cetakSertifikat()
     {
         $event = EventMaster::all();
-        return view('admin.nilai.sertifikat',compact('event'));
+        $kelompok = Kelompok::all();
+        $eventId = null;
+        if(request()->has('event_alias') || request()->has('event_id')){
+            $dataEvent = EventMaster::where('event_alias',request('event_alias'))->first();
+            $kelompok = Kelompok::where('event_id',$dataEvent->id??request('event_id'))->get();
+            $eventId = $dataEvent->id;
+        }
+        return view('admin.nilai.sertifikat',compact('event','kelompok','eventId'));
     }
     public function previewSertifikat()
     {
@@ -164,19 +171,26 @@ class NilaiController extends Controller
                 'data'=>$this->error
             ]);
         }
+
         $dataEvent = EventMaster::where('id',request('event_id'))->first();
         $muka = request('muka')??'depan';
         $blangko = request('blangko')??'off';
         $data = request('data')??'off';
         $foto = request('foto')??'off';
+        $dataSertifikat = SummaryNilai::with(['data_peserta'])->where('event_id',request('event_id'))->orderBy('peserta_id');
+        if(request()->has('komwil_id') && request('komwil_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
+            $q->where('komwil_id',request('komwil_id'));
+        });
+        if(request()->has('unit_id') && request('unit_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
+            $q->where('unit_id',request('unit_id'));
+        });
+        if(request()->has('ts_id') && request('ts_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
+            $q->where('ts_awal_id',request('ts_id'));
+        });
+        $dataSertifikat = $dataSertifikat->get();
         if($muka=='depan'){
-            $dataSertifikat = SummaryNilai::where('event_id',request('event_id'))->orderBy('peserta_id')->get();
-            // return view($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
             $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
         } else {
-            // return view('admin.sertifikat.belakang');
-            $dataSertifikat = SummaryNilai::where('event_id',request('event_id'))->orderBy('peserta_id')->get();
-            // dd($dataSertifikat);
             $pdf = Pdf::loadView('admin.sertifikat.belakangKomda',compact('dataSertifikat'));
         }
         $pdf->setBasePath(public_path());
