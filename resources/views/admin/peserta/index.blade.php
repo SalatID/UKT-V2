@@ -111,6 +111,7 @@
                         <th>Tempat Lahir</th>
                         <th>Tanggal Lahir</th>
                         <th>Aktif Event</th>
+                        <th>Foto</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -130,6 +131,11 @@
                             <td>{{ $item->tgl_lahir }}</td>
                             <td>{{ $item->data_event->name ?? 'No Event' }} -
                                 {{ $item->data_event->penyelenggara ?? 'No Event' }}</td>
+                            <td>
+                                <div style="width: 3cm; height:4cm; border:solid black;">
+                                    <img src="/{{$item->foto}}" style="object-fit:contain" width="100%" height="100%" alt="">
+                                </div>
+                            </td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"

@@ -2,10 +2,13 @@
 
 <head>
     <title>Cetak Sertifikat</title>
-    <link rel="stylesheet" href="{{ public_path() }}/assets/css/bootstrap.min.css">
-    <script type="text/javascript" src="{{ public_path() }}/assets/js/jquery.js"></script>
+    {{-- <link rel="stylesheet" href="{{ public_path() }}/assets/css/bootstrap.min.css">
+    <script type="text/javascript" src="{{ public_path() }}/assets/js/jquery.js"></script> --}}
     <style>
         /* Set height of the grid so .sidenav can be 100% (adjust if needed) */
+        .text-center{
+            text-align: center;
+        }
         .row.content {
             height: 1500px
         }
