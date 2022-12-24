@@ -83,7 +83,7 @@
             <tr>
                 <td class="border text-center">{{$i++}}</td>
                 <td class="border text-center">{{$val->no_peserta}}</td>
-                <td class="border">{{ucwords($val->name)}}</td>
+                <td class="border">{{ucwords(strtolower($val->name))}}</td>
                 <td class="border">{{$val->data_ts->ts_code}}</td>
                 <td class="border">{{$val->data_komwil->name}}</td>
                 <td class="border">{{$val->data_unit->name}}</td>
