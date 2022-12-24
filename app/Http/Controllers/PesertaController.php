@@ -38,6 +38,13 @@ class PesertaController extends Controller
                 },ARRAY_FILTER_USE_KEY);
                 if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
                 $dataPeserta = $dataPeserta->where($params);
+                if(request()->has('innot') && request('innot')!=null){
+                    if(request('innot')==1){
+                        $dataPeserta = $dataPeserta->whereIn('no_peserta',explode(',',request('no_peserta')));
+                    }else{
+                        $dataPeserta = $dataPeserta->whereNotIn('no_peserta',explode(',',request('no_peserta')));
+                    }
+                }
                 if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
                 if(request()->has('event_alias')){
                     $event = EventMaster::where('event_alias',request('event_alias'))->first();
