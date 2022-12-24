@@ -1054,8 +1054,10 @@ class AdminController extends Controller
             $dataPeserta = $dataPeserta->where($params);
             if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
         }
-        
-        $dataPeserta = $dataPeserta->orderBy('name')->orderBy('no_peserta')->take(58)->get();
+        if(request()->has('limit')){
+            $dataPeserta = $dataPeserta->take(request('limit'));
+        }
+        $dataPeserta = $dataPeserta->orderBy('name')->orderBy('no_peserta')->get();
         $dataPeserta = $dataPeserta->sortBy(function($query){
             return $query->data_unit->name;
          })->sortBy(function($query){

@@ -97,7 +97,7 @@
                 <input type="hidden" name="view" value="admin.tools.formulir.absen">
                 @csrf
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="event_id">Event</label>
                             @php($eventSelect = \App\Models\EventMaster::all())
@@ -111,7 +111,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="komwil_id">Komwil</label>
                             @php($eventSelect = \App\Models\Komwil::all())
@@ -122,6 +122,12 @@
                                 {{ $item->name }}</option>
                                 @endforeach
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="komwil_id">Limit</label>
+                            <input type="number" name="limit" class="form-control">
                         </div>
                     </div>
                 </div>

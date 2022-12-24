@@ -194,7 +194,7 @@
                       <li class="nav-item">
                         <a href="{{route('formulir')}}" class="nav-link">
                            <i class="far fa-dot-circle nav-icon"></i>
-                           <p>Form Penilaian Manual</p>
+                           <p>Formulir</p>
                         </a>
                      </li>
                      {{--<li class="nav-item">
