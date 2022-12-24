@@ -24,10 +24,10 @@ class PesertaController extends Controller
         $dataPeserta = [];
         // if(count(request()->all())>0){
 
-            $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
-            if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
             
-            if(count(request()->all())>0){
+            if(count(request()->all())>0 || auth()->user()->event_id !=null){
+                $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
+                if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
                 // $dataPeserta = Peserta::all();
                 // dd($dataPeserta);
                 $this->peserta = new Peserta();
@@ -38,32 +38,32 @@ class PesertaController extends Controller
                 if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
                 $dataPeserta = $dataPeserta->where($params);
                 if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
-            }
-            if(request()->has('event_alias')){
-                $event = EventMaster::where('event_alias',request('event_alias'))->first();
-                $dataPeserta = $dataPeserta->where('event_id',$event->id);
-            }
-            
-            $dataPeserta = $dataPeserta->orderBy('name')->get();
-            if(request()->has('order_by')){
-                    switch (request('order_by')) {
-                            case 'unit':
-                                    $dataPeserta = $dataPeserta->sortByDesc(function($query){
-                                            return $query->data_unit->name;
-                                         })->all();
-                                      break;
-                                    case 'komwil':
-                                            $dataPeserta = $dataPeserta->sortByDesc(function($query){
-                                                    return $query->data_komwil->name;
-                         })->all();
-                      break;
-                    case 'ts':
-                        $dataPeserta = $dataPeserta->sortByDesc(function($query){
-                            return $query->data_ts->name;
-                         })->all();
-                      break;
-                    default:
-                  }
+                if(request()->has('event_alias')){
+                    $event = EventMaster::where('event_alias',request('event_alias'))->first();
+                    $dataPeserta = $dataPeserta->where('event_id',$event->id);
+                }
+                
+                $dataPeserta = $dataPeserta->orderBy('name')->get();
+                if(request()->has('order_by')){
+                        switch (request('order_by')) {
+                                case 'unit':
+                                        $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                                return $query->data_unit->name;
+                                             })->all();
+                                          break;
+                                        case 'komwil':
+                                                $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                                        return $query->data_komwil->name;
+                             })->all();
+                          break;
+                        case 'ts':
+                            $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                return $query->data_ts->name;
+                             })->all();
+                          break;
+                        default:
+                      }
+                }
             }
         // }
         
