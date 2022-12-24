@@ -181,6 +181,7 @@
     <script>
         var form = $('#formPeserta')
         $('#tablePeserta').dataTable({
+            paginate:false,
             dom: 'Bfrtip',
             buttons: [
                 {
