@@ -45,7 +45,7 @@
     @php($i=0)
     <div class="container-fluid" style="width:21cm;">
         @foreach($dataPeserta as $item)
-            <div style="width:80mm;height:50mm; border:3px solid black;margin:8px;display:block;float:unset">
+            <div style="width:85mm;height:52mm; border:3px solid black;margin:8px;display:block;float:unset">
                 <h1 class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:15px">
                     PANITIA {{strtoupper($item->data_event->name)}}
                 </h1>
