@@ -12,7 +12,9 @@
         .row.content {
             height: 1500px
         }
-
+        .col-12{
+            width: 100%;
+        }
         h1 {
             font-size: 18px;
         }

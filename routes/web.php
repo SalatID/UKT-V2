@@ -141,11 +141,15 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
             Route::post('/update-ts',[AdminController::class,'updateTs'])->name('update-ts');
             Route::get('/delete/{id}',[AdminController::class,'deleteTs'])->name('delete-ts');
         });
-        Route::group(['prefix'=>'shortcut'],function(){
+        Route::group(['prefix'=>'tools'],function(){
             Route::get('/copy-data',[AdminController::class,'copyData'])->name('copy-data');
             Route::post('/copy-jurus',[AdminController::class,'copyJurus'])->name('copy-jurus');
             Route::post('/copy-peserta',[AdminController::class,'copyPeserta'])->name('copy-peserta');
             Route::post('/copy-penilai',[AdminController::class,'copyPenilai'])->name('copy-penilai');
+
+            Route::get('/formulir',[AdminController::class,'formulir'])->name('formulir');
+            Route::post('/penilaian-manual',[AdminController::class,'penilaianManual'])->name('penilaian-manual');
+            Route::post('/absensi-peserta',[AdminController::class,'absensiPeserta'])->name('absensi-peserta');
         });
     });
 

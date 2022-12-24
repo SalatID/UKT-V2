@@ -1,7 +1,7 @@
 @extends('admin.index')
 @section('title', 'Cetak Sertifikat')
 @section('content')
-    <form action="{{ route('preview-sertifikat') }}">
+    <form action="{{ route('preview-sertifikat') }}" target="_blank">
         <div class="row">
             <div class="col-xl-3">
                 <div class="form-group">

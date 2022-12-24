@@ -26,7 +26,7 @@ class Kelompok extends Model
     }
     public function data_peserta()
     {
-        return $this->hasMany(Peserta::class,'kelompok_id','id');
+        return $this->hasMany(Peserta::class,'kelompok_id','id')->orderBy('no_peserta')->orderBy('name');
     }
     public function data_ts()
     {

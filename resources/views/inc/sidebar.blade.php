@@ -180,7 +180,7 @@
                   <a href="#" class="nav-link">
                     <i class="fas fa-toolbox nav-icon"></i>
                      <p>
-                        Shortcut
+                        Tools
                         <i class="right fas fa-angle-left"></i>
                      </p>
                   </a>
@@ -191,13 +191,13 @@
                            <p>Copy Data</p>
                         </a>
                      </li>
-                     {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
+                      <li class="nav-item">
+                        <a href="{{route('formulir')}}" class="nav-link">
                            <i class="far fa-dot-circle nav-icon"></i>
-                           <p>Copy Tingkat Sabuk</p>
+                           <p>Form Penilaian Manual</p>
                         </a>
                      </li>
-                     <li class="nav-item">
+                     {{--<li class="nav-item">
                         <a href="#" class="nav-link">
                            <i class="far fa-dot-circle nav-icon"></i>
                            <p>Copy Kelompok</p>

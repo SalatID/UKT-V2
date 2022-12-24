@@ -19,6 +19,7 @@ use DB;
 use Validator;
 use Str;
 use Hash;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -952,7 +953,7 @@ class AdminController extends Controller
     }
     public function copyData()
     {
-        return view('admin.shortcut.copyData');
+        return view('admin.tools.copyData');
     }
     public function copyJurus()
     {
@@ -1026,5 +1027,41 @@ class AdminController extends Controller
             'error'=>false,
             'message'=>'Copy Berhasil '.$insCnt.' row'
         ]);
+    }
+    public function formulir()
+    {
+        return view('admin.tools.formulir');
+    }
+    public function penilaianManual()
+    {
+        $dataKelompok = Kelompok::with(['data_peserta','data_ts','data_event'])->where('id','like',(request('kelompok_id')??'').'%')->where('event_id',request('event_id'))->get();
+        $pdf = Pdf::loadView('admin.tools.formulir.penilaian',compact('dataKelompok'));
+        return $pdf->setPaper('a4')->stream('form-nilai-manual_'.(request('kelompok_id')!='' && $dataKelompok !=null? $dataKelompok[0]->name:''));
+    }
+    public function absensiPeserta()
+    {
+        $dataEvent = EventMaster::where('id',request('event_id'))->first();
+        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
+        if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+        
+        if(count(request()->all())>0){
+            $this->peserta = new Peserta();
+            $params = request()->all();
+            $params = array_filter(request()->all(),function($key) use($params){
+                return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
+            },ARRAY_FILTER_USE_KEY);
+            if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
+            $dataPeserta = $dataPeserta->where($params);
+            if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
+        }
+        
+        $dataPeserta = $dataPeserta->orderBy('name')->orderBy('no_peserta')->get();
+        $dataPeserta = $dataPeserta->sortBy(function($query){
+            return $query->data_unit->name;
+         })->sortBy(function($query){
+            return $query->data_komwil->name;
+        })->all();
+        $pdf = Pdf::loadView(request('view'),compact('dataPeserta','dataEvent'));
+        return $pdf->setPaper('a4')->stream('form-nilai-manual_'.(request('kelompok_id')!='' && $dataPeserta !=null? $dataPeserta[0]->name:''));
     }
 }

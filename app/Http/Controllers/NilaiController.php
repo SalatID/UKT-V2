@@ -187,6 +187,10 @@ class NilaiController extends Controller
         if(request()->has('ts_id') && request('ts_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
             $q->where('ts_awal_id',request('ts_id'));
         });
+        if(request()->has('no_peserta_from') && request('no_peserta_from')!=null && request()->has('no_peserta_to') && request('no_peserta_to')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
+            $q->where('no_peserta','>=',request('no_peserta_from'));
+            $q->where('no_peserta','<=',request('no_peserta_to'));
+        });
         $dataSertifikat = $dataSertifikat->get();
         if($muka=='depan'){
             $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
