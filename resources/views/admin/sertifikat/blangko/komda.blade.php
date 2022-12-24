@@ -219,7 +219,7 @@
                             berhasil <span class="font-weight-bold">LULUS </span> Ke Tingkat Sabuk<br>
                             @endif
                             @if($blangko != 'on')
-                            <div style="height: 2.7cm">
+                            <div style="height: 3cm">
 
                             </div>
                             @endif
