@@ -55,6 +55,7 @@
         </style>
     </head>
     <body>
+        @php(ini_set("gd.jpeg_ignore_warning", 1))
         <div class="row col-12">
             <h1 class="text-center" style="margin:0;padding:0">{{ strtoupper('List Peserta') }}</h1>
             <h4 class="text-center" style="margin:0;padding:0">{{$dataEvent->name}}-{{$dataEvent->lokasi}}-{{$dataEvent->penyelenggara}}</h4>
