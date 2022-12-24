@@ -59,15 +59,15 @@
                 <h1 class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:70px">
                     {{strtoupper($item->no_peserta)}}
                 </h1>
-                <div class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:17px">
+                <div class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:15px">
                     {{strtoupper($item->name)}}
                 </div>
             </div>
-            @if($i==4)
+            @php($i++)
+            @if($i==5)
             <div class="page-break"></div>
             @php($i=0)
             @endif
-            @php($i++)
         @endforeach
     </div>
 </body>
