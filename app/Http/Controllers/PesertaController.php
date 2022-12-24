@@ -36,6 +36,7 @@ class PesertaController extends Controller
                 $params = array_filter(request()->all(),function($key) use($params){
                     return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
                 },ARRAY_FILTER_USE_KEY);
+                unset($params['no_peserta']);
                 if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
                 $dataPeserta = $dataPeserta->where($params);
                 if(request()->has('innot') && request('innot')!=null){
