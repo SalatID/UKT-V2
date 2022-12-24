@@ -11,6 +11,7 @@ use App\Models\EventMaster;
 use Validator;
 use Str;
 use Crypt;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PesertaController extends Controller
 {
@@ -167,7 +168,8 @@ class PesertaController extends Controller
     public function cetakKartu()
     {
         if(!request()->has('id')) return false;
-        $dataPeserta = Peserta::whereIn('id',request('id'))->get();
+        $dataPeserta = Peserta::whereIn('id',explode(',',request('id')))->get();
+        return Pdf::loadView('admin.peserta.kartuPeserta',compact('dataPeserta'))->setPaper('a4')->stream('kartupeserta.pdf');
         return view('admin.peserta.kartuPeserta',compact('dataPeserta'));
     }
 }

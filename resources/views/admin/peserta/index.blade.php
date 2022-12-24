@@ -262,22 +262,23 @@
             id = $("input[name='check_item']:checked").map(function() {
                 return $(this).data('id')
             }).get()
-            $.ajax({
-                url: btn.data('src'),
-                data: {
-                    _token:$('input[name="_token"]').val(),
-                    id:id
-                },
-                method :'POST',
-                success: function(d) {
-                    console.log(d.length)
-                    if(d.length > 0){
-                        var newWindow = window.open('/admin/peserta', "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
-                        newWindow.document.write(d);
+            window.location.href = btn.data('src')+'?id='+id.join(',')
+            // $.ajax({
+            //     url: btn.data('src'),
+            //     data: {
+            //         _token:$('input[name="_token"]').val(),
+            //         id:id
+            //     },
+            //     method :'GET',
+            //     success: function(d) {
+            //         console.log(d.length)
+            //         if(d.length > 0){
+            //             var newWindow = window.open('/admin/peserta', "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
+            //             newWindow.document.write(d);
 
-                    }
-                }
-            })
+            //         }
+            //     }
+            // })
         })
     </script>
 @endsection
