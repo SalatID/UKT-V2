@@ -41,7 +41,7 @@ class PesertaController extends Controller
                 $dataPeserta = $dataPeserta->where($params);
                 if(request()->has('innot') && request('innot')!=null){
                     if(request('innot')==1){
-                        $dataPeserta = $dataPeserta->whereIn('no_peserta',explode(',',request('no_peserta')));
+                        if(request('no_peserta')!=null)$dataPeserta = $dataPeserta->whereIn('no_peserta',explode(',',request('no_peserta')));
                     }else{
                         $dataPeserta = $dataPeserta->whereNotIn('no_peserta',explode(',',request('no_peserta')));
                     }
