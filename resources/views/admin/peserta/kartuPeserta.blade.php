@@ -63,8 +63,9 @@
                     {{strtoupper($item->name)}}
                 </div>
             </div>
-            @if($i%4==0 && $i!=0)
+            @if($i==4)
             <div class="page-break"></div>
+            @php($i=0)
             @endif
             @php($i++)
         @endforeach
