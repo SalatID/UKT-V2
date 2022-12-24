@@ -98,7 +98,7 @@
                             <label class="form-check-label">In</label>
                         </div>
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="innot" value="0" {{request('innot')==0?'checked':''}} >
+                            <input class="form-check-input" type="radio" name="innot" value="0" {{request('innot')==='0'?'checked':''}} >
                             <label class="form-check-label">Not In</label>
                         </div>
                     </div>
