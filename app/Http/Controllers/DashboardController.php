@@ -26,10 +26,14 @@ class DashboardController extends Controller
                         ->join('ts as b','b.id','peserta.ts_awal_id')
                         ->where('event_id',$event->id)
                         ->groupBy('b.name')->orderBy('b.id')->get(); 
+            $sumTsPt =  Peserta::selectRaw('cast(count(*) as int) as y,b.name,peserta.tingkat')
+                        ->join('ts as b','b.id','peserta.ts_awal_id')
+                        ->where('event_id',$event->id)
+                        ->groupBy('b.name','peserta.tingkat')->orderBy('b.name')->orderBy('peserta.tingkat')->get(); 
             $sumJenjang =  Peserta::selectRaw('cast(count(*) as int) as y,tingkat as name')
                         ->where('event_id',$event->id)
                         ->groupBy('tingkat')->get(); 
         }
-        return view('admin.dashboard.peserta',compact('sumKomwil','sumTs','sumJenjang'));
+        return view('admin.dashboard.peserta',compact('sumKomwil','sumTs','sumJenjang','sumTsPt'));
     }
 }
