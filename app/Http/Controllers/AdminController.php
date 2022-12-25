@@ -451,7 +451,7 @@ class AdminController extends Controller
             return in_array($key,$this->penilai->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Penilai::where('id',request('id'))->firstOrFail()->update($params);
+        $ins = Penilai::where('id',request('id'))->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'

@@ -128,6 +128,7 @@
                     $('input[name="name"]', form).val(data.name)
                     $('select[name="ts_id"]',form).val(data.ts_id)
                     $('select[name="event_id"]',form).val(data.event_id)
+                    $('select[name="komwil_id"]',form).val(data.komwil_id)
                     $('#addPenilai').modal('show')
                     return
                 }
