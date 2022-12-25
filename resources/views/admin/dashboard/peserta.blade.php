@@ -51,16 +51,16 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>TS</th>
-                            <th>Jenjang</th>
+                            <th>Unit</th>
+                            <th>Komwil</th>
                             <th>Jumlah</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($sumTsPt as $value)
+                        @foreach($sumUnit as $value)
                         <tr>
-                            <td>{{$value->name}}</td>
-                            <td>{{$value->tingkat}}</td>
+                            <td>{{$value->unit}}</td>
+                            <td>{{$value->komwil}}</td>
                             <td class="text-right">{{$value->y}} orang</td>
                         </tr>
                         @endforeach
@@ -68,6 +68,7 @@
                 </table>
             </div>
         </div>
+        
     </div>
     <div class="col-md-4">
         <div class="card">
@@ -83,6 +84,28 @@
                         @foreach($sumTs as $value)
                         <tr>
                             <td>{{$value->name}}</td>
+                            <td class="text-right">{{$value->y}} orang</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tingkat Sabuk</th>
+                            <th>Jenjang</th>
+                            <th>Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($sumTsPt as $value)
+                        <tr>
+                            <td>{{$value->name}}</td>
+                            <td>{{$value->tingkat}}</td>
                             <td class="text-right">{{$value->y}} orang</td>
                         </tr>
                         @endforeach

@@ -25,7 +25,7 @@
                             <td>{{ $item->name }}</td>
                             {{-- <td>{{ $item->data_ts->name }}</td> --}}
                             {{-- <td>{{ $item->data_komwil->name??'' }}</td> --}}
-                            <td>{{ $item->data_event->name??'' }}</td>
+                            <td>{{ $item->data_event->name??'' }}, {{ $item->data_event->lokasi??'' }} {{ $item->data_event->penyelenggara??'' }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"
@@ -127,7 +127,7 @@
                     }).appendTo('#formPenilai');
                     $('input[name="name"]', form).val(data.name)
                     $('select[name="ts_id"]',form).val(data.ts_id)
-                    $('select[name="komwil_id"]',form).val(data.data_komwil.id)
+                    $('select[name="event_id"]',form).val(data.event_id)
                     $('#addPenilai').modal('show')
                     return
                 }
