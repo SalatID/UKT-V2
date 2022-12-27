@@ -11,8 +11,8 @@
                     <tr>
                         <th>#</th>
                         <th>Nama Penilai</th>
-                        {{-- <th>TS</th> --}}
-                        {{-- <th>Komwil</th> --}}
+                        <th>TS</th>
+                        <th>Komwil</th>
                         <th>Event</th>
                         <th>Action</th>
                     </tr>
@@ -23,8 +23,8 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $item->name }}</td>
-                            {{-- <td>{{ $item->data_ts->name }}</td> --}}
-                            {{-- <td>{{ $item->data_komwil->name??'' }}</td> --}}
+                            <td>{{ $item->data_ts->name }}</td> 
+                            <td>{{ $item->data_komwil->name??'' }}</td>
                             <td>{{ $item->data_event->name??'' }}, {{ $item->data_event->lokasi??'' }} {{ $item->data_event->penyelenggara??'' }}</td>
                             <td>
                                 <div class="dropdown">
