@@ -476,7 +476,7 @@ class AdminController extends Controller
         },ARRAY_FILTER_USE_KEY);
         // if(!array_key_exists('event_id',$params)) return redirect()->back()->with(['error'=>true,'message'=>'Harap Pilih Event']);
         $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
-        $dataJurus = Jurus::with(['data_parent','data_ts'])->where($params)->get();
+        $dataJurus = Jurus::with(['data_parent','data_ts'])->where($params)->where('parent_id',0)->get();
         $parent = Jurus::where('parent_id',0)->where('event_id',$params['event_id']??'')->get();
         $ts = Ts::get();
         return view('admin.jurus.index',compact('dataJurus','parent','ts'));
@@ -728,7 +728,7 @@ class AdminController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
         $event_data = auth()->user()->event_id;
-        $params['event_id']=$event_data;
+        if($event_data!=null)$params['event_id']=$event_data;
         return DB::transaction(function() use ($params){
             $upd = Kelompok::where('id',request('id'))->firstOrFail()->update($params);
             $id = request('id');
@@ -1050,8 +1050,17 @@ class AdminController extends Controller
             $params = array_filter(request()->all(),function($key) use($params){
                 return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
             },ARRAY_FILTER_USE_KEY);
+            unset($params['no_peserta']);
             if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
             $dataPeserta = $dataPeserta->where($params);
+            $dataPeserta = $dataPeserta->where($params);
+                if(request()->has('innot') && request('innot')!=null){
+                    if(request('innot')==1){
+                        if(request('no_peserta')!=null)$dataPeserta = $dataPeserta->whereIn('no_peserta',explode(',',request('no_peserta')));
+                    }else{
+                        $dataPeserta = $dataPeserta->whereNotIn('no_peserta',explode(',',request('no_peserta')));
+                    }
+                }
             if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
         }
         if(request()->has('limit') && request('limit')!=null){

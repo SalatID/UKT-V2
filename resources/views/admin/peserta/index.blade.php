@@ -227,7 +227,12 @@
             
         })
         $(document).ready(function(){
-            if($('#komwil').val()!=='') $('#komwil').change();
+            if($('#komwil').val()!=='') {
+                $('#komwil').change()
+                setInterval(() => {
+                    $('#unit_id').val('{{request("unit_id"??"")}}')
+                }, 2000);
+            };
         })
         function editData(e) {
             $.get($(e).data('action'), function(data) {

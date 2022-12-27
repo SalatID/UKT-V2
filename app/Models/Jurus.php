@@ -34,4 +34,8 @@ class Jurus extends Model
     {
         return $this->hasOne(EventMaster::class,'id','event_id');
     }
+    public function data_children()
+    {
+        return $this->hasMany(Jurus::class,'parent_id','id');
+    }
 }

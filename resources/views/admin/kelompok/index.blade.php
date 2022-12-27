@@ -5,6 +5,7 @@
         <a href="{{route('add-kelompok')}}" class="btn btn-success" >Tambah Kelompok</a>
     </div>
     <div class="row">
+        @csrf
         <div class="col-xl-12 table-responsive">
             <table class="table table-striped table-bordered" id="tableKelompok">
                 <thead>
@@ -12,6 +13,7 @@
                         <th>#</th>
                         <th>Nama Kelompok</th>
                         <th>TS</th>
+                        <th>Penilai</th>
                         <th>Anggota</th>
                         <th>Aktif Event</th>
                         <th>Action</th>
@@ -24,6 +26,14 @@
                             <td>{{ $no++ }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->data_ts->name }}</td>
+                            <td>
+                                <select name="penilai_id" class="form-control" id="" data-id="{{$item->id}}" onchange="updatePenilai(this)" data-url="{{route('update-kelompok')}}">
+                                    <option value="">Pilih Penilai</option>
+                                    @foreach(\App\Models\Penilai::where('event_id',$item->event_id)->get() as $v)
+                                        <option value="{{$v->id}}" {{$v->id==$item->penilai_id?'selected':''}}>{{$v->name}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td>
                                 <ol>
                                     @foreach ($item->data_peserta as $p)
@@ -83,6 +93,20 @@
                     location.reload()
                 })
             }
+        }
+        function updatePenilai(e){
+            $.ajax({
+                method:'POST',
+                url:$(e).data('url'),
+                data:{
+                    _token:$('input[name="_token"]').val(),
+                    id:$(e).data('id'),
+                    penilai_id:$(e).val()
+                },
+                success:function(data){
+                    location.reload()
+                }
+            })
         }
         $('.btn-add').click(function(){
             $('#addKelompokLabel').text('Tambah Kelompok')

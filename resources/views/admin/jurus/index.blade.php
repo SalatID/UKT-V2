@@ -48,6 +48,7 @@
                         <th>Nama Jurus</th>
                         <th>TS</th>
                         <th>Parent</th>
+                        <th>Child</th>
                         <th>Event</th>
                         <th>Action</th>
                     </tr>
@@ -60,6 +61,38 @@
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->data_ts->name }}</td>
                             <td>{{ $item->data_parent->name??'' }} </td>
+                            <td>
+                                <ol>
+                                @foreach($item->data_children as $d)
+                                    <li>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                {{$d->name}} 
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                {{$d->data_ts->ts_code}} 
+
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="dropdown">
+                                                    <button class="btn dropdown-toggle" type="button" id="dropDownOption"
+                                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fas fa-ellipsis-v"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" aria-labelledby="dropDownOption">
+                                                        <a class="dropdown-item" onclick="editData(this)" href="#"
+                                                            data-action="{{ route('json-jurus', $d->id) }}">Edit</a>
+                                                        <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-jurus', $d->id) }}">Delete</a>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                                </ol>
+                            </td>
                             <td>{{ $item->data_event->name??'' }} {{ $item->data_event->lokasi??'' }} {{ $item->data_event->penyelenggara??'' }}</td>
                             <td>
                                 <div class="dropdown">

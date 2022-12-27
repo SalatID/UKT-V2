@@ -12,7 +12,7 @@ class Kelompok extends Model
     use HasFactory,LogsActivity;
     protected $table = 'kelompok';
     public $fillable =[
-        'name','event_id','ts_id','penilai_id','created_user'
+        'name','event_id','ts_id','penilai_id','created_user','penguji_id'
     ];
     public function getActivitylogOptions(): LogOptions
     {
