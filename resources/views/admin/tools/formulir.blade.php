@@ -54,7 +54,7 @@
                 <input type="hidden" name="view" value="admin.tools.formulir.peserta">
                 
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label for="event_id">Event</label>
                             @php($eventSelect = \App\Models\EventMaster::all())
@@ -68,18 +68,49 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-xl-4">
                         <div class="form-group">
                             <label for="komwil_id">Komwil</label>
-                            @php($eventSelect = \App\Models\Komwil::all())
-                            <select name="komwil_id" class="form-control">
-                                <option value="">Semua Komwil</option>
-                                @foreach ($eventSelect as $item)
-                                <option value="{{ $item->id }}" {{(request('komwil_id')??'')==$item->id?'selected':''}}>
-                                {{ $item->name }}</option>
+                            <select name="komwil_id" class="form-control" id="komwil" data-href="{{ route('get-json-unit') }}">
+                                <option value="">Pilih Komwil</option>
+                                @foreach (\App\Models\Komwil::all() as $item)
+                                    <option value="{{$item->id}}" {{(request('komwil_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
                                 @endforeach
                             </select>
                         </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="form-group">
+                            <label for="unit_id">Unit</label>
+                            <select name="unit_id" class="form-control" id="unit_id" disabled>
+                                <option value="">Pilih Unit</option>
+                                {{-- @foreach ($unit as $item)
+                                    <option value="{{$item->id}}" {{(request('unit_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="order_by">No Peserta</label>
+                                    <input type="text" class="form-control" name="no_peserta" value="{{request('no_peserta')??''}}">
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="innot" value="1" {{request('innot')==1?'checked':''}} {{request('innot')==null?'checked':''}}>
+                                    <label class="form-check-label">In</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="innot" value="0" {{request('innot')==='0'?'checked':''}} >
+                                    <label class="form-check-label">Not In</label>
+                                </div>
+                            </div>
+        
+                        </div>
+                        
                     </div>
                 </div>
                 <button type="submit" class="btn btn-success">Cetak</button>
