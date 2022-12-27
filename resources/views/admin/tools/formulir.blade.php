@@ -27,7 +27,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="kelompok_id">Kelompok</label>
-                            @php($eventSelect = \App\Models\Kelompok::all())
+                            @php($eventSelect = \App\Models\Kelompok::whereNull('deleted_at')->get())
                             <select name="kelompok_id" class="form-control">
                                 <option value="">Semua Kelompok</option>
                                 @foreach ($eventSelect as $item)

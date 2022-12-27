@@ -70,7 +70,7 @@
             <tr>
                 <td>Penilai</td>
                 <td>:</td>
-                <td></td>
+                <td>{{$value->data_penilai->name??''}}</td>
             </tr>
         </table>
         <table width="100%" class="table">
