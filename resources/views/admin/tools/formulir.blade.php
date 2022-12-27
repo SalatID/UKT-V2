@@ -97,30 +97,25 @@
                 <input type="hidden" name="view" value="admin.tools.formulir.absen">
                 @csrf
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-xl-4">
                         <div class="form-group">
-                            <label for="event_id">Event</label>
-                            @php($eventSelect = \App\Models\EventMaster::all())
-                            <select name="event_id" class="form-control" required>
-                                <option value="">Pilih Event</option>
-                                @foreach ($eventSelect as $item)
-                                <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
-                                {{ $item->name }} - {{ $item->lokasi }} -
-                                {{ $item->penyelenggara }}</option>
+                            <label for="komwil_id">Komwil</label>
+                            <select name="komwil_id" class="form-control" id="komwil" data-href="{{ route('get-json-unit') }}">
+                                <option value="">Pilih Komwil</option>
+                                @foreach (\App\Models\Komwil::all() as $item)
+                                    <option value="{{$item->id}}" {{(request('komwil_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xl-4">
                         <div class="form-group">
-                            <label for="komwil_id">Komwil</label>
-                            @php($eventSelect = \App\Models\Komwil::all())
-                            <select name="komwil_id" class="form-control">
-                                <option value="">Semua Komwil</option>
-                                @foreach ($eventSelect as $item)
-                                <option value="{{ $item->id }}" {{(request('komwil_id')??'')==$item->id?'selected':''}}>
-                                {{ $item->name }}</option>
-                                @endforeach
+                            <label for="unit_id">Unit</label>
+                            <select name="unit_id" class="form-control" id="unit_id" disabled>
+                                <option value="">Pilih Unit</option>
+                                {{-- @foreach ($unit as $item)
+                                    <option value="{{$item->id}}" {{(request('unit_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
+                                @endforeach --}}
                             </select>
                         </div>
                     </div>
