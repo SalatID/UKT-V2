@@ -97,6 +97,20 @@
                 <input type="hidden" name="view" value="admin.tools.formulir.absen">
                 @csrf
                 <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="event_id">Event</label>
+                            @php($eventSelect = \App\Models\EventMaster::all())
+                            <select name="event_id" class="form-control" required>
+                                <option value="">Pilih Event</option>
+                                @foreach ($eventSelect as $item)
+                                <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
+                                {{ $item->name }} - {{ $item->lokasi }} -
+                                {{ $item->penyelenggara }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
                     <div class="col-xl-4">
                         <div class="form-group">
                             <label for="komwil_id">Komwil</label>
@@ -105,17 +119,6 @@
                                 @foreach (\App\Models\Komwil::all() as $item)
                                     <option value="{{$item->id}}" {{(request('komwil_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
                                 @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-xl-4">
-                        <div class="form-group">
-                            <label for="unit_id">Unit</label>
-                            <select name="unit_id" class="form-control" id="unit_id" disabled>
-                                <option value="">Pilih Unit</option>
-                                {{-- @foreach ($unit as $item)
-                                    <option value="{{$item->id}}" {{(request('unit_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
-                                @endforeach --}}
                             </select>
                         </div>
                     </div>
