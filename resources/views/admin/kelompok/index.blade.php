@@ -30,7 +30,7 @@
                                 <select name="penilai_id" class="form-control" id="" data-id="{{$item->id}}" onchange="updatePenilai(this)" data-url="{{route('update-kelompok')}}">
                                     <option value="">Pilih Penilai</option>
                                     @foreach(\App\Models\Penilai::where('event_id',$item->event_id)->orderBy('name')->get() as $v)
-                                        <option value="{{$v->id}}" {{$v->id==$item->penilai_id?'selected':''}}>{{$v->name}}</option>
+                                        <option value="{{$v->id}}" {{$v->id==$item->penilai_id?'selected':''}}>{{$v->name}} - {{$v->data_ts->ts_code}}</option>
                                     @endforeach
                                 </select>
                             </td>
