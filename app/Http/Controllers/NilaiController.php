@@ -89,7 +89,7 @@ class NilaiController extends Controller
                 return in_array($key,$this->summary_nilai_detail->fillable)!==false;
             },ARRAY_FILTER_USE_KEY);
             
-            $params['nilai']=round($params['nilai']/$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']),1);
+            $params['nilai']=round($params['nilai']/$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']));
             $params['total_jurus']=$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']);
             $params['kriteria']=$this->summary_nilai_detail->criteria($params['nilai']);
             
