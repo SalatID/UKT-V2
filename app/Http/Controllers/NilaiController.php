@@ -183,7 +183,7 @@ class NilaiController extends Controller
         $blangko = request('blangko')??'off';
         $data = request('data')??'off';
         $foto = request('foto')??'off';
-        $dataSertifikat = SummaryNilai::with(['data_peserta'])->join('peserta','peserta.id','summary_nilai.peserta_id')->where('summary_nilai.event_id',request('event_id'))->orderBy('peserta_id');
+        $dataSertifikat = SummaryNilai::with(['data_peserta'])->where('summary_nilai.event_id',request('event_id'))->orderBy('peserta_id');
         if(request()->has('komwil_id') && request('komwil_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
             $q->where('komwil_id',request('komwil_id'));
         });
