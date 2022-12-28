@@ -35,8 +35,8 @@ class NilaiController extends Controller
             if(request()->has('event_alias')){
                 $event = EventMaster::where('event_alias',request('event_alias'))->first();
                 $dataNilai = $dataNilai->where('event_id',$event->id);
+                $param = ['event_id',$event->id];
             }
-            $param = ['event_id',$event->id];
             $dataNilai = $dataNilai->get();
         }
         $ts = Ts::all();
