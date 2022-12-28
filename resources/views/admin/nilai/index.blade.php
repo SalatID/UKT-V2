@@ -113,7 +113,7 @@
                             <td>{{ $item->data_kelompok->name??'' }}</td>
                             <td>{{ $item->data_event->name }}</td>
                             <td>{{ $item->data_penilai->name }}</td>
-                            <td>{{ $item->data_jurus->name }}</td>
+                            <td>{{ $item->data_jurus->name??'' }}</td>
                             <td>{{ $item->nilai }}</td>
                             @if(in_array(auth()->user()->role,$allow))
                             <td>
