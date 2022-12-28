@@ -84,12 +84,12 @@
                     <tr>
                         <td class="no-border" width="100">Nama</td>
                         <td class="no-border" width="5">:</td>
-                        <td width="300" class="font-weight-bold no-border">{{$item->data_peserta->name}}</td>
+                        <td width="300" class="font-weight-bold no-border">{{$item->data_peserta->name??''}}</td>
                     </tr>
                     <tr>
                         <td class="no-border" width="100">Tingkatan Sabuk</td>
                         <td class="no-border" width="5">:</td>
-                        <td class="no-border" width="300">{{$item->data_peserta->data_ts->name}}</td>
+                        <td class="no-border" width="300">{{$item->data_peserta->data_ts->name??''}}</td>
                     </tr>
                 </table>
             </div>
