@@ -87,6 +87,7 @@
                 <thead>
                     <tr>
                         <th>#</th>
+                        <th>No Peserta</th>
                         <th>Nama Peserta</th>
                         <th>Tingkatan Sabuk</th>
                         <th>Unit</th>
@@ -106,6 +107,7 @@
                     @foreach ($dataNilai as $item)
                         <tr>
                             <td>{{ $no++ }}</td>
+                            <td>{{ $item->data_peserta->no_peserta??'' }}</td>
                             <td>{{ $item->data_peserta->name??'' }}</td>
                             <td>{{ $item->data_peserta->data_ts->name??'' }}</td>
                             <td>{{ $item->data_peserta->data_unit->name??'' }}</td>
