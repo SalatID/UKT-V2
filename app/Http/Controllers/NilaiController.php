@@ -37,7 +37,7 @@ class NilaiController extends Controller
                 $dataNilai = $dataNilai->where('event_id',$event->id);
                 $param = [['event_id',$event->id]];
             }
-            if(request()->has('event_id')){
+            if(request()->has('event_id') && request('event_id')!=null){
                 $dataNilai = $dataNilai->where('event_id',request('event_id'));
                 $param =[ ['event_id',request('event_id')]];
             }
