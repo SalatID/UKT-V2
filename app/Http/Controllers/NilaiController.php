@@ -32,15 +32,15 @@ class NilaiController extends Controller
             // $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
             $dataNilai = Nilai::select('nilai.*')->where($params);
             // if(request('ts_id')!=null) $dataNilai = $dataNilai->join('peserta','peserta.id','nilai.peserta_id')->where('peserta.ts_awal_id',request('ts_id'));
-            // if(request()->has('event_alias')){
-            //     $event = EventMaster::where('event_alias',request('event_alias'))->first();
-            //     $dataNilai = $dataNilai->where('event_id',$event->id);
-            //     $param = [['event_id',$event->id]];
-            // }
-            // if(request()->has('event_id') && request('event_id')!=null){
-            //     $dataNilai = $dataNilai->where('event_id',request('event_id'));
-            //     $param =[ ['event_id',request('event_id')]];
-            // }
+            if(request()->has('event_alias')){
+                $event = EventMaster::where('event_alias',request('event_alias'))->first();
+                $dataNilai = $dataNilai->where('event_id',$event->id);
+                $param = [['event_id',$event->id]];
+            }
+            if(request()->has('event_id') && request('event_id')!=null){
+                $dataNilai = $dataNilai->where('event_id',request('event_id'));
+                $param =[ ['event_id',request('event_id')]];
+            }
             $dataNilai = $dataNilai->get();
         }
         $ts = Ts::all();
