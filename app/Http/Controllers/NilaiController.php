@@ -22,6 +22,7 @@ class NilaiController extends Controller
     public function index()
     {
         $dataNilai = [];
+        $param =[];
         if(count(request()->all())>0){
             $this->nilai = new Nilai();
             $params = array_filter(request()->all(),function($key){
@@ -35,11 +36,12 @@ class NilaiController extends Controller
                 $event = EventMaster::where('event_alias',request('event_alias'))->first();
                 $dataNilai = $dataNilai->where('event_id',$event->id);
             }
+            $param = ['event_id',$event->id];
             $dataNilai = $dataNilai->get();
         }
         $ts = Ts::all();
-        $kelompok = Kelompok::all();
-        $penilai = Penilai::all();
+        $kelompok = Kelompok::where($param)->get();
+        $penilai = Penilai::where($param)->get();
         $jurus = Jurus::where('parent_id','!=','0')->get();
         return view('admin.nilai.index',compact('dataNilai','ts','kelompok','penilai','jurus'));
     }
