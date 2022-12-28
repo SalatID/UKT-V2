@@ -228,5 +228,12 @@
                 })
             })
         };
+        function deleteData(e) {
+            if(confirm('Hapus Nilai?')){
+                $.get($(e).data('action'),function(){
+                    location.reload()
+                })
+            }
+        }
     </script>
 @endsection
