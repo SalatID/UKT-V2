@@ -35,14 +35,18 @@ class NilaiController extends Controller
             if(request()->has('event_alias')){
                 $event = EventMaster::where('event_alias',request('event_alias'))->first();
                 $dataNilai = $dataNilai->where('event_id',$event->id);
-                $param = ['event_id',$event->id];
+                $param = [['event_id',$event->id]];
+            }
+            if(request()->has('event_id')){
+                $dataNilai = $dataNilai->where('event_id',request('event_id'));
+                $param =[ ['event_id',request('event_id')]];
             }
             $dataNilai = $dataNilai->get();
         }
         $ts = Ts::all();
         $kelompok = Kelompok::where($param)->get();
         $penilai = Penilai::where($param)->get();
-        $jurus = Jurus::where('parent_id','!=','0')->get();
+        $jurus = Jurus::where('parent_id','!=','0')->where($param)->get();
         return view('admin.nilai.index',compact('dataNilai','ts','kelompok','penilai','jurus'));
     }
     public function calculateNilai()
