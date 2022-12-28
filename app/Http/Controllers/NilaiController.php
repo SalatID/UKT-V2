@@ -53,7 +53,7 @@ class NilaiController extends Controller
     {
         // $this->user = auth()->user();
         // return Queue::push(new \App\Jobs\CalculateNilaiJob(auth()->user()));        
-        $data = Nilai::select('peserta.name','peserta.no_peserta','peserta.id as peserta_id','peserta.ts_awal_id as ts_id','d.name as nama_jurus','d.id as jurus_id','nilai.event_id','e.no_sertifikat',DB::raw('sum(nilai)nilai,COUNT(c.id)jurus_dinilai'))
+        $data = Nilai::select('peserta.name','peserta.no_peserta','peserta.id as peserta_id','peserta.ts_awal_id as ts_id','d.name as nama_jurus','d.id as jurus_id','nilai.event_id','e.no_sertifikat',DB::raw('round(sum(nilai))nilai,COUNT(c.id)jurus_dinilai'))
                 ->join('peserta','peserta.id','nilai.peserta_id')
                 ->join('jurus as c','c.id','nilai.jurus_id')
                 ->join('jurus as d','d.id','c.parent_id')
