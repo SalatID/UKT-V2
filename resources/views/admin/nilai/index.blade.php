@@ -106,7 +106,7 @@
                     @foreach ($dataNilai as $item)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $item->data_peserta->name?? }}</td>
+                            <td>{{ $item->data_peserta->name??'' }}</td>
                             <td>{{ $item->data_peserta->data_ts->name??'' }}</td>
                             <td>{{ $item->data_peserta->data_unit->name??'' }}</td>
                             <td>{{ $item->data_peserta->data_komwil->name??'' }}</td>
