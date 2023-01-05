@@ -9,6 +9,9 @@
         .text-center{
             text-align: center;
         }
+        .text-left{
+            text-align: left;
+        }
         .row.content {
             height: 1500px
         }
@@ -171,13 +174,13 @@
                                 <br>
                                <span style="font-size : 11px">Dewan Guru</span> 
                             </td>
-                            <td width="100"></td>
+                            <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-abah-dindin.png" width="100px" alt=""></td>
                             <td width="130">
-                                <strong>Dindin Djuandi</strong>
+                                <strong>Muhammad Soleh</strong>
                                  <br>
                                 <span style="font-size : 11px">Dewan Guru</span> 
                              </td>
-                             <td width="100"></td>
+                             <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-abah-soleh.png" width="100px" alt=""></td>
                         </tr>
                         <tr>
                             <td width="130">
@@ -185,13 +188,13 @@
                                 <br>
                                <span style="font-size : 11px">Pendekar Muda Utama</span> 
                             </td>
-                            <td width="100"></td>
+                            <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-bang-otong.png" width="100px" alt=""></td>
                             <td width="130">
                                 <strong>Jarsa Purnama Desa</strong>
                                  <br>
                                 <span style="font-size : 11px">Pendekar Muda Utama</span> 
                              </td>
-                             <td width="100"></td>
+                             <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-bang-jarsa.png" width="100px" alt=""></td>
                         </tr>
                     </thead>
                 </table>

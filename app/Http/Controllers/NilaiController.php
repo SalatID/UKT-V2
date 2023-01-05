@@ -41,6 +41,11 @@ class NilaiController extends Controller
                 $dataNilai = $dataNilai->where('event_id',request('event_id'));
                 $param =[ ['event_id',request('event_id')]];
             }
+            if(request()->has('ts_id') && request('ts_id')!=null){
+                $dataNilai = $dataNilai->whereHas('data_peserta',function($q){
+                    $q->where('ts_awal_id',request('ts_id'));
+                });
+            }
             $dataNilai = $dataNilai->get();
         }
         $ts = Ts::all();
@@ -49,7 +54,7 @@ class NilaiController extends Controller
         $jurus = Jurus::where('parent_id','!=','0')->where($param)->get();
         return view('admin.nilai.index',compact('dataNilai','ts','kelompok','penilai','jurus'));
     }
-    public function calculateNilai()
+    public function calculateNilai($eventId)
     {
         // $this->user = auth()->user();
         // return Queue::push(new \App\Jobs\CalculateNilaiJob(auth()->user()));        
@@ -61,7 +66,10 @@ class NilaiController extends Controller
                 ->whereNull('peserta.deleted_at')
                 ->groupBy('peserta.id','peserta.name','d.name','d.id','nilai.event_id','peserta.ts_awal_id','e.no_sertifikat','peserta.no_peserta')
                 ->orderBy('peserta.id')
+                ->where('nilai.event_id',$eventId)
+                ->where('peserta.id',520)
                 ->get()->toArray();
+                // dd($data);
         $sum_nilai=[];
         $peserta_id='';
         $insM = '';
@@ -69,6 +77,8 @@ class NilaiController extends Controller
         $summary='';
         $this->summary_nilai = new SummaryNilai();
         $this->summary_nilai_detail = new SummaryNilaiDetail();
+        $this->summary_nilai->where('event_id',$eventId)->delete();
+        $this->summary_nilai_detail->where('event_id',$eventId)->delete();
         // dd($data);
         foreach($data as $key =>$value){
             if( $peserta_id!=$value['peserta_id']){
@@ -117,13 +127,21 @@ class NilaiController extends Controller
     }
     public function summaryNilai()
     {
+        $event = EventMaster::all();
+        $kelompok = Kelompok::all();
+        $eventId = null;
         $dataNilai=[];
-        $event=null;
-        if(request()->has('event_alias')){
-            $event = EventMaster::where('event_alias',request('event_alias'))->first();
+        if(request()->has('event_alias') || request()->has('event_id')){
+            if(request()->has('event_alias')){
+                $event = EventMaster::where('event_alias',request('event_alias'))->first();
+                
+            }else {
+                $event = EventMaster::where('id',request('event_id'))->first();
+            }
+            $kelompok = Kelompok::where('event_id',$event->id??request('event_id'))->get();
             $jurus = Jurus::where('event_id',$event->id)->where('parent_id',0)->get();
             $query = "
-                SELECT a.name,c.name unit, d.name komwil,e.name ts,f.name ts_akhir,b.*
+                SELECT a.no_peserta,a.name,c.name unit, d.name komwil,e.name ts,f.name ts_akhir,b.*
                 FROM peserta a
                 JOIN unit c ON a.unit_id = c.id
                 JOIN komwil d ON a.komwil_id = d.id
@@ -139,13 +157,29 @@ class NilaiController extends Controller
                     where event_id=:event_id
                     GROUP BY peserta_id
                 ) b ON a.id = b.peserta_id
-                where a.event_id=:event_id2
-                    order by a.name
-                ";
-                $dataNilai =DB::select( $query,['event_id'=>$event->id,'event_id2'=>$event->id]);
-                $event = $event->id;
-        }
-        return view('admin.nilai.summaryNilai',compact('dataNilai','event'));
+                where a.event_id=:event_id2 and a.deleted_at is null";
+                $params = ['event_id'=>$event->id,'event_id2'=>$event->id];
+                if(request()->has('komwil_id') && request('komwil_id') != null){
+                    $query .= " and a.komwil_id=:komwil_id";
+                    $params = array_merge($params,['komwil_id'=>request('komwil_id')]);
+                }
+                if(request()->has('unit_id') && request('unit_id') != null){
+                    $query .= " and a.unit_id=:unit_id";
+                    $params = array_merge($params,['unit_id'=>request('unit_id')]);
+                }
+                if(request()->has('ts_id') && request('ts_id') != null){
+                    $query .= " and a.ts_awal_id=:ts_awal_id";
+                    $params = array_merge($params,['ts_awal_id'=>request('ts_id')]);
+                }
+                if(request()->has('kelompok_id') && request('kelompok_id') != null){
+                    $query .= " and a.kelompok_id=:kelompok_id";
+                    $params = array_merge($params,['kelompok_id'=>request('kelompok_id')]);
+                }
+                    $query.=" order by a.name ";
+                $dataNilai =DB::select( $query,$params);
+                $eventId = $event->id;
+            }
+        return view('admin.nilai.summaryNilai',compact('dataNilai','event','kelompok','eventId'));
     }
     public function cetakSertifikat()
     {
