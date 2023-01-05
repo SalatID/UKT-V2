@@ -67,7 +67,7 @@ class NilaiController extends Controller
                 ->groupBy('peserta.id','peserta.name','d.name','d.id','nilai.event_id','peserta.ts_awal_id','e.no_sertifikat','peserta.no_peserta')
                 ->orderBy('peserta.id')
                 ->where('nilai.event_id',$eventId)
-                ->where('peserta.id',520)
+                // ->where('peserta.id',520)
                 ->get()->toArray();
                 // dd($data);
         $sum_nilai=[];
