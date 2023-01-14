@@ -34,7 +34,7 @@ class SummaryNilaiDetail extends Model
     }
     public function averageParams($id,$ts)
     {
-        return Jurus::where('parent_id',$id)->where('ts_id','<=',$ts)->count();
+        return Jurus::where('parent_id',$id)->where('ts_id','<=',$ts)->whereNull('deleted_at')->count();
     }
     public function data_peserta()
     {

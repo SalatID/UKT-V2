@@ -57,18 +57,42 @@ class NilaiController extends Controller
     public function calculateNilai($eventId)
     {
         // $this->user = auth()->user();
-        // return Queue::push(new \App\Jobs\CalculateNilaiJob(auth()->user()));        
-        $data = Nilai::select('peserta.name','peserta.no_peserta','peserta.id as peserta_id','peserta.ts_awal_id as ts_id','d.name as nama_jurus','d.id as jurus_id','nilai.event_id','e.no_sertifikat',DB::raw('sum(nilai)nilai,COUNT(c.id)jurus_dinilai'))
-                ->join('peserta','peserta.id','nilai.peserta_id')
-                ->join('jurus as c','c.id','nilai.jurus_id')
-                ->join('jurus as d','d.id','c.parent_id')
-                ->join('event as e','e.id','nilai.event_id')
-                ->whereNull('peserta.deleted_at')
-                ->groupBy('peserta.id','peserta.name','d.name','d.id','nilai.event_id','peserta.ts_awal_id','e.no_sertifikat','peserta.no_peserta')
-                ->orderBy('peserta.id')
-                ->where('nilai.event_id',$eventId)
-                // ->where('peserta.id',520)
-                ->get()->toArray();
+        // return Queue::push(new \App\Jobs\CalculateNilaiJob(auth()->user()));  
+        // \DB::enableQueryLog();       
+        // $data = Nilai::select('peserta.name','peserta.no_peserta','peserta.id as peserta_id','peserta.ts_awal_id as ts_id','d.name as nama_jurus','d.id as jurus_id','nilai.event_id','e.no_sertifikat',DB::raw('sum(nilai)nilai,COUNT(c.id)jurus_dinilai'))
+        //         ->join('peserta','peserta.id','nilai.peserta_id')
+        //         ->join('jurus as c',function($q){
+        //             $q->on('c.id','nilai.jurus_id');
+        //             // $q->on('c.deleted_at',DB::raw("null"));
+        //         })
+        //         ->join('jurus as d',function($q){
+        //             $q->on('d.id','c.parent_id');
+        //             // $q->on('d.deleted_at',DB::raw("null"));
+        //         })
+        //         ->join('event as e','e.id','nilai.event_id')
+        //         ->whereNull('peserta.deleted_at')
+        //         ->whereNull('c.deleted_at')
+        //         ->whereNull('d.deleted_at')
+        //         ->groupBy('peserta.id','peserta.name','d.name','d.id','nilai.event_id','peserta.ts_awal_id','e.no_sertifikat','peserta.no_peserta')
+        //         ->orderBy('peserta.id')
+        //         ->where('nilai.event_id',$eventId)
+        //         // ->where('peserta.id',520)
+        //         ->get()->toArray();
+        $query = "SELECT `peserta`.`name`, `peserta`.`no_peserta`, `peserta`.`id` as `peserta_id`, `peserta`.`ts_awal_id` as `ts_id`, `d`.`name` as `nama_jurus`, `d`.`id` as `jurus_id`, `nilai`.`event_id`, `e`.`no_sertifikat`, sum(nilai)nilai,COUNT(c.id)jurus_dinilai 
+        FROM (
+            SELECT MAX(nilai) AS nilai,a.peserta_id,a.event_id,a.jurus_id
+            FROM nilai a
+            GROUP BY a.peserta_id,a.event_id,a.jurus_id
+        ) AS `nilai` 
+        inner join `peserta` on `peserta`.`id` = `nilai`.`peserta_id` 
+         INNER JOIN `jurus` as `c` on `c`.`id` = `nilai`.`jurus_id` and `c`.`deleted_at` IS NULL 
+        inner join `jurus` as `d` on `d`.`id` = `c`.`parent_id` and `d`.`deleted_at` IS NULL 
+        inner join `event` as `e` on `e`.`id` = `nilai`.`event_id` where `peserta`.`deleted_at` is null AND 
+         `nilai`.`event_id` = ?
+        group by `peserta`.`id`, `peserta`.`name`, `d`.`name`, `d`.`id`, `nilai`.`event_id`, `peserta`.`ts_awal_id`, `e`.`no_sertifikat`, `peserta`.`no_peserta` 
+        order by `peserta`.`id` asc";
+        $data = json_decode(json_encode(DB::select($query,[$eventId])),true);
+                // dd(\DB::getQueryLog());
                 // dd($data);
         $sum_nilai=[];
         $peserta_id='';
@@ -99,7 +123,7 @@ class NilaiController extends Controller
             $params = array_filter($value,function($key){
                 return in_array($key,$this->summary_nilai_detail->fillable)!==false;
             },ARRAY_FILTER_USE_KEY);
-            
+            // dd($this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']));
             $params['nilai']=$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id'])!=0?round($params['nilai']/$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']),1):0; 
             $params['total_jurus']=$this->summary_nilai_detail->averageParams($value['jurus_id'],$value['ts_id']);
             $params['kriteria']=$this->summary_nilai_detail->criteria($params['nilai']);
