@@ -1052,7 +1052,6 @@ class AdminController extends Controller
                 return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
             },ARRAY_FILTER_USE_KEY);
             unset($params['no_peserta']);
-            dd($params);
             if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
             $dataPeserta = $dataPeserta->where($params);
             $dataPeserta = $dataPeserta->where($params);
