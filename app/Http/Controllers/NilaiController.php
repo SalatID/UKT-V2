@@ -87,8 +87,8 @@ class NilaiController extends Controller
         inner join `peserta` on `peserta`.`id` = `nilai`.`peserta_id` 
          INNER JOIN `jurus` as `c` on `c`.`id` = `nilai`.`jurus_id` and `c`.`deleted_at` IS NULL 
         inner join `jurus` as `d` on `d`.`id` = `c`.`parent_id` and `d`.`deleted_at` IS NULL 
-        inner join `event` as `e` on `e`.`id` = `nilai`.`event_id` where `peserta`.`deleted_at` is null AND 
-         `nilai`.`event_id` = ?
+        inner join `event` as `e` on `e`.`id` = `nilai`.`event_id` 
+        where `peserta`.`deleted_at` is null AND  `nilai`.`event_id` = ?
         group by `peserta`.`id`, `peserta`.`name`, `d`.`name`, `d`.`id`, `nilai`.`event_id`, `peserta`.`ts_awal_id`, `e`.`no_sertifikat`, `peserta`.`no_peserta` 
         order by `peserta`.`id` asc";
         $data = json_decode(json_encode(DB::select($query,[$eventId])),true);
@@ -256,6 +256,17 @@ class NilaiController extends Controller
             $q->where('no_peserta','>=',request('no_peserta_from'));
             $q->where('no_peserta','<=',request('no_peserta_to'));
         });
+        if(request()->has('innot') && request('innot')!=null){
+            if(request('innot')==1){
+                if(request('no_peserta')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
+                    $q->whereIn('no_peserta',explode(',',request('no_peserta')));
+                });
+            }else{
+                if(request('no_peserta')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
+                    $q->whereNotIn('no_peserta',explode(',',request('no_peserta')));
+                });
+            }
+        }
         $dataSertifikat = $dataSertifikat->get();
         if($muka=='depan'){
             $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));

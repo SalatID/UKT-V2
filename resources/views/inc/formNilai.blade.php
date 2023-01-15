@@ -70,5 +70,27 @@
                 </div>
             </div>
         </div>
+        <div class="col-xl-3">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        <label for="order_by">No Peserta</label>
+                        <input type="text" class="form-control" name="no_peserta" value="{{request('no_peserta')??''}}">
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="innot" value="1" {{request('innot')==1?'checked':''}} {{request('innot')==null?'checked':''}}>
+                        <label class="form-check-label">In</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="innot" value="0" {{request('innot')==='0'?'checked':''}} >
+                        <label class="form-check-label">Not In</label>
+                    </div>
+                </div>
+
+            </div>
+            
+        </div>
     </div>
 
