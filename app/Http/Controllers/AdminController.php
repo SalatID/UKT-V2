@@ -1040,6 +1040,7 @@ class AdminController extends Controller
     }
     public function absensiPeserta()
     {
+        $form = request('type')??'draft';
         $dataEvent = EventMaster::where('id',request('event_id'))->first();
         $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
         if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
@@ -1051,6 +1052,7 @@ class AdminController extends Controller
                 return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
             },ARRAY_FILTER_USE_KEY);
             unset($params['no_peserta']);
+            dd($params);
             if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
             $dataPeserta = $dataPeserta->where($params);
             $dataPeserta = $dataPeserta->where($params);
@@ -1072,7 +1074,7 @@ class AdminController extends Controller
          })->sortBy(function($query){
             return $query->data_komwil->name;
         })->all();
-        $pdf = Pdf::loadView(request('view'),compact('dataPeserta','dataEvent'));
+        $pdf = Pdf::loadView(request('view'),compact('dataPeserta','dataEvent','form'));
         return $pdf->setPaper('a4')->stream('form-nilai-manual_'.(request('kelompok_id')!='' && $dataPeserta !=null? $dataPeserta[0]->name:''));
     }
 }

@@ -66,12 +66,19 @@
                 <td class="border text-center">No</td>
                 <td class="border text-center">No Peserta</td>
                 <td class="border text-center">Nama Peserta</td>
+                @if($form!="final")
                 <td class="border text-center">TS</td>
+                @else 
+                <td class="border text-center">TS Awal</td>
+                <td class="border text-center">TS Akhir</td>
+                @endif
                 <td class="border text-center">Komwil</td>
                 <td class="border text-center">Unit</td>
                 <td class="border text-center">Tingkat</td>
                 <td class="border text-center">Tempat/Tanggal Lahir</td>
+                @if($form!="final")
                 <td class="border text-center">Kelompok</td>
+                @endif
             </tr>           
             @php($i=1)
             @foreach($dataPeserta as $val)
@@ -79,12 +86,19 @@
                 <td class="border text-center">{{$i++}}</td>
                 <td class="border text-center">{{$val->no_peserta}}</td>
                 <td class="border">{{ucwords(strtolower($val->name))}}</td>
+                @if($form!="final")
                 <td class="border">{{$val->data_ts->ts_code}}</td>
+                @else 
+                <td class="border">{{$val->data_ts->ts_code}}</td>
+                <td class="border">{{$val->data_ts_akhir->ts_code}}</td>
+                @endif
                 <td class="border">{{$val->data_komwil->name}}</td>
                 <td class="border">{{$val->data_unit->name}}</td>
                 <td class="border">{{$val->tingkat}}</td>
                 <td class="border">{{$val->tempat_lahir}}, <br>{{$val->tgl_lahir}}</td>
-                <td class="border">{{$val->data_kelompok->name??'Belum Ada Kelompok'}}</td>                
+                @if($form!="final")
+                <td class="border">{{$val->data_kelompok->name??'Belum Ada Kelompok'}}</td>     
+                @endif           
             </tr>
             @endforeach
         </table>
