@@ -127,7 +127,7 @@
                                         {{$item->name}}
                                         <span class="float-right"><b>{{$item->total_peserta}}</b>/{{$totalPeserta}}</span>
                                         <div class="progress progress-sm">
-                                            <div class="progress-bar bg-primary" style="width: {{round((($item->total_peserta)/$totalPeserta)*100,0)}}%"></div>
+                                            <div class="progress-bar bg-primary" style="width: {{$totalPeserta!=null || $totalPeserta!=0?round((($item->total_peserta)/$totalPeserta)*100,0):0}}%"></div>
                                         </div>
                                     </div>
                                 {{-- @endif --}}
