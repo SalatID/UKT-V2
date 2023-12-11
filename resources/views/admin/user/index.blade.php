@@ -246,7 +246,7 @@
                     location.reload()
                 })
             }
-        })
+        }
         function updatePassword(e)
         {
             $('input[name="user_id"]',$('#updatePassword')).val($(e).data('id'))
