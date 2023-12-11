@@ -25,16 +25,16 @@ class GuestController extends Controller
         $alias =  $alias;
         $event = EventMaster::where('event_alias',$alias)->first();
         if($event==null) return redirect()->back()->with(["error"=>true,"message"=>"Event Tidak Ditemukan"]);
-        $penilai = Penilai::where('event_id',$event->id)->get();
-        $kelompok = Kelompok::where('event_id',$event->id)->get();
+        $penilai = Penilai::where('event_id',$event->id)->orderBy('name')->get();
+        $kelompok = Kelompok::where('event_id',$event->id)->orderBy('name')->get();
         $event_id = $event->id;
         return view('guest.firstPage',compact('penilai','kelompok','event_id','alias'));
     }
     public function selfRegistration($alias)
     {
-        $komwil = Komwil::get();
-        $unit = Unit::get();
-        $ts = Ts::whereNotIn('id',[1])->get();
+        $komwil = Komwil::orderBy('name')->get();
+        $unit = Unit::orderBy('name')->get();
+        $ts = Ts::whereNotIn('id',[1])->orderBy('name')->get();
         $event = EventMaster::where('event_alias',$alias)->first();
       return view('guest.registration',compact('komwil','unit','ts','event'));
     }
@@ -46,7 +46,8 @@ class GuestController extends Controller
     }
     public function pilihJurus()
     {
-        $masterJurus = Jurus::where('parent_id',0)->get();
+        $sData = json_decode(session()->get('sNilai'));
+        $masterJurus = Jurus::where('parent_id',0)->where('event_id',$sData->event_id)->orderBy('name')->get();
         return view('guest.pilihJurus',compact('masterJurus'));
     }
     public function getSubJurus()
@@ -58,7 +59,7 @@ class GuestController extends Controller
         $dataJurus = Jurus::select('jurus.*')->leftJoin('nilai',function($join) use ($sData){
             $join->on('nilai.jurus_id','jurus.id');
             $join->on('nilai.kelompok_id',DB::raw($sData->kelompok_id));
-        })->whereNull('nilai.jurus_id')->where('parent_id',$id)->where('ts_id','<=',$kelompok->ts_id)->orderBy('name')->get();
+        })->whereNull('nilai.jurus_id')->where('jurus.event_id',$sData->event_id)->where('parent_id',$id)->where('ts_id','<=',$kelompok->ts_id)->orderBy('name')->get();
         return response()->json($dataJurus);
     }
     public function setJurus()
@@ -123,9 +124,14 @@ class GuestController extends Controller
     {
         try {
             $decrypted = Crypt::decrypt($no_peserta);
-            $peserta = Peserta::where('no_peserta',$decrypted)->first();
+            $decrypted = json_decode($decrypted);
+            $peserta = Peserta::where(['no_peserta'=>$decrypted->no_peserta,'event_id'=>$decrypted->event_id])->first();
             $event = EventMaster::where('id',$peserta->event_id)->first();
-            $qrCode = QrCode::size(200)->generate(route('self-peserta',[Crypt::encrypt($peserta->no_peserta)]));
+            $throw = [
+                "no_peserta"=>$peserta->no_peserta,
+                "event_id"=>$peserta->event_id
+            ];
+            $qrCode = QrCode::size(200)->generate(route('self-peserta',[Crypt::encrypt(json_encode( $throw))]));
             return view('guest.peserta',compact('event','peserta','qrCode'));
         } catch (Illuminate\Contracts\Encryption\DecryptException $e) {
             return false ;

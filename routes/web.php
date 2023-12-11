@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\NilaiController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,18 +45,23 @@ Route::group(['prefix'=>'komwil'],function(){
 Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
     Route::get('/home',[AdminController::class,'home'])->name('home');
 
+    Route::group(['prefix'=>'dashboard'],function(){
+        Route::get('/peserta',[DashboardController::class,'peserta'])->name('dashboard.peserta');
+    });
+
     Route::group(['prefix'=>'peserta'],function(){
         Route::get('/',[PesertaController::class,'index'])->name('peserta');
         Route::get('/json-data/{id}',[PesertaController::class,'jsonPeserta'])->name('json-peserta');
         Route::post('/update-peserta',[PesertaController::class,'updatePeserta'])->name('update-peserta');
         Route::get('/delete/{id}',[PesertaController::class,'deletePeserta'])->name('delete-peserta');
-        Route::post('/cetak/kartu',[PesertaController::class,'cetakKartu'])->name('cetak-kartu');
+        Route::get('/cetak/kartu',[PesertaController::class,'cetakKartu'])->name('cetak-kartu');
     });
 
     Route::group(['prefix'=>'kelompok'],function(){
         Route::get('/',[AdminController::class,'kelompok'])->name('kelompok');
         Route::get('/reset-filter',[AdminController::class,'resetFilteredPeserta'])->name('reset-filter');
         Route::get('/filtered-peserta',[AdminController::class,'getFilteredPeserta'])->name('filtered-peserta');
+        Route::get('/autogenerate-kelompok',[AdminController::class,'autogenerateKelompok'])->name('autogenerate-kelompok');
         Route::get('/set-anggota-kelompok/{id}',[AdminController::class,'setAnggotaKelompok'])->name('set-anggota-kelompok');
         Route::get('/delete-tmp-anggota-kelompok/{id}',[AdminController::class,'deleteTmpAnggotaKel'])->name('delete-tmp-anggota-kelompok');
         Route::get('/delete-anggota-kelompok/{id}',[AdminController::class,'deleteAnggotaKel'])->name('delete-anggota-kelompok');
@@ -72,7 +78,10 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::get('/summary',[NilaiController::class,'summaryNilai'])->name('summary-nilai');
         Route::get('/sertifikat',[NilaiController::class,'cetakSertifikat'])->name('cetak-sertifikat');
         Route::get('/sertifikat/cetak',[NilaiController::class,'previewSertifikat'])->name('preview-sertifikat');
-        Route::get('/calculate',[NilaiController::class,'calculateNilai'])->name('calculate-nilai');
+        Route::get('/calculate/{eventId}',[NilaiController::class,'calculateNilai'])->name('calculate-nilai');
+        Route::get('/json-data/{id}',[NilaiController::class,'jsonNilai'])->name('json-nilai');
+        Route::get('/delete/{id}',[NilaiController::class,'deleteNilai'])->name('delete-nilai');
+        Route::post('/update-nilai',[NilaiController::class,'updateNilai'])->name('update-nilai');
     });
 
     Route::group(['prefix'=>'user'],function(){
@@ -94,6 +103,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
 
     Route::group(['prefix'=>'log'],function(){
         Route::get('/',[AdminController::class,'log'])->name('admin-log');
+        Route::get('/activity',[AdminController::class,'activityLog'])->name('activity-log');
     });
 
     Route::group(['prefix'=>'master'],function(){
@@ -131,6 +141,16 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
             Route::get('/json-data/{id}',[AdminController::class,'jsonTs'])->name('json-ts');
             Route::post('/update-ts',[AdminController::class,'updateTs'])->name('update-ts');
             Route::get('/delete/{id}',[AdminController::class,'deleteTs'])->name('delete-ts');
+        });
+        Route::group(['prefix'=>'tools'],function(){
+            Route::get('/copy-data',[AdminController::class,'copyData'])->name('copy-data');
+            Route::post('/copy-jurus',[AdminController::class,'copyJurus'])->name('copy-jurus');
+            Route::post('/copy-peserta',[AdminController::class,'copyPeserta'])->name('copy-peserta');
+            Route::post('/copy-penilai',[AdminController::class,'copyPenilai'])->name('copy-penilai');
+
+            Route::get('/formulir',[AdminController::class,'formulir'])->name('formulir');
+            Route::post('/penilaian-manual',[AdminController::class,'penilaianManual'])->name('penilaian-manual');
+            Route::post('/absensi-peserta',[AdminController::class,'absensiPeserta'])->name('absensi-peserta');
         });
     });
 

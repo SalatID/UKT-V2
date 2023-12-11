@@ -64,7 +64,7 @@
         </div>
         <div class="input-group mb-3">
           <input type="password" class="form-control" placeholder="Password" name="password">
-          <div class="input-group-append">
+          <div class="input-group-append" onclick="showPassword(this)" style="cursor:pointer">
             <div class="input-group-text">
               <span class="fas fa-eye"></span>
             </div>
@@ -99,5 +99,12 @@
 <script src="{{asset('plugins')}}/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="{{asset('assets/admin')}}/js/adminlte.min.js"></script>
+<script>
+  function showPassword(e)
+  {
+    type = $(e).parent().find('input[name="password"]').attr('type');
+    $(e).parent().find('input[name="password"]').attr('type',(type=='password'?'text':'password'))
+  }
+</script>
 </body>
 </html>

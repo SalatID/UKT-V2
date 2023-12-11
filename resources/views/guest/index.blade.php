@@ -34,9 +34,9 @@
        <h4>@yield('title','Penilaian Ujian Kenaikan Tingkat Online')</h4>
        <div>@yield('sub-title','')</div>
      </div>
-     <div class="col-xl-12">
+     <div class="col-xl-12 m-0 p-0">
        <div class="table-responsive">
-         <div class="container">
+         <div class="container-fluid m-0 p-0">
           @if(Session::has('error'))
           <div class="row">
               <div class="col-sm-12">

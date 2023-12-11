@@ -23,9 +23,9 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $item->name }}</td>
-                            <td>{{ $item->data_ts->name }}</td>
-                            <td>{{ $item->data_komwil->name }}</td>
-                            <td>{{ $item->data_event->name }}</td>
+                            <td>{{ $item->data_ts->name }}</td> 
+                            <td>{{ $item->data_komwil->name??'' }}</td>
+                            <td>{{ $item->data_event->name??'' }}, {{ $item->data_event->lokasi??'' }} {{ $item->data_event->penyelenggara??'' }}</td>
                             <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"
@@ -33,9 +33,9 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
+                                        <a class="dropdown-item" onclick="editData(this)" href="#"
                                             data-action="{{ route('json-penilai', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-penilai', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-penilai', $item->id) }}">Delete</a>
                                     </div>
                                 </div>
                             </td>
@@ -114,8 +114,8 @@
     <script>
         var form = $('#formPenilai')
         $('#tablePenilai').dataTable()
-        $('.btn-edit').click(function() {
-            $.get($(this).data('action'), function(data) {
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
                 console.log(data.id)
                 if (typeof data.id !== 'undefined') {
                     $('#addPenilaiLabel').text('Edit Penilai')
@@ -127,7 +127,8 @@
                     }).appendTo('#formPenilai');
                     $('input[name="name"]', form).val(data.name)
                     $('select[name="ts_id"]',form).val(data.ts_id)
-                    $('select[name="komwil_id"]',form).val(data.data_komwil.id)
+                    $('select[name="event_id"]',form).val(data.event_id)
+                    $('select[name="komwil_id"]',form).val(data.komwil_id)
                     $('#addPenilai').modal('show')
                     return
                 }
@@ -136,14 +137,14 @@
                     message:'Data Tidak Ditemukan'
                 })
             })
-        });
-        $('.btn-delete').click(function(){
+        };
+        function deleteData(e) {
             if(confirm('Hapus Penilai?')){
-                $.get($(this).data('action'),function(){
+                $.get($(e).data('action'),function(){
                     location.reload()
                 })
             }
-        })
+        }
         $('.btn-add').click(function(){
             $('#addPenilaiLabel').text('Tambah Penilai')
             form.attr('action', '{{ route('store-penilai') }}')

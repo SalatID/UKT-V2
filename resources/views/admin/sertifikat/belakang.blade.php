@@ -48,7 +48,7 @@
 
 <body style="padding:10px;margin:0;">
     @php
-        $jurus = ['Standart SMI', 'Tradisional', 'Prasetya Pesilat', 'Beladiri Praktis'];
+        $jurus = ['Standar SMI', 'Tradisional', 'Prasetya Pesilat', 'Beladiri Praktis'];
         $td = ['Aerobik', 'Fisik Teknik', 'Kuda-kuda Dasar', 'Serang Hindar'];
         $detail = new \App\Models\SummaryNilaiDetail();
     @endphp
@@ -71,7 +71,7 @@
             <div class="row col-12">
                 <h1 class="text-center">
                     {{ strtoupper('PERGURUAN PENCAK SILAT SATRIA MUDA INDONESIA') }}<br>
-                    {{ strtoupper('KOMISARIAT WILAYAH JAKARTA BARAT') }}
+                    {{ strtoupper('KOMISARIAT DAERAH DKI JAKARTA') }}
                 </h1>
             </div>
             <div class="row col-12 mt-3">
@@ -113,7 +113,7 @@
                         <tr>
                             <td class="text-center font-weight-bold" colspan="2">TOTAL</td>
                             <td class="text-center font-weight-bold">{{number_format(round(array_sum($sumTs),1),1)}}</td>
-                            <td class="text-center font-weight-bold" rowspan="2">{{$detail->criteria(count($fJurus)>0?array_sum($sumTs)/count($fTd):0)}}</td>
+                            <td class="text-center font-weight-bold" rowspan="2">{{$detail->criteria(count($fTd)>0?array_sum($sumTs)/count($fTd):0)}}</td>
                         </tr>
                         <tr>
                             <td class="text-center font-weight-bold" colspan="2">NILAI RATA-RATA</td>
@@ -154,6 +154,64 @@
                             <td class="text-center font-weight-bold">{{number_format(round(count($fJurus)>0?array_sum($sumJurus)/count($fJurus):0,1),1)}}</td>
                         </tr>
                     </tbody>
+                </table>
+            </div>
+            <div class="row col-12 mt-3">
+                <h1 style="margin-left:80px" class="text-center">Mengetahui Dewan Guru</h1>
+                <table border="1" width="1" style="border-collapse: collapse;margin-left:80px">
+                    <thead>
+                        <tr>
+                            <td width="100">
+                               <strong>Dindin Djuandi</strong>
+                                <br>
+                               <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                            </td>
+                            <td width="100"></td>
+                            <td width="100">
+                                <strong>Dindin Djuandi</strong>
+                                 <br>
+                                <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                             </td>
+                             <td width="100"></td>
+                        </tr>
+                        <tr>
+                            <td width="100">
+                               <strong>Dindin Djuandi</strong>
+                                <br>
+                               <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                            </td>
+                            <td width="100"></td>
+                            <td width="100">
+                                <strong>Dindin Djuandi</strong>
+                                 <br>
+                                <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                             </td>
+                             <td width="100"></td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="row col-12 mt-3">
+                <table width="1" style="border-collapse: collapse;margin-left:180px">
+                    <thead>
+                        <tr>
+                            <td style="border:none" class="text-center" width="300">
+                              Ketua<br>
+                              PPS Satria Muda Indonesia<br>
+                              Komisariat Daerah DKI Jakarta<br>
+                              <br>
+                              <br>
+                              <br>
+                              <br>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border:none" class="text-center" width="300">
+                                <strong>Dr. Ir. H. Sufmi Dasco Ahmad, S.H., M.H</strong>
+                            </td>
+                            
+                        </tr>
+                    </thead>
                 </table>
             </div>
         </div>

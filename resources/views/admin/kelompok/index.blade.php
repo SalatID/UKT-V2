@@ -5,6 +5,7 @@
         <a href="{{route('add-kelompok')}}" class="btn btn-success" >Tambah Kelompok</a>
     </div>
     <div class="row">
+        @csrf
         <div class="col-xl-12 table-responsive">
             <table class="table table-striped table-bordered" id="tableKelompok">
                 <thead>
@@ -12,6 +13,7 @@
                         <th>#</th>
                         <th>Nama Kelompok</th>
                         <th>TS</th>
+                        <th>Penilai</th>
                         <th>Anggota</th>
                         <th>Aktif Event</th>
                         <th>Action</th>
@@ -24,6 +26,14 @@
                             <td>{{ $no++ }}</td>
                             <td>{{ $item->name }}</td>
                             <td>{{ $item->data_ts->name }}</td>
+                            <td>
+                                <select name="penilai_id" class="form-control" id="" data-id="{{$item->id}}" onchange="updatePenilai(this)" data-url="{{route('update-kelompok')}}">
+                                    <option value="">Pilih Penilai</option>
+                                    @foreach(\App\Models\Penilai::where('event_id',$item->event_id)->orderBy('name')->get() as $v)
+                                        <option value="{{$v->id}}" {{$v->id==$item->penilai_id?'selected':''}}>{{$v->name}} - {{$v->data_ts->ts_code}}</option>
+                                    @endforeach
+                                </select>
+                            </td>
                             <td>
                                 <ol>
                                     @foreach ($item->data_peserta as $p)
@@ -39,8 +49,8 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="{{route('edit-kelompok',$item->id)}}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-kelompok', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="editData(this)" href="{{route('edit-kelompok',$item->id)}}">Edit</a>
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-kelompok', $item->id) }}">Delete</a>
                                     </div>
                                 </div>
                             </td>
@@ -54,8 +64,8 @@
     <script>
         var form = $('#formKelompok')
         $('#tableKelompok').dataTable()
-        $('.btn-edit').click(function() {
-            $.get($(this).data('action'), function(data) {
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
                 console.log(data.id)
                 if (typeof data.id !== 'undefined') {
                     $('#addKelompokLabel').text('Edit Kelompok')
@@ -76,14 +86,28 @@
                     message:'Data Tidak Ditemukan'
                 })
             })
-        });
-        $('.btn-delete').click(function(){
+        };
+        function deleteData(e) {
             if(confirm('Hapus Kelompok?')){
-                $.get($(this).data('action'),function(){
+                $.get($(e).data('action'),function(){
                     location.reload()
                 })
             }
-        })
+        }
+        function updatePenilai(e){
+            $.ajax({
+                method:'POST',
+                url:$(e).data('url'),
+                data:{
+                    _token:$('input[name="_token"]').val(),
+                    id:$(e).data('id'),
+                    penilai_id:$(e).val()
+                },
+                success:function(data){
+                    location.reload()
+                }
+            })
+        }
         $('.btn-add').click(function(){
             $('#addKelompokLabel').text('Tambah Kelompok')
             form.attr('action', '{{ route('store-kelompok') }}')

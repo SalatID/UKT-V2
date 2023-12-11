@@ -4,15 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Nilai extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
     protected $table = 'nilai';
     public $fillable =[
         'jurus_id','nilai','kelompok_id','peserta_id','penguji_id','event_id','created_user'
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logAll()->useLogName($this->table);
+    }
     public function data_jurus()
     {
         return $this->hasOne(Jurus::class,'id','jurus_id');

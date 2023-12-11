@@ -29,9 +29,9 @@
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
+                                        <a class="dropdown-item" onclick="editData(this)" href="#"
                                             data-action="{{ route('json-komwil', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-komwil', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-komwil', $item->id) }}">Delete</a>
                                     </div>
                                 </div>
                             </td>
@@ -79,8 +79,8 @@
     <script>
         var form = $('#formKomwil')
         $('#tableKomwil').dataTable()
-        $('.btn-edit').click(function() {
-            $.get($(this).data('action'), function(data) {
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
                 console.log(data)
                 if (typeof data.id !== 'undefined') {
                     $('#addKomwilLabel').text('Edit Komwil')
@@ -100,14 +100,14 @@
                     message:'Data Tidak Ditemukan'
                 })
             })
-        });
-        $('.btn-delete').click(function(){
+        };
+        function deleteData(e) {
             if(confirm('Hapus Komwil?')){
-                $.get($(this).data('action'),function(){
+                $.get($(e).data('action'),function(){
                     location.reload()
                 })
             }
-        })
+        }
         $('.btn-add').click(function(){
             $('#addKomwilLabel').text('Tambah Komwil')
             form.attr('action', '{{ route('store-komwil') }}')

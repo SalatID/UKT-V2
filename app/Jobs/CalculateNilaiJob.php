@@ -51,6 +51,7 @@ class CalculateNilaiJob implements ShouldQueue
         $summary='';
         $this->summary_nilai = new SummaryNilai();
         $this->summary_nilai_detail = new SummaryNilaiDetail();
+        dd($data);
         foreach($data as $key =>$value){
             if( $peserta_id!=$value['peserta_id']){
                 $p = array_filter($value,function($key){

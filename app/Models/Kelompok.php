@@ -4,15 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Kelompok extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
     protected $table = 'kelompok';
     public $fillable =[
-        'name','event_id','ts_id','penilai_id','created_user'
+        'name','event_id','ts_id','penilai_id','created_user','penguji_id'
     ];
-
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logAll()->useLogName($this->table);
+    }
     public function newQuery($excludeDeleted = true) {
         $query = parent::newQuery($excludeDeleted)
         ->whereNull('kelompok.deleted_at');
@@ -21,7 +26,7 @@ class Kelompok extends Model
     }
     public function data_peserta()
     {
-        return $this->hasMany(Peserta::class,'kelompok_id','id');
+        return $this->hasMany(Peserta::class,'kelompok_id','id')->orderBy('no_peserta')->orderBy('name');
     }
     public function data_ts()
     {

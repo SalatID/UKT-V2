@@ -4,14 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
 
 class Peserta extends Model
 {
-    use HasFactory;
+    use HasFactory,LogsActivity;
     protected $table = 'peserta';
     public $fillable =[
         'no_peserta','name','ts_awal_id','tempat_lahir','tgl_lahir','komwil_id','unit_id','event_id','tingkat','created_user','foto'
     ];
+    protected $casts = [
+        'y' => 'integer',
+    ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()->logAll()->useLogName($this->table);
+    }
 
     public function data_komwil()
     {

@@ -38,9 +38,9 @@
         </div>
     </div>
     <div class="form-group">
-        <label for="tingkat">Tingkat</label>
+        <label for="tingkat">Jenjang</label>
         <select name="tingkat" class="form-control" required id="tingkat">
-            <option value="">Pilih Tingkat</option>
+            <option value="">Pilih Jenjang</option>
             <option value="TK">TK</option>
             <option value="SD">SD</option>
             <option value="SMP">SMP</option>

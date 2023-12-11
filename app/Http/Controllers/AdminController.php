@@ -14,10 +14,12 @@ use App\Models\User;
 use App\Models\EventMaster;
 use App\Models\SummaryNilaiDetail;
 use App\Models\SummaryNilai;
+use App\Models\ActivityLog;
 use DB;
 use Validator;
 use Str;
 use Hash;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class AdminController extends Controller
 {
@@ -51,9 +53,13 @@ class AdminController extends Controller
         $jurusDinilai = [];
         $top3 = [];
         $dataNilai = [];
-        if(request()->has('event_alias')){
-            $event = EventMaster::where('event_alias',request('event_alias'))->first();
-            $totalPeserta = Peserta::where('event_id',$event->id)->count();
+        $event = [];
+        if(request()->has('event_alias') || auth()->user()->event_id!=null){
+            if(request()->has('event_alias')) $event = EventMaster::where('event_alias',request('event_alias'))->first();
+            if(auth()->user()->event_id!=null) $event = EventMaster::where('id',auth()->user()->event_id)->first();
+            $totalPeserta = Peserta::where('event_id',$event->id);
+            if(auth()->user()->event_id!=null) $totalPeserta = $totalPeserta->where('komwil_id',auth()->user()->komwil_id);
+            $totalPeserta = $totalPeserta->count();
             $totalJurus = SummaryNilaiDetail::selectRaw('sum(jurus_dinilai)jurus_dinilai,sum(total_jurus)total_jurus')->where('event_id',$event->id)->first();
             $totalPenilai = Penilai::where('event_id',$event->id)->count();
             $totalKelompok = Kelompok::where('event_id',$event->id)->count();
@@ -63,8 +69,9 @@ class AdminController extends Controller
                 FROM jurus a
                 LEFT JOIN (
                     SELECT COUNT(peserta_id)total_peserta, jurus_id
-                    FROM summary_nilai_detail
-                    where event_id = :event_id
+                    FROM summary_nilai_detail a
+                    ".(auth()->user()->event_id!=null?" join peserta b on b.id = a.peserta_id and b.komwil_id=".auth()->user()->komwil_id:"")."
+                    where a.event_id = :event_id
                     GROUP BY jurus_id
                 ) b ON a.id = b.jurus_id
                 WHERE a.parent_id=0",['event_id'=>$event->id]);
@@ -163,34 +170,32 @@ class AdminController extends Controller
             WHERE a.id NOT IN(1,11) 
             order by a.id,nilai desc
             ",['event_id'=>$event->id]);
-    
-            $dataNilai = DB::select("
-            SELECT a.name,c.name unit, d.name komwil,e.name ts, b.*
-            FROM peserta a
-            JOIN unit c ON a.unit_id = c.id
-            JOIN komwil d ON a.komwil_id = d.id
-            JOIN ts e ON e.id = a.ts_awal_id
-            LEFT JOIN (
-                SELECT 
-                SUM(CASE WHEN jurus_id = 1 THEN nilai END) standar_smi,
-                SUM(CASE WHEN jurus_id = 2 THEN nilai END) tradisional,
-                SUM(CASE WHEN jurus_id = 12 THEN nilai END) prasetya,
-                SUM(CASE WHEN jurus_id = 14 THEN nilai END) beladiri_praktis,
-                SUM(CASE WHEN jurus_id = 15 THEN nilai END) aerobik,
-                SUM(CASE WHEN jurus_id = 16 THEN nilai END) fisik_teknik,
-                SUM(CASE WHEN jurus_id = 17 THEN nilai END) kuda_kuda,
-                SUM(CASE WHEN jurus_id = 18 THEN nilai END) serang_hindar,
-                sum(nilai) total_nilai,
-                peserta_id
-                FROM `summary_nilai_detail`
-                where event_id=:event_id
-                GROUP BY peserta_id
-            ) b ON a.id = b.peserta_id
-                order by a.name
-            ",['event_id'=>$event->id]);
+            $jurus = Jurus::where('event_id',$event->id)->where('parent_id',0)->get();
+            $query = "
+                SELECT a.name,c.name unit, d.name komwil,e.name ts,f.name ts_akhir,b.*
+                FROM peserta a
+                JOIN unit c ON a.unit_id = c.id
+                JOIN komwil d ON a.komwil_id = d.id
+                JOIN ts e ON e.id = a.ts_awal_id
+                LEFT JOIN ts f ON f.id = a.ts_akhir_id
+                LEFT JOIN ( SELECT ";
+                    foreach($jurus as $val ){
+                        $query .= "SUM(CASE WHEN jurus_id = $val->id THEN nilai END) ".(str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )).",";
+                    }
+            $query .=  " sum(nilai) total_nilai,
+                    peserta_id
+                    FROM `summary_nilai_detail`
+                    where event_id=:event_id
+                    GROUP BY peserta_id
+                ) b ON a.id = b.peserta_id
+                where a.event_id=:event_id2
+                    order by a.name
+                ";
+                $dataNilai =DB::select( $query,['event_id'=>$event->id,'event_id2'=>$event->id]);
+            $event = $event->id;
         }
 
-        return view('admin.home',compact('totalPeserta','totalJurus','totalPenilai','totalKelompok','jurusDinilai','top3','dataNilai'));
+        return view('admin.home',compact('totalPeserta','totalJurus','totalPenilai','totalKelompok','jurusDinilai','top3','dataNilai','event'));
     }
     public function komwil()
     {
@@ -234,7 +239,7 @@ class AdminController extends Controller
     public function getJsonUnit()
     {
         if(!request()->has('id')) return response()->json([]);
-        return response()->json(Unit::where('komwil_id',request('id'))->get());
+        return response()->json(Unit::where('komwil_id',request('id'))->orderBy('name')->get());
     }
 
     public function updateKomwil()
@@ -244,7 +249,7 @@ class AdminController extends Controller
             return in_array($key,$this->komwil->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Komwil::where('id',request('id'))->update($params);
+        $ins = Komwil::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -308,7 +313,7 @@ class AdminController extends Controller
             return in_array($key,$this->unit->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Unit::where('id',request('id'))->update($params);
+        $ins = Unit::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -371,7 +376,7 @@ class AdminController extends Controller
             return in_array($key,$this->ts->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Ts::where('id',request('id'))->update($params);
+        $ins = Ts::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -390,7 +395,12 @@ class AdminController extends Controller
     }
     public function penilai()
     {
-        $dataPenilai = Penilai::with(['data_komwil','data_ts'])->orderBy('name')->get();
+        $dataPenilai = Penilai::with(['data_komwil','data_ts'])->orderBy('name');
+        if(request()->has('event_alias') || auth()->user()->event_id!=null){
+           $event = EventMaster::where('event_alias',request('event_alias'))->first();
+            $dataPenilai = $dataPenilai->where('event_id',$event->id);
+        }
+        $dataPenilai = $dataPenilai->get();
         $komwil = Komwil::get();
         $ts = Ts::whereNotIn('id',[1])->get();
         $event = EventMaster::all();
@@ -460,8 +470,14 @@ class AdminController extends Controller
     }
     public function jurus()
     {
-        $dataJurus = Jurus::with(['data_parent','data_ts'])->get();
-        $parent = Jurus::where('parent_id',0)->get();
+        $this->jurus = new Jurus();
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->jurus->fillable)!==false;
+        },ARRAY_FILTER_USE_KEY);
+        // if(!array_key_exists('event_id',$params)) return redirect()->back()->with(['error'=>true,'message'=>'Harap Pilih Event']);
+        $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
+        $dataJurus = Jurus::with(['data_parent','data_ts'])->where($params)->where('parent_id',0)->get();
+        $parent = Jurus::where('parent_id',0)->where('event_id',$params['event_id']??'')->get();
         $ts = Ts::get();
         return view('admin.jurus.index',compact('dataJurus','parent','ts'));
     }
@@ -490,6 +506,7 @@ class AdminController extends Controller
             return in_array($key,$this->jurus->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['created_user']=auth()->user()->id;
+        if(auth()->user()->role!='SPADM') $params['event_id'] = auth()->user()->event_id;
         $ins = Jurus::create($params);
         return redirect()->back()->with([
             'error'=>!$ins,
@@ -508,7 +525,7 @@ class AdminController extends Controller
             return in_array($key,$this->jurus->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = Jurus::where('id',request('id'))->update($params);
+        $ins = Jurus::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -527,7 +544,12 @@ class AdminController extends Controller
     }
     public function kelompok()
     {
-        $dataKelompok = Kelompok::with(['data_peserta','data_ts'])->get();
+        $dataKelompok = Kelompok::with(['data_peserta','data_ts']);
+        if(request()->has('event_alias')){
+            $event = EventMaster::where('event_alias',request('event_alias'))->first();
+            $dataKelompok = $dataKelompok->where('event_id',$event->id);
+        }
+        $dataKelompok = $dataKelompok->get();
         $komwil = Komwil::get();
         $ts = Ts::whereNotIn('id',[1])->get();
         return view('admin.kelompok.index',compact('dataKelompok','komwil','ts'));
@@ -536,7 +558,7 @@ class AdminController extends Controller
     {
         $ts = Ts::whereNotIn('id',[1])->get();
         $komwil = Komwil::get();
-        $unit = Unit::get();
+        $unit = Unit::orderBy('name')->get();
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
         $event = EventMaster::all();
         return view('admin.kelompok.addKelompok',compact('ts','unit','komwil','anggotaKelompok','event'));
@@ -555,6 +577,7 @@ class AdminController extends Controller
             'unit'=>$dataPeserta->data_unit->name,
             'ts'=>$dataPeserta->data_ts->name,
             'tingkat'=>$dataPeserta->tingkat,
+            'event_id'=>$dataPeserta->event_id,
         ]);
         $notPeserta = session()->has(auth()->user()->id.'_'.'not_peserta')?session()->get(auth()->user()->id.'_'.'not_peserta'):[];
         array_push($notPeserta,$id);
@@ -571,6 +594,7 @@ class AdminController extends Controller
             ['unit_id','like',request('unit_id')??'%'],
             ['ts_awal_id','like',request('ts_id')??'%'],
             ['tingkat','like',request('tingkat')??'%'],
+            ['event_id','=',request('event_id')],
         ];
         session()->put(auth()->user()->id.'_'.'form_data',[
             'name'=>request('name'),
@@ -619,18 +643,42 @@ class AdminController extends Controller
         $event_data = auth()->user()->event_id;
         $params['event_id']=request()->has('event_id')?request('event_id'):$event_data;
         return DB::transaction(function() use ($params){
-            $ins = Kelompok::create($params);
-            $id = $ins->id;
-            if($ins){
-                $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok');
-                $insSuccess = 0;
-                foreach($anggotaKelompok as $val){
-                    $insSuccess++;
-                    Peserta::where('id',$val['id'])->update([
-                        'kelompok_id'=>$id
-                    ]);
+            $peserta=[];
+            $sessionFilter=[];
+            if(request()->has('jumlah')){
+                $sessionFilter = [
+                    ['komwil_id','like',request('komwil_id')??'%'],
+                    ['unit_id','like',request('unit_id')??'%'],
+                    ['ts_awal_id','like',request('ts_id')??'%'],
+                    ['tingkat','like',request('tingkat')??'%'],
+                    ['event_id','=',request('event_id')],
+                ];
+                // dd(ceil(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->count()/(request('jumlah')??10)));
+            }
+            $name = $params['name'];
+            $z=1;
+            $totalRow = (request()->has('jumlah')?ceil(Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->count()/(request('jumlah')??10)):1);
+            for($i=0;$i<$totalRow;$i++){
+                if(request()->has('jumlah')) $params['name'] =  $name.' '.($z++);
+                $ins = Kelompok::create($params);
+                $id = $ins->id;
+                if($ins){
+                        if(request()->has('jumlah')){
+                            $latest =Peserta::with(['data_komwil','data_unit','data_ts'])->where($sessionFilter)->whereNull('kelompok_id')->get();
+                            $peserta = $latest->random(min($latest->count(), (request('jumlah')??10)));
+                        }
+                        $anggotaKelompok = count($peserta)>0?$peserta:session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
+                        $insSuccess = 0;
+                        foreach(($anggotaKelompok) as $val){
+                            $insPeserta = Peserta::where('id',$val['id'])->where('event_id',$params['event_id'])->update([
+                                'kelompok_id'=>$id
+                            ]);
+                            if($insPeserta)  $insSuccess++;
+                        }
+                    
                 }
             }
+            // dd($i);
             $this->resetFilteredPeserta();
             return redirect()->route('kelompok')->with([
                 'error'=>count($anggotaKelompok)!=$insSuccess,
@@ -639,6 +687,7 @@ class AdminController extends Controller
 
         });
     }
+
     public function deleteTmpAnggotaKel($id)
     {
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok');
@@ -665,7 +714,7 @@ class AdminController extends Controller
     { 
         $ts = Ts::whereNotIn('id',[1])->get();
         $komwil = Komwil::get();
-        $unit = Unit::get();
+        $unit = Unit::orderBy('name')->get();
         $dataKelompok = Kelompok::with('data_peserta')->where('id',$id)->first();
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
         // dd($anggotaKelompok);
@@ -679,16 +728,16 @@ class AdminController extends Controller
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
         $event_data = auth()->user()->event_id;
-        $params['event_id']=$event_data;
+        if($event_data!=null)$params['event_id']=$event_data;
         return DB::transaction(function() use ($params){
-            $upd = Kelompok::where('id',request('id'))->update($params);
+            $upd = Kelompok::where('id',request('id'))->firstOrFail()->update($params);
             $id = request('id');
             if($upd){
                 $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
                 $updSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $updSuccess++;
-                    Peserta::where('id',$val['id'])->update([
+                    Peserta::where('id',$val['id'])->firstOrFail()->update([
                         'kelompok_id'=>$id
                     ]);
                 }
@@ -705,13 +754,9 @@ class AdminController extends Controller
     {
         return DB::transaction(function() {
             $kelompok = Kelompok::with('data_peserta')->where('id',request('id'));
-            $upd = $kelompok->update([
-                'deleted_at'=>date('Y-m-d H:i:s'),
-                'deleted_user'=>auth()->user()->id
-            ]);
-            $id = request('id');
-            if($upd){
-                $anggotaKelompok = $kelompok->first()->data_peserta;
+            
+            // if($upd){
+                $anggotaKelompok = $kelompok->first()->data_peserta??[];
                 $updSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $updSuccess++;
@@ -719,7 +764,12 @@ class AdminController extends Controller
                         'kelompok_id'=>null
                     ]);
                 }
-            }
+                $upd = $kelompok->update([
+                    'deleted_at'=>date('Y-m-d H:i:s'),
+                    'deleted_user'=>auth()->user()->id
+                ]);
+                $id = request('id');
+            // }
             $this->resetFilteredPeserta();
             return redirect()->route('kelompok')->with([
                 'error'=>count($anggotaKelompok)!=$updSuccess,
@@ -733,7 +783,7 @@ class AdminController extends Controller
     {
         $dataUser = User::get();
         $komwil = Komwil::get();
-        $unit = Unit::get();
+        $unit = Unit::orderBy('name')->get();
         $event = EventMaster::get();
         return view('admin.user.index',compact('dataUser','komwil','unit','event'));
     }
@@ -782,7 +832,7 @@ class AdminController extends Controller
     }
     public function deleteUser($id)
     {
-        $ins = User::where('id',$id)->update([
+        $ins = User::where('id',$id)->firstOrFail()->update([
             'deleted_at'=>date('Y-m-d H:i:s'),
             'deleted_user'=>auth()->user()->id
         ]);
@@ -798,7 +848,7 @@ class AdminController extends Controller
             return in_array($key,$this->user->fillable)!==false;
         },ARRAY_FILTER_USE_KEY);
         $params['updated_user']=auth()->user()->id;
-        $ins = User::where('id',request('id'))->update($params);
+        $ins = User::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -918,10 +968,144 @@ class AdminController extends Controller
             $gambar->move($dir,$fielName);
             $params['gambar']=$dir.$fielName;
         }
-        $ins = EventMaster::where('id',request('id'))->update($params);
+        $ins = EventMaster::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
         ]);
-    }    
+    } 
+    public function activityLog()
+    {
+        $this->activityLog = new ActivityLog();
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,$this->activityLog->fillable)!==false && request($key)!=null;
+        },ARRAY_FILTER_USE_KEY);
+        $dataLog = $this->activityLog->where($params)->limit(50)->orderBy('id','desc')->get(); 
+        return view('admin.log.activity',compact('dataLog'));
+    }
+    public function copyData()
+    {
+        return view('admin.tools.copyData');
+    }
+    public function copyJurus()
+    {
+        $event_sumber = Jurus::where('event_id',request('event_sumber'))->where('parent_id',0);
+        if($event_sumber->count()==0) return redirect()->back()->with(['error'=>true,'message'=>'Jurus Event Sumber Tidak ditemukan']);
+        $event_sumber = $event_sumber->get()->toArray();
+        $insCnt = 0;
+        foreach($event_sumber as $value){
+            $parent_before = $value['id'];
+            $value['event_id']=request('event_tujuan');
+            $ins = Jurus::create($value);
+            if($ins) {
+                $insCnt++;
+                $childs = Jurus::where('event_id',request('event_sumber'))->where('parent_id',$parent_before);
+                if(!$childs->count()==0) {
+                    $childs = $childs->get()->toArray();
+                    foreach($childs as $child){
+                        $insCnt++;
+                        $child['event_id']=request('event_tujuan');
+                        $child['parent_id']=$ins->id;
+                        $insC = Jurus::create($child);
+                    }
+                }
+            }
+        }
+        $event_sumber = Jurus::where('event_id',request('event_sumber'))->get();
+        return redirect()->back()->with([
+            'error'=>!($insCnt==count($event_sumber??[])),
+            'message'=>$insCnt==count($event_sumber??[])?'Copy Berhasil '.$insCnt.' row':'Copy Gagal'
+        ]);
+    }
+    public function copyPeserta()
+    {
+        $insCnt = 0;
+        $pesertaAsal =  Peserta::where('event_id',request('event_sumber'))->get();
+        if($pesertaAsal->count()==0) return redirect()->back()->with(['error'=>true,'message'=>'Peserta tidak ditemukan']);
+        $pesertaAsal = $pesertaAsal->toArray();
+        foreach($pesertaAsal as $val){
+            $peserta = Peserta::where('event_id',request('event_tujuan'))->where([
+                ['name',$val['name']],
+                ['tgl_lahir',$val['tgl_lahir']]
+            ]);
+            if(!$peserta->exists()){
+                $val['event_id'] = request('event_tujuan');
+                Peserta::create($val);
+                $insCnt++;
+            }
+        }
+        return redirect()->back()->with([
+            'error'=>false,
+            'message'=>'Copy Berhasil '.$insCnt.' row'
+        ]);
+    }
+    public function copyPenilai()
+    {
+        $insCnt = 0;
+        $penilaiAsal =  Penilai::where('event_id',request('event_sumber'))->get();
+        if($penilaiAsal->count()==0) return redirect()->back()->with(['error'=>true,'message'=>'Penilai tidak ditemukan']);
+        $penilaiAsal = $penilaiAsal->toArray();
+        foreach($penilaiAsal as $val){
+            $peserta = Penilai::where('event_id',request('event_tujuan'))->where([
+                ['name',$val['name']]
+            ]);
+            if(!$peserta->exists()){
+                $val['event_id'] = request('event_tujuan');
+                Penilai::create($val);
+                $insCnt++;
+            }
+        }
+        return redirect()->back()->with([
+            'error'=>false,
+            'message'=>'Copy Berhasil '.$insCnt.' row'
+        ]);
+    }
+    public function formulir()
+    {
+        return view('admin.tools.formulir');
+    }
+    public function penilaianManual()
+    {
+        $dataKelompok = Kelompok::with(['data_peserta','data_ts','data_event'])->where('id','like',(request('kelompok_id')??'').'%')->where('event_id',request('event_id'))->get();
+        $pdf = Pdf::loadView('admin.tools.formulir.penilaian',compact('dataKelompok'));
+        return $pdf->setPaper('a4')->stream('form-nilai-manual_'.(request('kelompok_id')!='' && $dataKelompok !=null? $dataKelompok[0]->name:''));
+    }
+    public function absensiPeserta()
+    {
+        $form = request('type')??'draft';
+        $dataEvent = EventMaster::where('id',request('event_id'))->first();
+        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
+        if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+        
+        if(count(request()->all())>0){
+            $this->peserta = new Peserta();
+            $params = request()->all();
+            $params = array_filter(request()->all(),function($key) use($params){
+                return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
+            },ARRAY_FILTER_USE_KEY);
+            unset($params['no_peserta']);
+            if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
+            $dataPeserta = $dataPeserta->where($params);
+            $dataPeserta = $dataPeserta->where($params);
+                if(request()->has('innot') && request('innot')!=null){
+                    if(request('innot')==1){
+                        if(request('no_peserta')!=null)$dataPeserta = $dataPeserta->whereIn('no_peserta',explode(',',request('no_peserta')));
+                    }else{
+                        $dataPeserta = $dataPeserta->whereNotIn('no_peserta',explode(',',request('no_peserta')));
+                    }
+                }
+            if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
+        }
+        if(request()->has('limit') && request('limit')!=null){
+            $dataPeserta = $dataPeserta->take(request('limit'));
+        }
+        $dataPeserta = $dataPeserta->orderBy('name')->orderBy('no_peserta')->get();
+        $dataPeserta = $dataPeserta->sortBy(function($query){
+            return $query->data_unit->name;
+         })->sortBy(function($query){
+            return $query->data_komwil->name;
+        })->all();
+        $pdf = Pdf::loadView(request('view'),compact('dataPeserta','dataEvent','form'));
+        return $pdf->setPaper('a4')->stream('form-nilai-manual_'.(request('kelompok_id')!='' && $dataPeserta !=null? $dataPeserta[0]->name:''));
+    }
 }

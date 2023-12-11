@@ -5,7 +5,7 @@
         <tr>
             <td colspan="2">
                 <br>
-                <a href="/ukt">Kembali Ke Halaman Awal</a>
+                <a href="{{env('APP_URL')}}/event/run/{{$alias}}">Kembali Ke Halaman Awal</a>
                 <br>
                 <br>
                 <br>
@@ -38,11 +38,11 @@
     <form class="" action="{{route('proc-penilaian')}}" method="post">
         <table class="table">
             <tr>
-                <th>No</th>
-                <th>No.Peserta</th>
-                <th>Nama</th>
-                <th>TS</th>
-                <th style="width : 15%">Nilai</th>
+                <th class="text-center">No</th>
+                <th class="text-center" width="10%">No<br>Peserta</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">TS</th>
+                <th class="text-center" style="width : 15%">Nilai</th>
             </tr>
 
             <input type="hidden" name="count" value="{{ count($dataKelompok->data_peserta) }}">
@@ -61,7 +61,7 @@
                 </td>
                 <td>{{$item->name}}</td>
                 <td>
-                    {{$item->data_ts->name}}
+                    {{$item->data_ts->ts_code}}
                 </td>
                 <td style="width : 20%">
                     <input class="form-control nilai" type="number"  name="nilai[]" step="1" min="5" max="9"></td>

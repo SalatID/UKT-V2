@@ -11,6 +11,7 @@ use App\Models\EventMaster;
 use Validator;
 use Str;
 use Crypt;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PesertaController extends Controller
 {
@@ -21,23 +22,62 @@ class PesertaController extends Controller
     }
     public function index()
     {
-        $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts'])->orderBy('name');
-        if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
-        $dataPeserta = $dataPeserta->get();
-        if(count(request()->all())>0){
-            $this->peserta = new Peserta();
-            $params = array_filter(request()->all(),function($key){
-                return in_array($key,$this->peserta->fillable)!==false;
-            },ARRAY_FILTER_USE_KEY);
-            if(request()->has('ts_id')) $params['ts_awal_id']=request('ts_id');
-            $params = array_filter($params, fn($value) => !is_null($value) && $value !== '');
-            $dataPeserta = Peserta::where($params);
-            if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
-            $dataPeserta = $dataPeserta->get();
-        }
+        $dataPeserta = [];
+        // if(count(request()->all())>0){
+
+            
+            if(count(request()->all())>0 || auth()->user()->event_id !=null){
+                $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
+                if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+                // $dataPeserta = Peserta::all();
+                // dd($dataPeserta);
+                $this->peserta = new Peserta();
+                $params = request()->all();
+                $params = array_filter(request()->all(),function($key) use($params){
+                    return in_array($key,$this->peserta->fillable)!==false && $params[$key]!=null;
+                },ARRAY_FILTER_USE_KEY);
+                unset($params['no_peserta']);
+                if(request()->has('ts_id') && request('ts_id')!=null) $params['ts_awal_id']=request('ts_id');
+                $dataPeserta = $dataPeserta->where($params);
+                if(request()->has('innot') && request('innot')!=null){
+                    if(request('innot')==1){
+                        if(request('no_peserta')!=null)$dataPeserta = $dataPeserta->whereIn('no_peserta',explode(',',request('no_peserta')));
+                    }else{
+                        $dataPeserta = $dataPeserta->whereNotIn('no_peserta',explode(',',request('no_peserta')));
+                    }
+                }
+                if(request('no_peserta_from')!='' && request('no_peserta_to')!='') $dataPeserta = $dataPeserta->where('no_peserta','>=',request('no_peserta_from'))->where('no_peserta','<=',request('no_peserta_to'));
+                if(request()->has('event_alias')){
+                    $event = EventMaster::where('event_alias',request('event_alias'))->first();
+                    $dataPeserta = $dataPeserta->where('event_id',$event->id);
+                }
+                
+                $dataPeserta = $dataPeserta->orderBy('name')->get();
+                if(request()->has('order_by')){
+                        switch (request('order_by')) {
+                                case 'unit':
+                                        $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                                return $query->data_unit->name;
+                                             })->all();
+                                          break;
+                                        case 'komwil':
+                                                $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                                        return $query->data_komwil->name;
+                             })->all();
+                          break;
+                        case 'ts':
+                            $dataPeserta = $dataPeserta->sortByDesc(function($query){
+                                return $query->data_ts->name;
+                             })->all();
+                          break;
+                        default:
+                      }
+                }
+            }
+        // }
         
-        $komwil = Komwil::get();
-        $unit = Unit::get();
+        $komwil = Komwil::orderBy('name')->get();
+        $unit = Unit::orderBy('name')->get();
         $ts = Ts::whereNotIn('id',[1])->get();
         $event = EventMaster::all();
         return view('admin.peserta.index',compact('dataPeserta','komwil','unit','ts','event'));
@@ -116,7 +156,7 @@ class PesertaController extends Controller
             $params['foto']=$dir.$fielName;
         }
         $params['updated_user']=auth()->user()->id;
-        $ins = Peserta::where('id',request('id'))->update($params);
+        $ins = Peserta::where('id',request('id'))->firstOrFail()->update($params);
         return redirect()->back()->with([
             'error'=>!$ins,
             'message'=>$ins?'Update Berhasil':'Update Gagal'
@@ -136,7 +176,8 @@ class PesertaController extends Controller
     public function cetakKartu()
     {
         if(!request()->has('id')) return false;
-        $dataPeserta = Peserta::whereIn('id',request('id'))->get();
+        $dataPeserta = Peserta::whereIn('id',explode(',',request('id')))->get();
+        return Pdf::loadView('admin.peserta.kartuPeserta',compact('dataPeserta'))->setPaper('a4')->stream('kartupeserta.pdf');
         return view('admin.peserta.kartuPeserta',compact('dataPeserta'));
     }
 }

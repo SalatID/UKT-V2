@@ -64,7 +64,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="tingkat">Tingkat</label>
+                        <label for="tingkat">Jenjang</label>
                         <select name="tingkat" class="form-control" disabled id="tingkat">
                             <option value="">{{$peserta->tingkat}}</option>
                         </select>
@@ -91,7 +91,7 @@
                         <div class="col-4 justity-content-center">
                             <strong class="text-center">Foto Anda</strong>
                             <br>
-                            <img src="/{{$peserta->foto}}" class="img-fluid foto" id="prev-foto" width="192cm" height="256cm"
+                            <img src="/{{$peserta->foto}}" class="img-fluid" width="192cm" height="256cm"
                                 alt="Event Banner">
 
                         </div>

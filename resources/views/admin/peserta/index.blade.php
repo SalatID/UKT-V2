@@ -1,11 +1,15 @@
 @extends('admin.index')
 @section('title', 'List Peserta')
 @section('content')
+<style>
+    .buttons-excel,.buttons-pdf{
+        display: none;
+    }
+</style>
     <div class="row d-flex justify-content-start mb-3">
         
     </div>
     <form action="{{route('peserta')}}">
-        @csrf
         <div class="row">
             <div class="col-xl-3">
                 <div class="form-group">
@@ -54,11 +58,63 @@
                 </div>
             </div>
         </div>
+        @if (auth()->user()->role==='SPADM')
+        <div class="row">
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="ts_id">Event</label>
+                    @php($eventSelect = \App\Models\EventMaster::all())
+                    <select name="event_id" class="form-control" data-src={{url()->current()}}>
+                        <option value="">Pilih Event</option>
+                        @foreach ($eventSelect as $item)
+                        <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
+                        {{ $item->name }} - {{ $item->lokasi }} -
+                        {{ $item->penyelenggara }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3">
+                <div class="form-group">
+                    <label for="order_by">Order By</label>
+                    <select name="order_by" class="form-control" id="">
+                        <option value="name" {{(request('order_by')??'')=='name'?'selected':''}}>Nama</option>
+                        <option value="komwil" {{(request('order_by')??'')=='komwil'?'selected':''}}>Komwil</option>
+                        <option value="unit" {{(request('order_by')??'')=='unit'?'selected':''}}>Unit</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xl-3">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label for="order_by">No Peserta</label>
+                            <input type="text" class="form-control" name="no_peserta" value="{{request('no_peserta')??''}}">
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="innot" value="1" {{request('innot')==1?'checked':''}} {{request('innot')==null?'checked':''}}>
+                            <label class="form-check-label">In</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="innot" value="0" {{request('innot')==='0'?'checked':''}} >
+                            <label class="form-check-label">Not In</label>
+                        </div>
+                    </div>
+
+                </div>
+                
+            </div>
+        </div>
+        @endif
         <div class="row justify-content-start mb-2">
                 <button type="submit" class="btn btn-info mr-2">Filter</button>
                 <button type="button" class="btn btn-success btn-add mr-2" data-toggle="modal" data-target="#addPeserta">Tambah
                     Peserta</button>
                 <button type="button" class="btn btn-primary mr-2 btn-cetak" data-src="{{route('cetak-kartu')}}">Cetak Kartu</button>
+                <button class="btn btn-secondary mr-2" onclick="$('.buttons-excel').click()" tabindex="0" aria-controls="tablePeserta" type="button"><span>Excel</span></button>
+                <button class="btn btn-secondary mr-2" onclick="$('.buttons-pdf').click()" tabindex="0" aria-controls="tablePeserta" type="button"><span>PDF</span></button>
         </div>
     </form>
     <div class="row">
@@ -77,6 +133,7 @@
                         <th>Tempat Lahir</th>
                         <th>Tanggal Lahir</th>
                         <th>Aktif Event</th>
+                        <th>Foto</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -97,16 +154,22 @@
                             <td>{{ $item->data_event->name ?? 'No Event' }} -
                                 {{ $item->data_event->penyelenggara ?? 'No Event' }}</td>
                             <td>
+                                <div style="width: 3cm; height:4cm; border:solid black;">
+                                    <img src="/{{$item->foto}}" style="object-fit:contain" width="100%" height="100%" alt="">
+                                </div>
+                            </td>
+                            <td>
                                 <div class="dropdown">
                                     <button class="btn dropdown-toggle" type="button" id="dropDownOption"
                                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <i class="fas fa-ellipsis-v"></i>
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
-                                        <a class="dropdown-item btn-edit" href="#"
+                                        <a class="dropdown-item" onclick="editData(this)" href="#"
                                             data-action="{{ route('json-peserta', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#"
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#"
                                             data-action="{{ route('delete-peserta', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" target="_blank" href="{{route('self-peserta',[Crypt::encrypt(json_encode( ['no_peserta'=>$item->no_peserta,'event_id'=>$item->event_id]))])}}">Cetak Kartu</a>
                                     </div>
                                 </div>
                             </td>
@@ -139,12 +202,40 @@
     </div>
     <script>
         var form = $('#formPeserta')
-        $('#tablePeserta').dataTable()
-        $(document).ready(function(){
-            if($('#komwil').val()!=='') $('#komwil').change();
+        $('#tablePeserta').dataTable({
+            paginate:false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'pdf',
+                    exportOptions: {
+                        columns: [ 0, 2,3,4,5,6,7,8,9 ]
+                    }
+                },{
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [ 0, 2,3,4,5,6,7,8,9 ]
+                    }
+                }
+            ],
+            columnDefs: [
+                {
+                    targets: [5],
+                    orderData: [5,3],
+                },
+            ],
+            
         })
-        $('.btn-edit').click(function() {
-            $.get($(this).data('action'), function(data) {
+        $(document).ready(function(){
+            if($('#komwil').val()!=='') {
+                $('#komwil').change()
+                setInterval(() => {
+                    $('#unit_id').val('{{request("unit_id"??"")}}')
+                }, 2000);
+            };
+        })
+        function editData(e) {
+            $.get($(e).data('action'), function(data) {
                 console.log(data.id)
                 if (typeof data.id !== 'undefined') {
                     $('#addPesertaLabel').text('Edit Peserta')
@@ -164,6 +255,7 @@
                     $('select[name="unit_id"]', form).val(data.unit_id)
                     $('select[name="tingkat"]', form).val(data.tingkat)
                     $('select[name="event_id"]', form).val(data.event_id)
+                    $('input[name="foto"]', form).attr('required',false)
                     $('.foto').show()
                     $('.foto').attr('src', '/' + data.foto)
                     $('#addPeserta').modal('show')
@@ -174,19 +266,20 @@
                     message: 'Data Tidak Ditemukan'
                 })
             })
-        });
-        $('.btn-delete').click(function() {
+        }
+        function deleteData(e) {
             if (confirm('Hapus User?')) {
-                $.get($(this).data('action'), function() {
+                $.get($(e).data('action'), function() {
                     location.reload()
                 })
             }
-        })
+        }
         $('.btn-add').click(function() {
             $('#addPesertaLabel').text('Tambah Peserta')
             form.attr('action', '{{ route('store-peserta') }}')
             $('input[name="id"]').remove()
             $('.foto').hide()
+            $('input[name="foto"]', form).attr('required',true)
             form.trigger("reset");
         })
         $("input[name='check_all']").click(function(){
@@ -197,22 +290,23 @@
             id = $("input[name='check_item']:checked").map(function() {
                 return $(this).data('id')
             }).get()
-            $.ajax({
-                url: btn.data('src'),
-                data: {
-                    _token:$('input[name="_token"]').val(),
-                    id:id
-                },
-                method :'POST',
-                success: function(d) {
-                    console.log(d.length)
-                    if(d.length > 0){
-                        var newWindow = window.open('/admin/peserta', "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
-                        newWindow.document.write(d);
+            window.location.href = btn.data('src')+'?id='+id.join(',')
+            // $.ajax({
+            //     url: btn.data('src'),
+            //     data: {
+            //         _token:$('input[name="_token"]').val(),
+            //         id:id
+            //     },
+            //     method :'GET',
+            //     success: function(d) {
+            //         console.log(d.length)
+            //         if(d.length > 0){
+            //             var newWindow = window.open('/admin/peserta', "_blank", "toolbar=yes,scrollbars=yes,resizable=yes");
+            //             newWindow.document.write(d);
 
-                    }
-                }
-            })
+            //         }
+            //     }
+            // })
         })
     </script>
 @endsection
