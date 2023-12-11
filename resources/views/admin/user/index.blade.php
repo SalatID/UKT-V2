@@ -37,7 +37,9 @@
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
                                         <a class="dropdown-item btn-edit" href="#"
                                             data-action="{{ route('json-user', $item->id) }}">Edit</a>
-                                        <a class="dropdown-item btn-delete" href="#" data-action="{{ route('delete-user', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-user', $item->id) }}">Delete</a>
+                                        <a class="dropdown-item" onclick="updatePassword(this)" href="#"
+                                            data-id="{{ $item->id }}">Ganti Password</a>
                                     </div>
                                 </div>
                             </td>
@@ -153,6 +155,42 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="updatePassword" tabindex="-1" role="dialog" aria-labelledby="updatePasswordLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="updatePasswordLabel">Update Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <form action="{{ route('update-password') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="user_id">
+                                <div class="form-group">
+                                    <label for="password">Password</label>
+                                    <input type="password" class="form-control" name="password" id="password"
+                                        placeholder="Password" required>
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
+                                <div class="form-group">
+                                    <label for="retype_password">Retype Password</label>
+                                    <input type="password" class="form-control" name="retype_password" id="retype_password"
+                                        placeholder="Retype Password" required>
+                                    {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                </div>
+                                <button type="submit" class="btn btn-success">Simpan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script>
         var form = $('#formUser')
         $('#tableUser').dataTable()
@@ -208,5 +246,10 @@
                 })
             }
         })
+        function updatePassword(e)
+        {
+            $('input[name="user_id"]',$('#updatePassword')).val($(e).data('id'))
+            $('#updatePassword').modal('show')
+        }
     </script>
 @endsection

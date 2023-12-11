@@ -81,6 +81,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::get('/json-data/{id}',[AdminController::class,'jsonUser'])->name('json-user');
         Route::get('/delete/{id}',[AdminController::class,'deleteUser'])->name('delete-user');
         Route::post('/update-user',[AdminController::class,'updateUser'])->name('update-user');
+        Route::post('/update-password',[AdminController::class,'updatePassword'])->name('update-password');
     });
 
     Route::group(['prefix'=>'event'],function(){

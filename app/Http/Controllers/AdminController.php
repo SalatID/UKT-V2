@@ -804,6 +804,38 @@ class AdminController extends Controller
             'message'=>$ins?'Update Berhasil':'Update Gagal'
         ]);
     }
+    public function updatePassword()
+    {
+        if(!request()->has('user_id'))  return redirect()->back()->with(['error'=>true,'message'=>'Id tidak ditemukan']); 
+        $validate = Validator::make(request()->all(),[
+            'password'=>'required',
+            'retype_password'=>'same:password'
+        ]);
+        
+        if($validate->fails()){
+            foreach($validate->errors()->getMessages() as $key =>$data){
+                array_push($this->error,[
+                    "name"=>$key,
+                    "message"=>$data[0]
+                ]);
+            }
+            return redirect()->back()->with([
+                'error'=>true,
+                'message'=>'The given data was invalid',
+                'data'=>$this->error
+            ]);
+        }
+        $params = array_filter(request()->all(),function($key){
+            return in_array($key,['password'])!==false;
+        },ARRAY_FILTER_USE_KEY);
+        $params['password']=Hash::make(request('password'));
+        $params['updated_user']=auth()->user()->id;
+        $ins = User::where('id',request('user_id'))->firstOrFail()->update($params);
+        return redirect()->back()->with([
+            'error'=>!$ins,
+            'message'=>$ins?'Update Berhasil':'Update Gagal'
+        ]);
+    }
     public function event()
     {
         $dataEvent = EventMaster::all();

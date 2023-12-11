@@ -15,6 +15,7 @@ use App\Models\Peserta;
 use DB;
 use Crypt;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class GuestController extends Controller
 {

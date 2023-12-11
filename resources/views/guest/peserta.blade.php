@@ -1,7 +1,6 @@
 @extends('guest.index')
 @section('title', 'Bukti Pendaftaran')
 @section('sub-title')
-
 <h4>{{$event->name}}</h4>
 <span class="font-size:5px">
     {{date('d F Y',strtotime($event->tgl_mulai))}} s.d {{date('d F Y',strtotime($event->tgl_selesai))}}
@@ -123,10 +122,10 @@
         </div>
         <div class="row">
             <div class="col-sm-4">
-                <span class="text-center row">Untuk cetak ulang formulir</span>
-                <span class="text-center row">Scan Disini</span>
+                <span class="text-center col-12">Untuk cetak ulang formulir</span>
+                <span class="text-center col-12">Scan Disini</span>
 
-                <div class="row">
+                <div class="col">
                     {!!$qrCode!!}
                 </div>
             </div>
