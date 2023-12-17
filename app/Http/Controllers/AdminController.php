@@ -548,8 +548,8 @@ class AdminController extends Controller
         if(request()->has('event_alias')){
             $event = EventMaster::where('event_alias',request('event_alias'))->first();
             $dataKelompok = $dataKelompok->where('event_id',$event->id);
+            $dataKelompok = $dataKelompok->get();
         }
-        $dataKelompok = $dataKelompok->get();
         $komwil = Komwil::get();
         $ts = Ts::whereNotIn('id',[1])->get();
         return view('admin.kelompok.index',compact('dataKelompok','komwil','ts'));

@@ -14,7 +14,7 @@
                         <div class="form-group">
                             <label for="event_id">Event</label>
                             @php($eventSelect = \App\Models\EventMaster::all())
-                            <select name="event_id" class="form-control" required>
+                            <select data-src="{{url()->current()}}" name="event_id" class="form-control" required>
                                 <option value="">Pilih Event</option>
                                 @foreach ($eventSelect as $item)
                                 <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
@@ -27,10 +27,10 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="kelompok_id">Kelompok</label>
-                            @php($eventSelect = \App\Models\Kelompok::whereNull('deleted_at')->get())
+                            @php($kelompok = \App\Models\Kelompok::whereNull('deleted_at')->where(['event_id'=>request('event_id')??''])->get())
                             <select name="kelompok_id" class="form-control">
                                 <option value="">Semua Kelompok</option>
-                                @foreach ($eventSelect as $item)
+                                @foreach ($kelompok as $item)
                                 <option value="{{ $item->id }}" {{(request('kelompok_id')??'')==$item->id?'selected':''}}>
                                 {{ $item->name }}</option>
                                 @endforeach
@@ -58,7 +58,7 @@
                         <div class="form-group">
                             <label for="event_id">Event</label>
                             @php($eventSelect = \App\Models\EventMaster::all())
-                            <select name="event_id" class="form-control" required>
+                            <select data-src="{{url()->current()}}" name="event_id" class="form-control" required>
                                 <option value="">Pilih Event</option>
                                 @foreach ($eventSelect as $item)
                                 <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
@@ -134,7 +134,7 @@
                         <div class="form-group">
                             <label for="event_id">Event</label>
                             @php($eventSelect = \App\Models\EventMaster::all())
-                            <select name="event_id" class="form-control" required>
+                            <select data-src="{{url()->current()}}" name="event_id" class="form-control" required>
                                 <option value="">Pilih Event</option>
                                 @foreach ($eventSelect as $item)
                                 <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
@@ -208,7 +208,7 @@
                         <div class="form-group">
                             <label for="event_id">Event</label>
                             @php($eventSelect = \App\Models\EventMaster::all())
-                            <select name="event_id" class="form-control" required>
+                            <select data-src="{{url()->current()}}" name="event_id" class="form-control" required>
                                 <option value="">Pilih Event</option>
                                 @foreach ($eventSelect as $item)
                                 <option value="{{ $item->id }}" {{(request('event_id')??'')==$item->id?'selected':''}}>
@@ -274,4 +274,13 @@
         </div>
     </div>
 </div>
+<script>
+    $('select[name="event_id"]').change(function(){
+        if($(this).val()=='') {
+        window.location.href = $(this).data('src')
+        return
+      }
+      window.location.href =$(this).data('src')+'?event_id='+$(this).val()
+    })
+</script>
 @endsection
