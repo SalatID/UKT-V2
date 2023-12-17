@@ -25,6 +25,21 @@
             </div>
         </div>
     </div>
+    @if (auth()->user()->role==='SPADM')
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="form-group">
+                    <label for="event_id">Event</label>
+                    <select name="event_id" class="form-control" id="event_id">
+                        <option value="">Pilih Event</option>
+                        @foreach ($event as $item)
+                            <option value="{{$item->id}}" {{$dataKelompok->event_id==$item->id?'selected':''}}>{{$item->name}} - {{$item->lokasi}} - {{$item->penyelenggara}}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="row">
         <div class="col-xl-12">
             <button type="button" class="btn btn-success btn-add" data-toggle="modal" data-target="#addPeserta" data-action="{{route('filtered-peserta')}}">Tambah Peserta</button>
@@ -203,6 +218,8 @@
             'unit_id':$('select[name="unit_id"]').val(),
             'ts_id':$('select[name="ts_awal_id"]').val(),
             'tingkat':$('select[name="tingkat"]').val(),
+            'name':$('input[name="name"]').val(),
+            'event_id':$('select[name="event_id"]').val(),
         },function(data){
             parseTable(data)
         })
@@ -218,11 +235,19 @@
         paging:false
     })
     $('.btn-add').click(function(){
+        if($('select[name="event_id"]').val()=='') {
+            alert('Pilih Event Terlebih Dahulu');
+            $('select[name="event_id"]').focus()
+            return;
+        }
+        if($('select[name="ts_id"]').val()=='') {
+            $('select[name="ts_id"]').focus()
+            alert('Pilih Tingkat Sabuk Terlebih Dahulu');
+            return;
+        }
         $('select[name="ts_awal_id"]').val($('select[name="ts_id"]').val())
         $('.btn-filter').click()
-        // $.get($(this).data('action'),function(data){
-        //     parseTable(data)
-        // })
+        $('#addPeserta').modal('show')
     })
     function addAnggotKelompok(e)
     {

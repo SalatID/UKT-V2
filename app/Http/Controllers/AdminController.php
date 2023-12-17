@@ -717,8 +717,9 @@ class AdminController extends Controller
         $unit = Unit::orderBy('name')->get();
         $dataKelompok = Kelompok::with('data_peserta')->where('id',$id)->first();
         $anggotaKelompok = session()->get(auth()->user()->id.'_'.'anggota_kelompok')??[];
+        $event = EventMaster::all();
         // dd($anggotaKelompok);
-        return view('admin.kelompok.editKelompok',compact('ts','unit','komwil','dataKelompok','anggotaKelompok'));
+        return view('admin.kelompok.editKelompok',compact('ts','unit','komwil','dataKelompok','anggotaKelompok','event'));
     }
     public function updateKelompok()
     {
@@ -737,15 +738,16 @@ class AdminController extends Controller
                 $updSuccess = 0;
                 foreach($anggotaKelompok as $val){
                     $updSuccess++;
-                    Peserta::where('id',$val['id'])->firstOrFail()->update([
+                    $updPeserta = Peserta::where('id',$val['id'])->where('event_id',$params['event_id'])->update([
                         'kelompok_id'=>$id
                     ]);
+                    if($updPeserta) $updSuccess++;
                 }
             }
             $this->resetFilteredPeserta();
             return redirect()->route('kelompok')->with([
-                'error'=>count($anggotaKelompok)!=$updSuccess,
-                'message'=>count($anggotaKelompok)==$updSuccess?'Tambah Berhasil':'Tambah Gagal'
+                'error'=>$updSuccess==0,
+                'message'=>$updSuccess!=0?'Tambah Berhasil':'Tambah Gagal'
             ]);
 
         });
