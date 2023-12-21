@@ -269,12 +269,13 @@ class NilaiController extends Controller
         }
         $dataSertifikat = $dataSertifikat->get();
         if($muka=='depan'){
+            // return view($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
             $pdf = Pdf::loadView($dataEvent->blangko_sertifikat,compact('dataSertifikat','blangko','foto','data'));
         } else {
-            $pdf = Pdf::loadView('admin.sertifikat.belakangKomda',compact('dataSertifikat'));
+            $pdf = Pdf::loadView($dataEvent->blangko_belakang,compact('dataSertifikat'));
         }
         $pdf->setBasePath(public_path());
-        return $pdf->setPaper('a4')->stream('sertifikat.pdf');
+        return $pdf->setPaper('a4',$dataEvent->orientation)->stream('sertifikat.pdf');
     }
     public function jsonNilai($id)
     {

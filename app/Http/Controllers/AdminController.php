@@ -893,8 +893,9 @@ class AdminController extends Controller
         $dataEvent = EventMaster::all();
         $dataKomwil = Komwil::all();
         $dataBlangko = $listFile = array_values(array_diff(scandir(resource_path('views/admin/sertifikat/blangko')), array('.', '..')));
+        $dataBlangkoBelakang = $listFile = array_values(array_diff(scandir(resource_path('views/admin/sertifikat/belakang')), array('.', '..')));
         // dd($dataBlangko);
-        return view('admin.event.index',compact('dataEvent','dataKomwil','dataBlangko'));
+        return view('admin.event.index',compact('dataEvent','dataKomwil','dataBlangko','dataBlangkoBelakang'));
     }
     public function storeEvent()
     {
@@ -1048,10 +1049,10 @@ class AdminController extends Controller
         if($penilaiAsal->count()==0) return redirect()->back()->with(['error'=>true,'message'=>'Penilai tidak ditemukan']);
         $penilaiAsal = $penilaiAsal->toArray();
         foreach($penilaiAsal as $val){
-            $peserta = Penilai::where('event_id',request('event_tujuan'))->where([
+            $penilai = Penilai::where('event_id',request('event_tujuan'))->where([
                 ['name',$val['name']]
             ]);
-            if(!$peserta->exists()){
+            if(!$penilai->exists()){
                 $val['event_id'] = request('event_tujuan');
                 Penilai::create($val);
                 $insCnt++;

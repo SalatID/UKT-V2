@@ -12,7 +12,7 @@ class EventMaster extends Model
     use HasFactory,LogsActivity;
     protected $table = 'event';
     public $fillable =[
-        'name','tgl_mulai','tgl_selesai','lokasi','penyelenggara','komwil_id','gambar','created_user','event_alias','blangko_sertifikat','no_sertifikat'
+        'name','tgl_mulai','tgl_selesai','lokasi','penyelenggara','komwil_id','gambar','created_user','event_alias','blangko_sertifikat','no_sertifikat','orientation','blangko_belakang'
     ];
     public function getActivitylogOptions(): LogOptions
     {

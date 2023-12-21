@@ -125,6 +125,30 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="form-group">
+                                            <label for="blangko_belakang">Belakang Sertifikat</label>
+                                            <select name="blangko_belakang" class="form-control" id="blangko_belakang">
+                                                <option value="">Pilih Belakang Sertifikat</option>
+                                               @foreach ($dataBlangkoBelakang as $item)
+                                                @php($explode=explode('.',$item))
+                                                <option value="admin.sertifikat.belakang.{{$explode[0]}}">{{$item}}</option>
+                                               @endforeach
+                                            </select>
+                                            {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label for="orientation">Orientasi Sertifikat</label>
+                                            <select name="orientation" class="form-control" id="orientation">
+                                                <option value="">Pilih Orientasi</option>
+                                                <option value="landscape">Landscape</option>
+                                                <option value="portrait">Portrait</option>
+                                            </select>
+                                            {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
                                             <label for="no_sertifikat">Nomor Sertifikat</label>
                                             <input type="text" class="form-control" name="no_sertifikat" id="no_sertifikat"
                                                 placeholder="Nama" required>
@@ -185,6 +209,8 @@
                     $('input[name="tgl_selesai"]', form).val(formatDate(data.tgl_selesai,'-'))
                     $('select[name="komwil_id"]',form).val(data.komwil_id)
                     $('select[name="blangko_sertifikat"]',form).val(data.blangko_sertifikat)
+                    $('select[name="blangko_belakang"]',form).val(data.blangko_belakang)
+                    $('select[name="orientation"]',form).val(data.orientation)
                     $('.gambar').show()
                     $('.gambar').attr('src','/'+data.gambar)
                     $('#addEvent').modal('show')
