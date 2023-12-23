@@ -43,10 +43,11 @@
                 display: table;
             }
         }
+        /* @page { margin: 12px; } */
     </style>
 </head>
 
-<body style="padding:10px;margin:0;">
+<body style="margin:0;">
     @php
         $jurus = ['Standar SMI', 'Tradisional', 'Prasetya Pesilat', 'Beladiri Praktis'];
         $td = ['Aerobik', 'Fisik Teknik', 'Kuda-kuda Dasar', 'Serang Hindar'];
@@ -64,7 +65,7 @@
             $sumJurus =[];
             $sumTs = [];
         @endphp
-        <div class="text-center mb-3">
+        {{-- <div class="text-center mb-3">
             <div class="row col-12">
                 <h1 class="text-center">{{ strtoupper('HASIL NILAI UJIAN KENAIKAN TINGKAT') }}</h1>
             </div>
@@ -213,6 +214,95 @@
                         </tr>
                     </thead>
                 </table>
+            </div>
+        </div> --}}
+        <div class="row">
+            <div style="width:49%;float:left;padding:10px;">
+                <h2 class="h5 border border-dark p-2 text-center">TEAM PENGUJI UJIAN KENAIKAN TINGKAT</h2>
+                <div class="border border-dark p-2 mb-4">
+                    <label class="text-center col-12 font-weight-bold">DEWAN PENDEKAR</label>
+                    <ol>
+                        <li>Wagianto</li>
+                        <li>Octavia Ariandi S</li>
+                    </ol>
+                </div>
+                <div class="border border-dark p-2 ">
+                    <label class="text-center col-12 font-weight-bold">TEAM PENGUJI</label>
+                    <ol>
+                        <li>Agam Ikhwan</li>
+                        <li>Mursalat</li>
+                    </ol>
+                </div>
+            </div>
+            <div style="width:49%;float:left;padding:10px;">
+                <h2 class="h5 border border-dark p-2 text-center">DAFTAR NILAI UJIAN KENAIKAN TINGKAT</h2>
+                <div class="border border-dark p-2 ">
+                        <h1 style="" class="text-left">I. Teknik Dasar</h1>
+                        <table border="1" style="border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="10">NO</th>
+                                    <th class="text-center" width="160">MATERI</th>
+                                    <th class="text-center" width="80">NILAI</th>
+                                    <th class="text-center" width="100">KRITERIA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php($no=1)
+                                @foreach ($fTd as $i)
+                                @php(array_push($sumTs,$i['nilai']))
+                                    <tr>
+                                        <td width="10" class="text-center">{{$no++}}</td>
+                                        <td width="160">{{ $i['nama_jurus'] }}</td>
+                                        <td class="text-center" width="80">{{number_format(round($i['nilai'],1),1) }}</td>
+                                        <td width="100" class="font-weight-bold text-center">{{ $i['kriteria'] }}</td>
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <td class="text-center font-weight-bold" colspan="2">TOTAL</td>
+                                    <td class="text-center font-weight-bold">{{number_format(round(array_sum($sumTs),1),1)}}</td>
+                                    <td class="text-center font-weight-bold" rowspan="2">{{$detail->criteria(count($fTd)>0?array_sum($sumTs)/count($fTd):0)}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center font-weight-bold" colspan="2">NILAI RATA-RATA</td>
+                                    <td class="text-center font-weight-bold">{{number_format(round(count($fTd)>0?array_sum($sumTs)/count($fTd):0,1),1)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <h1 style="" class="text-left">II. Jurus</h1>
+                        <table border="1" style="border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" width="10">NO</th>
+                                    <th class="text-center" width="160">MATERI</th>
+                                    <th class="text-center" width="80">NILAI</th>
+                                    <th class="text-center" width="100">KRITERIA</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php($no=1)
+                                @foreach ($fJurus as $d)
+                                @php(array_push($sumJurus,$d['nilai']))
+                                    <tr>
+                                        <td width="10" class="text-center">{{$no++}}</td>
+                                        <td width="160">{{ $d['nama_jurus'] }}</td>
+                                        <td class="text-center" width="80">{{number_format(round($d['nilai'],1),1) }}</td>
+                                        <td width="100" class="font-weight-bold text-center">{{ $d['kriteria'] }}</td>
+                                    </tr>
+                                @endforeach
+                                <tr>
+                                    <td class="text-center font-weight-bold" colspan="2">TOTAL</td>
+                                    <td class="text-center font-weight-bold">{{number_format(round(array_sum($sumJurus),1),1)}}</td>
+                                    <td class="text-center font-weight-bold" rowspan="2">{{$detail->criteria(count($fJurus)>0?array_sum($sumJurus)/count($fJurus):0)}}</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-center font-weight-bold" colspan="2">NILAI RATA-RATA</td>
+                                    <td class="text-center font-weight-bold">{{number_format(round(count($fJurus)>0?array_sum($sumJurus)/count($fJurus):0,1),1)}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    
+                </div>
             </div>
         </div>
         <div class="page-break"></div>

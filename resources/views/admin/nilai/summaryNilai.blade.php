@@ -44,7 +44,7 @@
                             $jurus = (array)$item;  
                         @endphp
                         @foreach(\App\Models\Jurus::where('event_id',$eventId)->where('parent_id',0)->get() as $val)
-                        <th class="text-center">{{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]}}</th>
+                        <th class="text-center">{{round($jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )],1)}}</th>
                         @endforeach
                         <td class="text-center">{{number_format($item->total_nilai,1)}}</td>
                     </tr>
