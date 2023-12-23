@@ -115,8 +115,8 @@
                             </tr>
                         </table>
                     </div>
-                    <div class="row justify-content-center mt-4">
-                        <p class="text-center" style="width: 30cm;margin-top:5px;"> <span
+                    <div>
+                        <p class="text-center" style="width: 29cm;margin-top:33px;"> <span
                                 class="font-weight-bold">{{ $item->data_peserta->data_event->lokasi }}</span>
                             pada tanggal : <span
                                 class="font-weight-bold">{{ date('d', strtotime($item->data_peserta->data_event->tgl_mulai)) }}
@@ -124,6 +124,24 @@
                                 {{ $bulan[date('n', strtotime($item->data_peserta->data_event->tgl_selesai))-1] }}
                                 {{ date('Y', strtotime($item->data_peserta->data_event->tgl_selesai)) }}</span></span>
                         </p>
+                        <div class="text-center" style="width: 100%;margin-left:180px;padding-top:10px">
+                            <div class="col-25" style="float:left;width:290px;">
+                               <img src="{{public_path()}}/ttd/ttd-h-heroy.png" width="200px" style="margin-top:-10px" alt="">
+    
+                            </div>
+                            <div class="col-25" style="float:left;width:170px;">
+                               <img src="{{public_path()}}/ttd/ttd-abah-dindin.png" width="100px" alt="">
+                                
+                            </div>
+                            <div class="col-25" style="float:left;width:190px;">
+                                <img src="{{public_path()}}/ttd/ttd-abah-soleh.png" width="100px" alt="">
+    
+                            </div>
+                            <div class="col-25" style="float:left;margin-left:70px">
+                                <img src="{{public_path()}}/ttd/ttd-andy.png" width="120px" alt="" style="margin-top:-10px;">
+    
+                            </div>
+                        </div>
                     </div>
                 </div>
 

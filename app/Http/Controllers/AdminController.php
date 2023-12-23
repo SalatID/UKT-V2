@@ -1075,6 +1075,7 @@ class AdminController extends Controller
     }
     public function absensiPeserta()
     {
+        // dd(request()->all());
         $form = request('type')??'draft';
         $dataEvent = EventMaster::where('id',request('event_id'))->first();
         $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
