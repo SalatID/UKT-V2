@@ -223,14 +223,23 @@
                     <label class="text-center col-12 font-weight-bold">DEWAN PENDEKAR</label>
                     <ol>
                         <li>Wagianto</li>
-                        <li>Octavia Ariandi S</li>
+                        <li>Rizky Iwan Sulman</li>
+                        <li>Novian Erwan</li>
+                        <li>Syahroni</li>
+                        <li>Oktavia Ariandi S</li>
                     </ol>
                 </div>
                 <div class="border border-dark p-2 ">
                     <label class="text-center col-12 font-weight-bold">TEAM PENGUJI</label>
                     <ol>
-                        <li>Agam Ikhwan</li>
-                        <li>Mursalat</li>
+                        <li>Achmad Faisal</li>
+                        <li>Ibnu Bachtiar</li>
+                        <li>Bagas Pramudya P.W</li>
+                        <li>Danang Wahyu W.</li>
+                        <li>Helmi</li>
+                        <li>Salsabila A.T.</li>
+                        <li>Sukandar</li>
+                        <li>Novian Erwan</li>
                     </ol>
                 </div>
             </div>
