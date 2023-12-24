@@ -240,6 +240,8 @@
                         <li>Salsabila A.T.</li>
                         <li>Sukandar</li>
                         <li>Novian Erwan</li>
+                        <li>Keiza Cahyaningtyas</li>
+                        <li>Suci Herlina</li>
                     </ol>
                 </div>
             </div>
