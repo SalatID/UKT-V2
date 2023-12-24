@@ -71,7 +71,7 @@
             <div class="row col-12">
                 <h1 class="text-center">
                     {{ strtoupper('PERGURUAN PENCAK SILAT SATRIA MUDA INDONESIA') }}<br>
-                    {{ strtoupper('KOMISARIAT DAERAH DKI JAKARTA') }}
+                    {{ strtoupper('KOMISARIAT WILAYAH JAKARTA BARAT') }}
                 </h1>
             </div>
             <div class="row col-12 mt-3">
@@ -158,35 +158,33 @@
             </div>
             <div class="row col-12 mt-3">
                 <h1 style="margin-left:80px" class="text-center">Mengetahui Dewan Guru</h1>
-                <table border="1" width="1" style="border-collapse: collapse;margin-left:80px">
+                <table border="1" width="1" style="border-collapse: collapse;margin-left:30px">
                     <thead>
                         <tr>
-                            <td width="100">
+                            <td width="130">
                                <strong>Dindin Djuandi</strong>
                                 <br>
-                               <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                               <span style="font-size : 11px">Dewan Guru</span> 
                             </td>
-                            <td width="100"></td>
-                            <td width="100">
-                                <strong>Dindin Djuandi</strong>
+                            <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-abah-dindin.png" width="100px" alt=""></td>
+                            <td width="130">
+                                <strong>Muhammad Soleh</strong>
                                  <br>
-                                <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                                <span style="font-size : 11px">Dewan Guru</span> 
                              </td>
-                             <td width="100"></td>
+                             <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-abah-soleh.png" width="100px" alt=""></td>
                         </tr>
                         <tr>
-                            <td width="100">
-                               <strong>Dindin Djuandi</strong>
+                            <td width="130">
+                               <strong>Wagianto</strong>
                                 <br>
-                               <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                               <span style="font-size : 11px">Pendekar Muda Utama</span> 
                             </td>
-                            <td width="100"></td>
-                            <td width="100">
-                                <strong>Dindin Djuandi</strong>
-                                 <br>
-                                <span style="font-size : 11px">Dewan Guru Sabandar</span> 
+                            <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-bang-otong.png" width="100px" alt=""></td>
+                            <td width="130">
+                               
                              </td>
-                             <td width="100"></td>
+                             <td width="100" class="text-center"></td>
                         </tr>
                     </thead>
                 </table>
@@ -196,18 +194,17 @@
                     <thead>
                         <tr>
                             <td style="border:none" class="text-center" width="300">
-                              Ketua<br>
-                              PPS Satria Muda Indonesia<br>
-                              Komisariat Daerah DKI Jakarta<br>
-                              <br>
-                              <br>
-                              <br>
-                              <br>
+                                Disahkan Oleh <br>
+                                Ketua PPS Satria Muda Indonesia<br>
+                                Komwil Jakarta Barat
+                                <br>
+                                <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="200px" alt="" >
+                                <br>
                             </td>
                         </tr>
                         <tr>
                             <td style="border:none" class="text-center" width="300">
-                                <strong>Dr. Ir. H. Sufmi Dasco Ahmad, S.H., M.H</strong>
+                                <strong>Ir. Indra Madya Permana</strong>
                             </td>
                             
                         </tr>
