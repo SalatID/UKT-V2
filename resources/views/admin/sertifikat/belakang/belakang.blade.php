@@ -157,7 +157,7 @@
                 </table>
             </div>
             <div class="row col-12 mt-3">
-                <h1 style="margin-left:80px" class="text-center">Mengetahui Dewan Guru</h1>
+                <h1 style="margin-left:80px" class="text-center">Mengetahui</h1>
                 <table border="1" width="1" style="border-collapse: collapse;margin-left:30px">
                     <thead>
                         <tr>
