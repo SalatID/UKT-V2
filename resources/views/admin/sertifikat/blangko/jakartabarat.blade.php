@@ -132,8 +132,7 @@
                                     Ketua PPS Satria Muda Indonesia<br>
                                     Komwil Jakarta Barat
                                     <br>
-                                    <br>
-                                    <br>
+                                    <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="200px" alt="" >
                                     <br>
                                     <strong>Ir. Indra Madya Permana</strong>
                                 </td>
