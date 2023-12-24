@@ -43,7 +43,7 @@
                 display: table;
             }
         }
-        /* @page { margin: 12px; } */
+        @page { margin: 50px; }
     </style>
 </head>
 
@@ -217,13 +217,13 @@
             </div>
         </div> --}}
         <div class="row">
-            <div style="width:49%;float:left;padding:10px;">
+            <div style="width:48%;float:left;padding:10px;">
                 <h2 class="h5 border border-dark p-2 text-center">TEAM PENGUJI UJIAN KENAIKAN TINGKAT</h2>
                 <div class="border border-dark p-2 mb-4">
                     <label class="text-center col-12 font-weight-bold">DEWAN PENDEKAR</label>
                     <ol>
                         <li>Wagianto</li>
-                        <li>Rizky Iwan Sulman</li>
+                        <li>Rizky Iwan S.</li>
                         <li>Novian Erwan</li>
                         <li>Syahroni</li>
                         <li>Oktavia Ariandi S</li>
@@ -243,7 +243,7 @@
                     </ol>
                 </div>
             </div>
-            <div style="width:49%;float:left;padding:10px;">
+            <div style="width:48%;float:left;padding:10px;">
                 <h2 class="h5 border border-dark p-2 text-center">DAFTAR NILAI UJIAN KENAIKAN TINGKAT</h2>
                 <div class="border border-dark p-2 ">
                         <h1 style="" class="text-left">I. Teknik Dasar</h1>
@@ -251,7 +251,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" width="10">NO</th>
-                                    <th class="text-center" width="160">MATERI</th>
+                                    <th class="text-center" width="150">MATERI</th>
                                     <th class="text-center" width="80">NILAI</th>
                                     <th class="text-center" width="100">KRITERIA</th>
                                 </tr>
@@ -262,7 +262,7 @@
                                 @php(array_push($sumTs,$i['nilai']))
                                     <tr>
                                         <td width="10" class="text-center">{{$no++}}</td>
-                                        <td width="160">{{ $i['nama_jurus'] }}</td>
+                                        <td width="150">{{ $i['nama_jurus'] }}</td>
                                         <td class="text-center" width="80">{{number_format(round($i['nilai'],1),1) }}</td>
                                         <td width="100" class="font-weight-bold text-center">{{ $i['kriteria'] }}</td>
                                     </tr>
@@ -283,7 +283,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" width="10">NO</th>
-                                    <th class="text-center" width="160">MATERI</th>
+                                    <th class="text-center" width="150">MATERI</th>
                                     <th class="text-center" width="80">NILAI</th>
                                     <th class="text-center" width="100">KRITERIA</th>
                                 </tr>
@@ -294,7 +294,7 @@
                                 @php(array_push($sumJurus,$d['nilai']))
                                     <tr>
                                         <td width="10" class="text-center">{{$no++}}</td>
-                                        <td width="160">{{ $d['nama_jurus'] }}</td>
+                                        <td width="150">{{ $d['nama_jurus'] }}</td>
                                         <td class="text-center" width="80">{{number_format(round($d['nilai'],1),1) }}</td>
                                         <td width="100" class="font-weight-bold text-center">{{ $d['kriteria'] }}</td>
                                     </tr>
