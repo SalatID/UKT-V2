@@ -198,7 +198,7 @@
                                 Ketua PPS Satria Muda Indonesia<br>
                                 Komwil Jakarta Barat
                                 <br>
-                                <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="150px" style="margin-bottom: -30px;" >
+                                <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="150px" style="margin-bottom: -30px;margin-top:-10px;" >
                                 <br>
                             </td>
                         </tr>
