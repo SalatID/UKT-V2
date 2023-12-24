@@ -43,7 +43,7 @@
                 display: table;
             }
         }
-        @page { margin: 50px; }
+        @page { margin: 80px; }
     </style>
 </head>
 
@@ -251,7 +251,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" width="10">NO</th>
-                                    <th class="text-center" width="150">MATERI</th>
+                                    <th class="text-center" width="125">MATERI</th>
                                     <th class="text-center" width="80">NILAI</th>
                                     <th class="text-center" width="100">KRITERIA</th>
                                 </tr>
@@ -262,7 +262,7 @@
                                 @php(array_push($sumTs,$i['nilai']))
                                     <tr>
                                         <td width="10" class="text-center">{{$no++}}</td>
-                                        <td width="150">{{ $i['nama_jurus'] }}</td>
+                                        <td width="125">{{ $i['nama_jurus'] }}</td>
                                         <td class="text-center" width="80">{{number_format(round($i['nilai'],1),1) }}</td>
                                         <td width="100" class="font-weight-bold text-center">{{ $i['kriteria'] }}</td>
                                     </tr>
@@ -283,7 +283,7 @@
                             <thead>
                                 <tr>
                                     <th class="text-center" width="10">NO</th>
-                                    <th class="text-center" width="150">MATERI</th>
+                                    <th class="text-center" width="125">MATERI</th>
                                     <th class="text-center" width="80">NILAI</th>
                                     <th class="text-center" width="100">KRITERIA</th>
                                 </tr>
@@ -294,7 +294,7 @@
                                 @php(array_push($sumJurus,$d['nilai']))
                                     <tr>
                                         <td width="10" class="text-center">{{$no++}}</td>
-                                        <td width="150">{{ $d['nama_jurus'] }}</td>
+                                        <td width="125">{{ $d['nama_jurus'] }}</td>
                                         <td class="text-center" width="80">{{number_format(round($d['nilai'],1),1) }}</td>
                                         <td width="100" class="font-weight-bold text-center">{{ $d['kriteria'] }}</td>
                                     </tr>
