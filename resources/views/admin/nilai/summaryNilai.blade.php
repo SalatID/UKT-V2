@@ -61,6 +61,7 @@
 
 <script>
     $('#table-nilai').dataTable({
+        paging:false,
         dom: 'Bfrtip',
         buttons: [
             {
