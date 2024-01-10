@@ -42,10 +42,14 @@
                         <td class="text-center">{{$item->komwil}}</td>
                         @php
                             $jurus = (array)$item;  
+                            $model = new \App\Models\SummaryNilaiDetail();
                         @endphp
                         @foreach(\App\Models\Jurus::where('event_id',$eventId)->where('parent_id',0)->get() as $val)
-                        <th class="text-center">{{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]}}</th>
-                        {{-- <th class="text-center">{{round($jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )],1)}}</th> --}}
+                        <th class="text-center">
+                            {{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]==null?'':round($jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )],1)}}
+                            <br>
+                            {{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]==null?'':$model->criteria($jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]??0)}}
+                        </th>
                         @endforeach
                         <td class="text-center">{{number_format($item->total_nilai,1)}}</td>
                     </tr>
@@ -56,7 +60,16 @@
 </div>
 
 <script>
-    $('#table-nilai').dataTable()
+    $('#table-nilai').dataTable({
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                extend: 'pdfHtml5',
+                orientation: 'landscape',
+                pageSize: 'A4'
+            }, 'print'
+        ]
+    })
     $('.btn-calculate').click(function(){
         $('.preloader').css('height','100%')
         $('.preloader').children().css("display","inline")
