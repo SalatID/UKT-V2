@@ -176,16 +176,20 @@ class NilaiController extends Controller
                         $query .= "SUM(CASE WHEN jurus_id = $val->id THEN nilai END) ".(str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )).",";
                     }
             $query .=  " sum(nilai) total_nilai,
-                    peserta_id
+                    peserta_id,kriteria
                     FROM `summary_nilai_detail`
                     where event_id=:event_id
-                    GROUP BY peserta_id
+                    GROUP BY peserta_id,kriteria
                 ) b ON a.id = b.peserta_id
                 where a.event_id=:event_id2 and a.deleted_at is null";
                 $params = ['event_id'=>$event->id,'event_id2'=>$event->id];
                 if(request()->has('komwil_id') && request('komwil_id') != null){
                     $query .= " and a.komwil_id=:komwil_id";
                     $params = array_merge($params,['komwil_id'=>request('komwil_id')]);
+                }
+                if(request()->has('kriteria') && request('kriteria') != null){
+                    $query .= " and b.kriteria=:kriteria";
+                    $params = array_merge($params,['kriteria'=>request('kriteria')]);
                 }
                 if(request()->has('unit_id') && request('unit_id') != null){
                     $query .= " and a.unit_id=:unit_id";
