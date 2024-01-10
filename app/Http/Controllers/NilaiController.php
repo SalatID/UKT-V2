@@ -191,6 +191,10 @@ class NilaiController extends Controller
                     $query .= " and b.kriteria=:kriteria";
                     $params = array_merge($params,['kriteria'=>request('kriteria')]);
                 }
+                if(request()->has('nilai') && request('nilai') != null){
+                    $query .= " and b.total_nilai<=:nilai";
+                    $params = array_merge($params,['nilai'=>request('nilai')]);
+                }
                 if(request()->has('unit_id') && request('unit_id') != null){
                     $query .= " and a.unit_id=:unit_id";
                     $params = array_merge($params,['unit_id'=>request('unit_id')]);

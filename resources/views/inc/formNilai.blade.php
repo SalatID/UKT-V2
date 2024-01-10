@@ -103,5 +103,11 @@
                 </select>
             </div>
         </div>
+        <div class="col-xl-3">
+            <div class="form-group">
+                <label for="kriteria">Nilai Minimum</label>
+                <input type="text" class="form-control" name="nilai" value="{{request('nilai')??''}}">
+            </div>
+        </div>
     </div>
 
