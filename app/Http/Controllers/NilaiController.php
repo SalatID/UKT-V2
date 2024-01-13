@@ -226,9 +226,7 @@ class NilaiController extends Controller
                         }
                     }
                 }
-                if(request()->has('kriteria') && request('kriteria') != null){
-                    $query .= " and b.total_nilai is not null ";
-                }
+                $query .= " and b.total_nilai is not null ";
                 $query.=" order by a.name ";
                 // var_dump($query);die;
                 $dataNilai =DB::select( $query,$params);
