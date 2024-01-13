@@ -164,6 +164,7 @@ class NilaiController extends Controller
             }
             $kelompok = Kelompok::where('event_id',$event->id??request('event_id'))->get();
             $jurus = Jurus::where('event_id',$event->id)->where('parent_id',0)->get();
+            $params =[];
             $query = "
                 SELECT a.no_peserta,a.name,c.name unit, d.name komwil,e.name ts,f.name ts_akhir,b.*
                 FROM peserta a
@@ -174,22 +175,25 @@ class NilaiController extends Controller
                 LEFT JOIN ( SELECT ";
                     foreach($jurus as $val ){
                         $query .= "SUM(CASE WHEN jurus_id = $val->id THEN nilai END) ".(str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )).",";
+                        $query .= "MAX(CASE WHEN jurus_id = $val->id THEN kriteria END) ".(str_replace("-","_",str_replace(" ","_",strtolower($val->name)) ))."_kriteria,";
                     }
             $query .=  " sum(nilai) total_nilai,
-                    peserta_id,kriteria
+                    peserta_id
                     FROM `summary_nilai_detail`
-                    where event_id=:event_id
-                    GROUP BY peserta_id,kriteria
+                    where event_id=:event_id";
+
+                    if(request()->has('kriteria') && request('kriteria') != null){
+                    $query .= " and kriteria=:kriteria ";
+                    $params = array_merge($params,['kriteria'=>request('kriteria')]);
+                    }
+                    $query .="GROUP BY peserta_id
                 ) b ON a.id = b.peserta_id
                 where a.event_id=:event_id2 and a.deleted_at is null";
-                $params = ['event_id'=>$event->id,'event_id2'=>$event->id];
+                $params = array_merge($params,['event_id'=>$event->id]);
+                $params = array_merge($params,['event_id2'=>$event->id]);
                 if(request()->has('komwil_id') && request('komwil_id') != null){
                     $query .= " and a.komwil_id=:komwil_id";
                     $params = array_merge($params,['komwil_id'=>request('komwil_id')]);
-                }
-                if(request()->has('kriteria') && request('kriteria') != null){
-                    $query .= " and b.kriteria=:kriteria";
-                    $params = array_merge($params,['kriteria'=>request('kriteria')]);
                 }
                 if(request()->has('nilai') && request('nilai') != null){
                     $query .= " and b.total_nilai<=:nilai";
@@ -207,7 +211,12 @@ class NilaiController extends Controller
                     $query .= " and a.kelompok_id=:kelompok_id";
                     $params = array_merge($params,['kelompok_id'=>request('kelompok_id')]);
                 }
-                    $query.=" order by a.name ";
+                
+                if(request()->has('kriteria') && request('kriteria') != null){
+                    $query .= " and b.total_nilai is not null ";
+                }
+                $query.=" order by a.name ";
+                // var_dump($query);die;
                 $dataNilai =DB::select( $query,$params);
                 $eventId = $event->id;
             }
