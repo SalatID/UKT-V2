@@ -214,14 +214,14 @@ class NilaiController extends Controller
                 if(request()->has('innot') && request('innot')!=null){
                     if(request('innot')==1){
                         if(request('no_peserta')!=null) {
-                            $query .= " and a.no_peserta in (:in) ";
-                            $params = array_merge($params,['in'=>request('no_peserta')]);
+                            $query .= " and a.no_peserta in (".request('no_peserta').") ";
+                            // $params = array_merge($params,['in'=>request('no_peserta')]);
                         }
 
                     }else{
                         if(request('no_peserta')!=null){
-                            $query .= " and a.no_peserta not in (:in) ";
-                            $params = array_merge($params,['in'=>request('no_peserta')]);
+                            $query .= " and a.no_peserta not in (".request('no_peserta').") ";
+                            // $params = array_merge($params,['in'=>request('no_peserta')]);
                         }
                     }
                 }
