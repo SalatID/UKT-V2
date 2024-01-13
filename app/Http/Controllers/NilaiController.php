@@ -180,7 +180,7 @@ class NilaiController extends Controller
             $query .=  " sum(nilai) total_nilai,
                     peserta_id
                     FROM `summary_nilai_detail`
-                    where event_id=:event_id";
+                    where event_id=:event_id ";
 
                     if(request()->has('kriteria') && request('kriteria') != null){
                     $query .= " and kriteria=:kriteria ";
@@ -211,7 +211,20 @@ class NilaiController extends Controller
                     $query .= " and a.kelompok_id=:kelompok_id";
                     $params = array_merge($params,['kelompok_id'=>request('kelompok_id')]);
                 }
-                
+                if(request()->has('innot') && request('innot')!=null){
+                    if(request('innot')==1){
+                        if(request('no_peserta')!=null) {
+                            $query .= " and a.no_peserta in (:in) ";
+                            $params = array_merge($params,['in'=>request('no_peserta')]);
+                        }
+
+                    }else{
+                        if(request('no_peserta')!=null){
+                            $query .= " and a.no_peserta not in (:in) ";
+                            $params = array_merge($params,['in'=>request('no_peserta')]);
+                        }
+                    }
+                }
                 if(request()->has('kriteria') && request('kriteria') != null){
                     $query .= " and b.total_nilai is not null ";
                 }

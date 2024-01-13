@@ -48,7 +48,7 @@
                         <th class="text-center">
                             {{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]==null?'':round($jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )],1)}}
                             <br>
-                            {{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )."_kriteria"]==null?'':$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )."_kriteria"]}}
+                            {{$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )]==null?'':$jurus[str_replace("-","_",str_replace(" ","_",strtolower($val->name)) )."_kriteria"]}}
                         </th>
                         @endforeach
                         <td class="text-center">{{number_format($item->total_nilai,1)}}</td>
