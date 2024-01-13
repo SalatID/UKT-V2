@@ -27,10 +27,10 @@ class SummaryNilaiDetail extends Model
         if($nilai <=4 ){
             return 'KURANG';
         }
-        if($nilai >4 && $nilai <=6 ){
+        if($nilai >4 && $nilai <6 ){
             return 'CUKUP';
         }
-       if($nilai >6 && $nilai <=8){
+       if($nilai >=6 && $nilai <=8){
            return 'BAIK';
        }
        return 'AMAT BAIK';
