@@ -187,10 +187,10 @@ class NilaiController extends Controller
                     $params = array_merge($params,['kriteria'=>request('kriteria')]);
                     }
                     if(request()->has('nilai') && request('nilai') != null){
-                        $query .= " and nilai<=:nilai";
+                        $query .= " and nilai<=:nilai ";
                         $params = array_merge($params,['nilai'=>request('nilai')]);
                     }
-                    $query .="GROUP BY peserta_id
+                    $query .=" GROUP BY peserta_id
                 ) b ON a.id = b.peserta_id
                 where a.event_id=:event_id2 and a.deleted_at is null";
                 $params = array_merge($params,['event_id'=>$event->id]);
