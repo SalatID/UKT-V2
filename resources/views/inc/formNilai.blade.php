@@ -98,6 +98,7 @@
                 <select name="kriteria" class="form-control" id="kriteria">
                     <option value="">Pilih Kriteria</option>
                     <option value="KURANG" {{request('kriteria')=='KURANG'?'selected':''}}>Kurang</option>
+                    <option value="CUKUP" {{request('kriteria')=='CUKUP'?'selected':''}}>Cukup</option>
                     <option value="BAIK" {{request('kriteria')=='BAIK'?'selected':''}}>Baik</option>
                     <option value="AMAT BAIK" {{request('kriteria')=='AMAT BAIK'?'selected':''}}>Amat Baik</option>
                 </select>
