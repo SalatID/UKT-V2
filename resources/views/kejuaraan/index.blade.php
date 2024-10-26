@@ -109,6 +109,11 @@
         $('#usia').val(data.usia);
         $('#editPeserta').modal('show')
     }
+    function hapus_peserta(t){
+        if (confirm('Hapus Data Ini?')){
+            window.location.href = $(t).data('url')
+        }
+    }
 </script>
 
 </html>

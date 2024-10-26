@@ -162,7 +162,7 @@
                                 <td>
                                     <button type="button" data-data="{{ json_encode($item) }}"
                                         onclick="detail_peserta(this)" class="btn btn-success btn-small">Edit</button>
-                                    <button type="button" data-id="{{ $item->id }}" onclick="hapus_peserta(this)"
+                                    <button type="button" data-url="{{ route('kejuaraan.validasi.hapus',[$item->id]) }}" onclick="hapus_peserta(this)"
                                         class="btn btn-danger btn-small">Hapus</button>
                                 </td>
                             </tr>

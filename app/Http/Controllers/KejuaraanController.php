@@ -93,19 +93,25 @@ class KejuaraanController extends Controller
     {
 
     }
+    public function validasi_hapus($id){
+        if(PesertaKejuaraan::where('id',$id)->delete()){
+            return redirect()->back()->with(['error'=>false,'message'=>'hapus berhasil']);
+        }
+        return redirect()->back()->with(['error'=>true,'message'=>'hapus gagal']);
+    }
     public function edit_validasi()
     {
         $req = request()->all();
         $peserta = PesertaKejuaraan::where('id',$req['id']);
         if(!$peserta->exists()){
-            return redirect()->back()->with(['error'=>'true','message'=>'data tidak ditemukan']);
+            return redirect()->back()->with(['error'=>true,'message'=>'data tidak ditemukan']);
         }
         $id = $req['id'];
         unset($req['id']);
         unset($req['_token']);
         $upd = $peserta->update($req);
         if (!$upd){
-            return redirect()->back()->with(['error'=>'true','message'=>'update gagal']);
+            return redirect()->back()->with(['error'=>true,'message'=>'update gagal']);
         }
         return redirect()->back()->with(['error'=>false,'message'=>'update berhasil']);
 

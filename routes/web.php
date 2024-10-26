@@ -50,6 +50,7 @@ Route::group(['prefix'=>'event'],function(){
         Route::get('/validasi-home',[KejuaraanController::class,'validasi_home'])->name('kejuaraan.validasi.home');
         Route::post('/set-validator',[KejuaraanController::class,'set_nama_validasi'])->name('kejuaraan.validasi.setvalidator');
         Route::get('/validasi',[KejuaraanController::class,'validasi'])->name('kejuaraan.validasi');
+        Route::get('/validasi-hapus/{id}',[KejuaraanController::class,'validasi_hapus'])->name('kejuaraan.validasi.hapus');
         Route::post('/validasi-bayar',[KejuaraanController::class,'validasi_bayar'])->name('kejuaraan.validasi.bayar');
         Route::post('/validasi-data',[KejuaraanController::class,'validasi_data'])->name('kejuaraan.validasi.data');
         Route::post('/edit-validasi',[KejuaraanController::class,'edit_validasi'])->name('kejuaraan.validasi.edit');
