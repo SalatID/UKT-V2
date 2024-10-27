@@ -26,23 +26,23 @@
             <thead>
                 <tr>
                     {{-- <th class="text-center bg-success">Total Peserta</th> --}}
-                    <th class="text-center">Sudah Validasi Bayar</th>
-                    <th class="text-center">Belum Validasi Bayar</th>
-                    <th class="text-center">Sudah Validasi Data</th>
-                    <th class="text-center">Belum Validasi Data</th>
+                    <th class="text-center bg-success text-white">Sudah Validasi Bayar</th>
+                    <th class="text-center bg-danger text-white">Belum Validasi Bayar</th>
+                    <th class="text-center bg-success text-white">Sudah Validasi Data</th>
+                    <th class="text-center bg-danger text-white">Belum Validasi Data</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     {{-- <td class="text-center h2 bg-success totalPeserta">0</td> --}}
-                    <td class="text-center h2" >{{$validPay}}</td>
-                    <td class="text-center h2" >{{$total-$validPay}}</td>
-                    <td class="text-center h2" >{{$validData}}</td>
-                    <td class="text-center h2" >{{$total-$validData}}</td>
+                    <td class="text-center h2 bg-success text-white" >{{$validPay}}</td>
+                    <td class="text-center h2 bg-danger text-white" >{{$total-$validPay}}</td>
+                    <td class="text-center h2 bg-success text-white" >{{$validData}}</td>
+                    <td class="text-center h2 bg-danger text-white" >{{$total-$validData}}</td>
                 </tr>
             </tbody>
         </table>
-        <table class="table table-striped table-bordered table-hover col-6">
+        <table class="table table-striped table-bordered table-hover col-6 bg-danger text-white">
             <thead>
                 <tr>
                     {{-- <th class="text-center bg-success">Total Peserta</th> --}}
