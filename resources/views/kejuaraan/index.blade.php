@@ -105,7 +105,7 @@
         $('#kategoriUsia').val(data.kategori_usia);
         $('#kelasSekolah').val(data.kelas_sekolah);
         $('#beratBadan').val(data.berat_badan);
-        $('#kategoriPertandingan').val(data.weight.id??'');
+        $('#kategoriPertandingan').val(data.weight= null? data.weight.id:'');
         $('#usia').val(data.usia);
         $('#editPeserta').modal('show')
     }
