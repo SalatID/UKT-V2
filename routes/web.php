@@ -46,6 +46,7 @@ Route::group(['prefix'=>'komwil'],function(){
 Route::group(['prefix'=>'event'],function(){
     Route::group(['prefix'=>'kejuaraan'],function(){
         Route::get('/',[KejuaraanController::class,'index'])->name('kejuaraan.home');
+        Route::get('/summary',[KejuaraanController::class,'summary'])->name('kejuaraan.summary');
         //validasi
         Route::get('/validasi-home',[KejuaraanController::class,'validasi_home'])->name('kejuaraan.validasi.home');
         Route::post('/set-validator',[KejuaraanController::class,'set_nama_validasi'])->name('kejuaraan.validasi.setvalidator');

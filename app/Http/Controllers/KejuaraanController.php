@@ -5,16 +5,17 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kejuaraan\Weight;
 use App\Models\Kejuaraan\PesertaKejuaraan;
+use DB;
 
 class KejuaraanController extends Controller
 {
     public $menu;
     public function __construct(){
         $this->menu =[
-            // [
-            //     "nama"=>"summary",
-            //     "src"=>route('kejuaraan.summary')
-            // ],
+            [
+                "nama"=>"summary",
+                "src"=>route('kejuaraan.summary')
+            ],
             [
                 "nama"=>"validasi",
                 "src"=>route('kejuaraan.validasi.home')
@@ -115,6 +116,18 @@ class KejuaraanController extends Controller
         }
         return redirect()->back()->with(['error'=>false,'message'=>'update berhasil']);
 
+    }
+    public function summary()
+    {
+        $sum = DB::select("SELECT ps.nama_kontingen,ps.asal_kontingen,
+            count(case when ps.kategori_usia='Pra Usia Dini' then ps.kategori_usia end) AS pra_usia_dini,
+            count(case when ps.kategori_usia='Usia Dini 1' then ps.kategori_usia end) AS usia_dini_1,
+            count(case when ps.kategori_usia='Usia Dini 2' then ps.kategori_usia end) AS usia_dini_2,
+            count(case when ps.kategori_usia='Pra Remaja' then ps.kategori_usia end) AS pra_remaja
+            FROM peserta_kejuaraan ps
+            GROUP BY ps.nama_kontingen,ps.asal_kontingen
+            ORDER BY ps.nama_kontingen");
+        return view('kejuaraan.summary',compact('sum'));
     }
     public function cetak()
     {
