@@ -50,6 +50,24 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
+                    <label for="namaPeserta">Validasi Bayar</label>
+                    <select name="sudah_bayar" class="form-control" id="">
+                        <option value="">Pilih Status</option>
+                        <option value="Y" {{request('sudah_bayar')=='Y'?'selected':''}}>Sudah</option>
+                        <option value="N" {{request('sudah_bayar')=='N'?'selected':''}}>Belum</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="namaPeserta">Validasi Data</label>
+                    <select name="sudah_validasi" class="form-control" id="">
+                        <option value="">Pilih Status</option>
+                        <option value="Y" {{request('sudah_validasi')=='Y'?'selected':''}}>Sudah</option>
+                        <option value="N" {{request('sudah_validasi')=='N'?'selected':''}}>Belum</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-3">
                     <label for="namaPeserta">Nama Peserta</label>
                     <input type="text" class="form-control" name="nama_peserta"
                         value="{{ request('nama_peserta') ?? '' }}">

@@ -127,7 +127,16 @@ class KejuaraanController extends Controller
             FROM peserta_kejuaraan ps
             GROUP BY ps.nama_kontingen,ps.asal_kontingen
             ORDER BY ps.nama_kontingen");
-        return view('kejuaraan.summary',compact('sum'));
+        $total = PesertaKejuaraan::count();
+        $validPay = PesertaKejuaraan::where('sudah_bayar','Y')->count();
+        $validData = PesertaKejuaraan::where('sudah_validasi','Y')->count();
+        $invalidNik = collect(\DB::select("SELECT 
+            COUNT(case when length(pk.nik)<16 then pk.nik END) lower_sixty,
+            COUNT(case when length(pk.nik)>16 then pk.nik END) upper_sixty,
+            COUNT(case when RIGHT(pk.nik,3)='000' then pk.nik END) zero_tri,
+            COUNT(case when pk.nik = '' then pk.nik END) zero
+            FROM peserta_kejuaraan pk"))->first();
+        return view('kejuaraan.summary',compact('sum','validPay','validData','total','invalidNik'));
     }
     public function cetak()
     {
