@@ -118,6 +118,8 @@
                         <th class="text-center">Validasi Data <br><input
                                 {{ $data->count() == $sudahValidasi && $data->count() != 0 ? 'checked' : '' }}
                                 type="checkbox" name="sudah_validasi_all" value=""></th>
+                        <th class="text-center">Validator Bayar</th>
+                        <th class="text-center">Validator Data</th>
                         <th class="text-center">Aksi</th>
                     </tr>
                 </thead>
@@ -159,6 +161,8 @@
                                         class="sudah_validasi_input" name="sudah_validasi[{{ $item->id }}]">
 
                                 </td>
+                                <td>{{$item->validator_bayar}}</td>
+                                <td>{{$item->validator}}</td>
                                 <td>
                                     <button type="button" data-data="{{ json_encode($item) }}"
                                         onclick="detail_peserta(this)" class="btn btn-success btn-small">Edit</button>
