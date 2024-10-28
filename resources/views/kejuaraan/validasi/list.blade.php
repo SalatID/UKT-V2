@@ -297,8 +297,7 @@
                                         <select class="form-control" id="kategoriPertandingan" name="id_weight">
                                             <option value="">Pilih Kategori Pertandingan</option>
                                             @foreach (\App\Models\Kejuaraan\Weight::get() as $item)
-                                                <option value="{{ $item->id }}"
-                                                    {{ request('id_weight') == $item->id ? 'selected' : '' }}>
+                                                <option value="{{ $item->id }}">
                                                     {{ $item->label }}</option>
                                             @endforeach
                                         </select>
