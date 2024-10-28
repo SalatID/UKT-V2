@@ -66,6 +66,33 @@ class KejuaraanController extends Controller
                 $data = $data->where('nik','like','%'.$req['nik'].'%');
                 unset($req['nik']);
             }
+            if(array_key_exists('nikBelumValid',$req)){
+                $data = $data->where(function ($query) {
+                    $query->where(DB::raw("length(nik)"),'<', 16)
+                          ->orWhere(DB::raw("length(nik)"),'>', 16)
+                          ->orWhere(DB::raw("RIGHT(nik,3)"), '000')
+                          ->orWhere("nik", '');
+                });
+            }
+            if(array_key_exists('bbKosong',$req)){
+                $data = $data->where(function ($query) {
+                    $query->where('berat_badan', 0)
+                          ->orWhere('berat_badan', '');
+                });
+            }
+            if(array_key_exists('ktKosong',$req)){
+                $data = $data->where('id_weight',0);
+            }
+            if(array_key_exists('usiaKosong',$req)){
+                $data = $data->where(function ($query) {
+                    $query->where('usia', 0)
+                          ->orWhere('usia', '');
+                });
+            }
+            unset($req['nikBelumValid']);
+            unset($req['bbKosong']);
+            unset($req['ktKosong']);
+            unset($req['usiaKosong']);
             $data = $data->where($req);
             $data = $data->get();
             $cnt = $data;

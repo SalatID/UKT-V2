@@ -53,17 +53,43 @@
                     <label for="namaPeserta">Validasi Bayar</label>
                     <select name="sudah_bayar" class="form-control" id="">
                         <option value="">Pilih Status</option>
-                        <option value="Y" {{request('sudah_bayar')=='Y'?'selected':''}}>Sudah</option>
-                        <option value="N" {{request('sudah_bayar')=='N'?'selected':''}}>Belum</option>
+                        <option value="Y" {{ request('sudah_bayar') == 'Y' ? 'selected' : '' }}>Sudah</option>
+                        <option value="N" {{ request('sudah_bayar') == 'N' ? 'selected' : '' }}>Belum</option>
                     </select>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="namaPeserta">Validasi Data</label>
                     <select name="sudah_validasi" class="form-control" id="">
                         <option value="">Pilih Status</option>
-                        <option value="Y" {{request('sudah_validasi')=='Y'?'selected':''}}>Sudah</option>
-                        <option value="N" {{request('sudah_validasi')=='N'?'selected':''}}>Belum</option>
+                        <option value="Y" {{ request('sudah_validasi') == 'Y' ? 'selected' : '' }}>Sudah</option>
+                        <option value="N" {{ request('sudah_validasi') == 'N' ? 'selected' : '' }}>Belum</option>
                     </select>
+                </div>
+                <div class="form-row col-md-6 px-4">
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" name="nikBelumValid" id="NIKBelumValid" {{ request('nikBelumValid') == 'on' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="NIKBelumValid">
+                            NIK Belum Valid
+                        </label>
+                    </div>
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" name="bbKosong" id="bbKosong" {{ request('bbKosong') == 'on' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="bbKosong">
+                            Berat Badan Kosong
+                        </label>
+                    </div>
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" name="ktKosong" id="ktKosong" {{ request('ktKosong') == 'on' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="ktKosong">
+                            Kategori Tanding Kosong
+                        </label>
+                    </div>
+                    <div class="form-check col">
+                        <input class="form-check-input" type="checkbox" name="usiaKosong" id="usiaKosong" {{ request('usiaKosong') == 'on' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="usiaKosong">
+                            Usia Kosong
+                        </label>
+                    </div>
                 </div>
             </div>
             <div class="form-row">
@@ -108,8 +134,9 @@
     <div class="row">
         <div class="col-12">
             @if (session()->has('error'))
-                <div class="alert alert-{{session()->get('error')?'danger':'success'}} alert-dismissible fade show" role="alert">
-                    <strong>{{session()->get('message')}}</strong>
+                <div class="alert alert-{{ session()->get('error') ? 'danger' : 'success' }} alert-dismissible fade show"
+                    role="alert">
+                    <strong>{{ session()->get('message') }}</strong>
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -131,8 +158,8 @@
                         <th class="text-center">Kategori Pertandingan</th>
                         <th class="text-center">Usia</th>
                         <th class="text-center">Validasi Bayar <br><input
-                                {{ $data->count() == $sudahBayar && $data->count() != 0 ? 'checked' : '' }} type="checkbox"
-                                name="sudah_bayar_all" value=""></th>
+                                {{ $data->count() == $sudahBayar && $data->count() != 0 ? 'checked' : '' }}
+                                type="checkbox" name="sudah_bayar_all" value=""></th>
                         <th class="text-center">Validasi Data <br><input
                                 {{ $data->count() == $sudahValidasi && $data->count() != 0 ? 'checked' : '' }}
                                 type="checkbox" name="sudah_validasi_all" value=""></th>
@@ -179,13 +206,13 @@
                                         class="sudah_validasi_input" name="sudah_validasi[{{ $item->id }}]">
 
                                 </td>
-                                <td>{{$item->validator_bayar}}</td>
-                                <td>{{$item->validator}}</td>
+                                <td>{{ $item->validator_bayar }}</td>
+                                <td>{{ $item->validator }}</td>
                                 <td>
                                     <button type="button" data-data="{{ json_encode($item) }}"
                                         onclick="detail_peserta(this)" class="btn btn-success btn-small">Edit</button>
-                                    <button type="button" data-url="{{ route('kejuaraan.validasi.hapus',[$item->id]) }}" onclick="hapus_peserta(this)"
-                                        class="btn btn-danger btn-small">Hapus</button>
+                                    <button type="button" data-url="{{ route('kejuaraan.validasi.hapus', [$item->id]) }}"
+                                        onclick="hapus_peserta(this)" class="btn btn-danger btn-small">Hapus</button>
                                 </td>
                             </tr>
                         @endforeach
