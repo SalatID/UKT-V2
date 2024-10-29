@@ -189,7 +189,7 @@
                                 </td>
                                 <td>{{ $item->kategori_usia }}</td>
                                 <td>{{ $item->kelas_sekolah }}</td>
-                                <td>{{ $item->berat_badan }}</td>
+                                <td class="{{ ($item->berat_badan=='' || $item->berat_badan==0) ? 'bg-danger text-white' : '' }}">{{ $item->berat_badan }}</td>
                                 <td class="{{ ($item->weight->label ?? '') == '' ? 'bg-danger text-white' : '' }}">
                                     {{ $item->weight->label ?? '' }}</td>
                                 <td class="{{ $item->usia == 0 ? 'bg-danger text-white' : '' }}">{{ $item->usia }}</td>

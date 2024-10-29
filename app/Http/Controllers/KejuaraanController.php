@@ -75,19 +75,15 @@ class KejuaraanController extends Controller
                 });
             }
             if(array_key_exists('bbKosong',$req)){
-                $data = $data->where(function ($query) {
-                    $query->where('berat_badan', 0)
+                $data = $data->where('berat_badan', 0)
                           ->orWhere('berat_badan', '');
-                });
             }
             if(array_key_exists('ktKosong',$req)){
                 $data = $data->where('id_weight',0);
             }
             if(array_key_exists('usiaKosong',$req)){
-                $data = $data->where(function ($query) {
-                    $query->where('usia', 0)
+                $data = $data->where('usia', 0)
                           ->orWhere('usia', '');
-                });
             }
             unset($req['nikBelumValid']);
             unset($req['bbKosong']);
