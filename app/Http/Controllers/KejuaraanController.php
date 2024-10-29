@@ -75,8 +75,10 @@ class KejuaraanController extends Controller
                 });
             }
             if(array_key_exists('bbKosong',$req)){
-                $data = $data->where('berat_badan', 0)
+                $data = $data->where(function($query){
+                    $query->where('berat_badan', 0)
                           ->orWhere('berat_badan', '');
+                })->whereNotIn('id_weight',[19,20,21,22,23,24,43,44,45,46,47,48,66,67,68,69,70,81]);
             }
             if(array_key_exists('ktKosong',$req)){
                 $data = $data->where('id_weight',0);

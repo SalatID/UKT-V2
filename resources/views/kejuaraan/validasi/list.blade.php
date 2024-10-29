@@ -125,6 +125,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Cari</button>
             <a href="{{ route('kejuaraan.validasi') }}" class="btn btn-secondary">Reset</a>
+            <button type="button" class="btn btn-warning" onclick="exportTableToPDF()">Export PDF</button>
         </form>
 
         <div class="col-12 d-flex justify-content-end">
@@ -142,7 +143,7 @@
                     </button>
                 </div>
             @endif
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="listTable">
                 <thead>
                     <tr>
                         <th class="text-center">No</th>

@@ -71,6 +71,9 @@
         @yield('content')
     </nav>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
+
 <script>
     $(document).ready(function() {
         // Event listener untuk checkbox "sudah_validasi_all"
@@ -105,15 +108,74 @@
         $('#kategoriUsia').val(data.kategori_usia);
         $('#kelasSekolah').val(data.kelas_sekolah);
         $('#beratBadan').val(data.berat_badan);
-        $('#kategoriPertandingan').val((data.weight!=null? data.weight.id:0));
+        $('#kategoriPertandingan').val((data.weight != null ? data.weight.id : 0));
         $('#usia').val(data.usia);
         $('#editPeserta').modal('show')
     }
-    function hapus_peserta(t){
-        if (confirm('Hapus Data Ini?')){
+
+    function hapus_peserta(t) {
+        if (confirm('Hapus Data Ini?')) {
             window.location.href = $(t).data('url')
         }
     }
+
+    function getElementStyle(el) {
+            return window.getComputedStyle(el);
+        }
+
+        function rgbToArray(rgb) {
+            return rgb.match(/\d+/g).map(Number);
+        }
+
+        function exportTableToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF('landscape');
+
+            const rows = [];
+            const headers = Array.from(document.querySelectorAll('#listTable th')).map(th => th.innerText);
+            rows.push(headers);
+
+            const dataRows = document.querySelectorAll('#listTable tr:not(:first-child)');
+            dataRows.forEach(row => {
+                const rowData = [];
+                const cells = row.querySelectorAll('td');
+                cells.forEach(cell => {
+                    const cellText = cell.innerText;
+                    const bgColor = getElementStyle(cell).backgroundColor;
+                    const colorArray = rgbToArray(bgColor);
+                    rowData.push({ text: cellText, styles: { fillColor: colorArray } });
+                });
+                rows.push(rowData);
+            });
+
+            doc.autoTable({
+                head: [headers],
+                body: rows.slice(1).map(row => row.map(cell => cell.text)),
+                theme: 'grid',
+                styles: {
+                    fontSize: 10,
+                },
+                headStyles: {
+                    fillColor: [0, 0, 0], // Set default header color
+                    textColor: [0, 0, 0], // Set text color for header
+                    fontStyle: 'bold', // Optional: make header text bold,
+                    lineColor:[0, 0, 0],
+                },
+                didParseCell: (data) => {
+                    const cell = data.cell;
+                    const rowIndex = data.row.index + 1; // +1 to account for header row
+                    const cellIndex = data.column.index;
+
+                    // Apply background color from HTML if available
+                    if (rows[rowIndex] && rows[rowIndex][cellIndex].styles) {
+                        cell.styles.fillColor = rows[rowIndex][cellIndex].styles.fillColor;
+                    }
+                }
+            });
+
+            doc.save("table_landscape.pdf");
+        }
+
 </script>
 
 </html>
