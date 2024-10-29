@@ -163,15 +163,15 @@
                         <th class="text-center">Berat Badan</th>
                         <th class="text-center">Kategori Pertandingan</th>
                         <th class="text-center">Usia</th>
-                        <th class="text-center">Validasi Bayar <br><input
+                        <th class="text-center removeTd">Validasi Bayar <br><input
                                 {{ $data->count() == $sudahBayar && $data->count() != 0 ? 'checked' : '' }}
                                 type="checkbox" name="sudah_bayar_all" value=""></th>
-                        <th class="text-center">Validasi Data <br><input
+                        <th class="text-center removeTd">Validasi Data <br><input
                                 {{ $data->count() == $sudahValidasi && $data->count() != 0 ? 'checked' : '' }}
                                 type="checkbox" name="sudah_validasi_all" value=""></th>
-                        <th class="text-center">Validator Bayar</th>
-                        <th class="text-center">Validator Data</th>
-                        <th class="text-center">Aksi</th>
+                        <th class="text-center removeTd">Validator Bayar</th>
+                        <th class="text-center removeTd">Validator Data</th>
+                        <th class="text-center removeTd">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -199,22 +199,22 @@
                                 <td class="{{ ($item->weight->label ?? '') == '' ? 'bg-danger text-white' : '' }}">
                                     {{ $item->weight->label ?? '' }}</td>
                                 <td class="{{ $item->usia == 0 ? 'bg-danger text-white' : '' }}">{{ $item->usia }}</td>
-                                <td class="text-center">
+                                <td class="text-center removeTd">
                                     <input class="sudah_bayar" type="checkbox" name="sudah_bayar[{{ $item->id }}]"
                                         {{ $item->sudah_bayar == 'Y' ? 'checked' : '' }}>
                                     <input type="hidden" value="{{ $item->sudah_bayar }}" class="sudah_bayar_input"
                                         name="sudah_bayar[{{ $item->id }}]">
                                 </td>
-                                <td class="text-center">
+                                <td class="text-center removeTd">
                                     <input class="sudah_validasi" type="checkbox"
                                         {{ $item->sudah_validasi == 'Y' ? 'checked' : '' }}>
                                     <input type="hidden" value="{{ $item->sudah_validasi }}"
                                         class="sudah_validasi_input" name="sudah_validasi[{{ $item->id }}]">
 
                                 </td>
-                                <td>{{ $item->validator_bayar }}</td>
-                                <td>{{ $item->validator }}</td>
-                                <td>
+                                <td class="removeTd">{{ $item->validator_bayar }}</td>
+                                <td class="removeTd">{{ $item->validator }}</td>
+                                <td class="removeTd">
                                     <button type="button" data-data="{{ json_encode($item) }}"
                                         onclick="detail_peserta(this)" class="btn btn-success btn-small">Edit</button>
                                     <button type="button" data-url="{{ route('kejuaraan.validasi.hapus', [$item->id]) }}"

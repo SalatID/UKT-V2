@@ -128,6 +128,7 @@
         }
 
         function exportTableToPDF() {
+            $('.removeTd').remove()
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('landscape');
 
@@ -161,6 +162,7 @@
                     fontStyle: 'bold', // Optional: make header text bold,
                     lineColor:[0, 0, 0],
                 },
+                margin: { left: 3, right: 3 },
                 didParseCell: (data) => {
                     const cell = data.cell;
                     const rowIndex = data.row.index + 1; // +1 to account for header row
@@ -174,6 +176,7 @@
             });
 
             doc.save("table_landscape.pdf");
+            location.reload()
         }
 
 </script>
