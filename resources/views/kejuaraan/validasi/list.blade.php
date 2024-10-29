@@ -99,10 +99,15 @@
                         value="{{ request('nama_peserta') ?? '' }}">
                 </div>
                 <div class="form-group col-md-3">
+                    <label for="namaPelatih">Nama Pelatih</label>
+                    <input type="text" class="form-control" name="nama_pelatih"
+                        value="{{ request('nama_pelatih') ?? '' }}">
+                </div>
+                <div class="form-group col-md-3">
                     <label for="nik">NIK</label>
                     <input type="text" class="form-control" name="nik" value="{{ request('nik') ?? '' }}">
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     <table class="table table-hover table-striped table-bordered">
                         <thead>
                             <tr>

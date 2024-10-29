@@ -62,6 +62,10 @@ class KejuaraanController extends Controller
                 $data = $data->where('nama_peserta','like','%'.$req['nama_peserta'].'%');
                 unset($req['nama_peserta']);
             }
+            if(array_key_exists('nama_pelatih',$req)){
+                $data = $data->where('nama_pelatih','like','%'.$req['nama_pelatih'].'%');
+                unset($req['nama_pelatih']);
+            }
             if(array_key_exists('nik',$req)){
                 $data = $data->where('nik','like','%'.$req['nik'].'%');
                 unset($req['nik']);
