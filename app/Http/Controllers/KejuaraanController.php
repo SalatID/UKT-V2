@@ -163,6 +163,7 @@ class KejuaraanController extends Controller
             count(case when ps.kategori_usia='Usia Dini 2' then ps.kategori_usia end) AS usia_dini_2,
             count(case when ps.kategori_usia='Pra Remaja' then ps.kategori_usia end) AS pra_remaja
             FROM peserta_kejuaraan ps
+            where deleted_at is null
             GROUP BY ps.nama_kontingen,ps.asal_kontingen
             ORDER BY ps.nama_kontingen");
         $total = PesertaKejuaraan::count();
