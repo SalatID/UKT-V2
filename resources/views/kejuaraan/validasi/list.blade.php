@@ -65,7 +65,7 @@
                         <option value="N" {{ request('sudah_validasi') == 'N' ? 'selected' : '' }}>Belum</option>
                     </select>
                 </div>
-                <div class="form-row col-md-3 px-4">
+                {{-- <div class="form-row col-md-3 px-4">
                     <div class="form-check col">
                         <input class="form-check-input" type="radio" value="nama_peserta" name="orderBy" id="orderBy" {{ request('orderBy') == 'nama_peserta' ? 'checked' : '' }}>
                         <label class="form-check-label" for="orderBy">
@@ -78,7 +78,7 @@
                             Order By Kontingen
                         </label>
                     </div>
-                </div>
+                </div> --}}
                 <div class="form-row col-md-3 px-4">
                     <div class="form-check col">
                         <input class="form-check-input" type="checkbox" name="nikBelumValid" id="NIKBelumValid" {{ request('nikBelumValid') == 'on' ? 'checked' : '' }}>
