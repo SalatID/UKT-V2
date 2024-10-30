@@ -174,7 +174,7 @@ class KejuaraanController extends Controller
             COUNT(case when length(pk.nik)>16 then pk.nik END) upper_sixty,
             COUNT(case when RIGHT(pk.nik,3)='000' then pk.nik END) zero_tri,
             COUNT(case when pk.nik = '' then pk.nik END) zero
-            FROM peserta_kejuaraan pk"))->first();
+            FROM peserta_kejuaraan pk where deleted_at is null"))->first();
         return view('kejuaraan.summary',compact('sum','validPay','validData','total','invalidNik'));
     }
     public function cetak()
