@@ -65,7 +65,21 @@
                         <option value="N" {{ request('sudah_validasi') == 'N' ? 'selected' : '' }}>Belum</option>
                     </select>
                 </div>
-                <div class="form-row col-md-6 px-4">
+                <div class="form-row col-md-3 px-4">
+                    <div class="form-check col">
+                        <input class="form-check-input" type="radio" value="nama_peserta" name="orderBy" id="orderBy" {{ request('orderBy') == 'nama_peserta' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="orderBy">
+                            Order By Peserta
+                        </label>
+                    </div>
+                    <div class="form-check col">
+                        <input class="form-check-input" type="radio" value="nama_kontingen" name="orderBy" id="orderBy" {{ request('orderBy') == 'nama_kontingen' ? 'checked' : '' }}>
+                        <label class="form-check-label" for="orderBy">
+                            Order By Kontingen
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row col-md-3 px-4">
                     <div class="form-check col">
                         <input class="form-check-input" type="checkbox" name="nikBelumValid" id="NIKBelumValid" {{ request('nikBelumValid') == 'on' ? 'checked' : '' }}>
                         <label class="form-check-label" for="NIKBelumValid">
@@ -195,7 +209,7 @@
                                 </td>
                                 <td>{{ $item->kategori_usia }}</td>
                                 <td>{{ $item->kelas_sekolah }}</td>
-                                <td class="{{ ($item->berat_badan=='' || $item->berat_badan==0) ? 'bg-danger text-white' : '' }}">{{ $item->berat_badan }}</td>
+                                <td class="{{ ($item->berat_badan=='' || $item->berat_badan==0) && str_contains(($item->weight->label ?? ''),'Tanding') ? 'bg-danger text-white' : '' }}">{{ $item->berat_badan }}</td>
                                 <td class="{{ ($item->weight->label ?? '') == '' ? 'bg-danger text-white' : '' }}">
                                     {{ $item->weight->label ?? '' }}</td>
                                 <td class="{{ $item->usia == 0 ? 'bg-danger text-white' : '' }}">{{ $item->usia }}</td>

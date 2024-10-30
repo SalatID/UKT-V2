@@ -57,7 +57,16 @@ class KejuaraanController extends Controller
             $req = array_filter(request()->all(), function($value) {
                 return $value !== '' && $value != null;
             });
-            $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta');
+            if(array_key_exists('orderBy',$req)){
+                if($req['orderBy']=='nama_peserta'){
+                    $data = PesertaKejuaraan::orderBy('nama_peserta')->orderBy('nama_kontingen');
+                }else{
+                    $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta');
+                }
+                unset($req['orderBy']);
+            }else{
+                $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta');
+            }
             if(array_key_exists('nama_peserta',$req)){
                 $data = $data->where('nama_peserta','like','%'.$req['nama_peserta'].'%');
                 unset($req['nama_peserta']);
