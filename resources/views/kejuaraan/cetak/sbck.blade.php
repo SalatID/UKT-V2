@@ -55,22 +55,15 @@
 </head>
 
 <body style="padding:0;margin:0;">
-    @if ($data == 'off')
-        <div class="text-center d-table mb-3" id="blangko" style="display: inline-block;position: relative;">
-            <img src="{{ public_path() }}/blangko_sertifikat/sbck.jpg"
-                style="width:29cm;height:20cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
-                alt="">
-        </div>
-    @else
         @foreach ($data as $item)
         @php($exp = explode(' ',($item->weight->label??'')))
-        @php($kategori = $exp[0])
-            <div class="text-center d-table mb-3" id="blangko" style="display: inline-block;position: relative;">
-                {{-- @if ($blangko == 'on') --}}
+        @php($kategori = str_contains(($item->weight->label??''),"Solo Kreatif")?($item->weight->label??''):$exp[0])
+            <div class="text-center d-table mb-3" id="blangko" style="display: inline-block;position: relative;width:29cm;">
+                @if (false)
                     <img src="{{ public_path() }}/blangko_sertifikat/sbck.jpg"
                         style="width:29cm;height:20cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
-                {{-- @endif --}}
+                @endif
                 <div style="margin-top:8cm;">
                     <div class="w-100" style="float:left">
                         <div class="row justify-content-center">
@@ -89,10 +82,14 @@
                         </div>
                     </div>
                 </div>
+                <div style="margin-top:5.5cm;margin-left:10cm;">
+                    <div class="w-100" style="float:left">
+                        <img width="110px" src="{{ public_path() }}/blangko_sertifikat/stempel-3.png" alt="">
+                    </div>
+                </div>
 
             </div>
         @endforeach
-    @endif
 
 </body>
 
