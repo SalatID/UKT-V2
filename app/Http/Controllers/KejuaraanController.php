@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Kejuaraan\Weight;
 use App\Models\Kejuaraan\PesertaKejuaraan;
 use DB;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class KejuaraanController extends Controller
 {
@@ -22,7 +23,7 @@ class KejuaraanController extends Controller
             ],
             [
                 "nama"=>"cetak",
-                "src"=>route('kejuaraan.cetak')
+                "src"=>route('kejuaraan.cetak.home')
             ],
         ];
     }
@@ -35,6 +36,12 @@ class KejuaraanController extends Controller
         $nama_validator = request('nama_validator');
         request()->session()->put('nama_validator',$nama_validator);
         return redirect()->route('kejuaraan.validasi');
+    }
+    public function set_nama_pic()
+    {
+        $nama_pic = request('nama_pic');
+        request()->session()->put('nama_pic',$nama_pic);
+        return redirect()->route('kejuaraan.cetak');
     }
     public function index()
     {
@@ -177,16 +184,82 @@ class KejuaraanController extends Controller
             FROM peserta_kejuaraan pk where deleted_at is null"))->first();
         return view('kejuaraan.summary',compact('sum','validPay','validData','total','invalidNik'));
     }
-    public function cetak()
+    public function cetak_home()
     {
-
+        return view('kejuaraan.cetak.home');
     }
-    public function cetak_nama()
+    public function cetak_list()
     {
-
+        if (!request()->session()->has('nama_pic')){
+            return redirect()->route('kejuaraan.cetak.home');
+        }
+        $data = PesertaKejuaraan::with('weight')->where('id',0)->get();
+        $sudahBayar = 0;
+        $sudahValidasi = 0;
+        if(count(request()->all())>0){
+            $req = array_filter(request()->all(), function($value) {
+                return $value !== '' && $value != null;
+            });
+                $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta');
+            if(array_key_exists('nama_peserta',$req)){
+                $data = $data->where('nama_peserta','like','%'.$req['nama_peserta'].'%');
+                unset($req['nama_peserta']);
+            }
+            if(array_key_exists('nama_pelatih',$req)){
+                $data = $data->where('nama_pelatih','like','%'.$req['nama_pelatih'].'%');
+                unset($req['nama_pelatih']);
+            }
+            if(array_key_exists('nik',$req)){
+                $data = $data->where('nik','like','%'.$req['nik'].'%');
+                unset($req['nik']);
+            }
+            $data = $data->where($req);
+            $data = $data->get();
+            $cnt = $data;
+            // $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta')->get();
+            return view('kejuaraan.cetak.list',compact('data'));
+        }
+        return view('kejuaraan.cetak.list',compact('data'));
+    }
+    public function cetak_sertifikat()
+    {
+        $cetakId = [];
+        $juara = request('juara');
+        foreach (request('cetak') as $key=>$val){
+            $upd = PesertaKejuaraan::where('id',$key)->update([
+                'sertifikat_print_at'=>date('Y-m-d H:i:s'),
+                'sertifikat_pic'=>session()->get('nama_pic'),
+                'juara'=>$juara[$key]
+            ]);
+            if($upd){
+                array_push($cetakId,$key);
+            }
+        }
+        $data = PesertaKejuaraan::whereIn('id',$cetakId)->orderBy('nama_kontingen')->orderBy('nama_peserta')->get();
+        $pdf = Pdf::loadView('kejuaraan.cetak.sbck',compact('data'));
+        $pdf->setBasePath(public_path());
+        return $pdf->setPaper('a4','landscape')->stream('sbck.pdf');
+        dd($data);
     }
     public function cetak_sk()
     {
-
+        $cetakId = [];
+        $juara = request('juara');
+        foreach (request('cetak') as $key=>$val){
+            $upd = PesertaKejuaraan::where('id',$key)->update([
+                'sk_print_at'=>date('Y-m-d H:i:s'),
+                'sk_pic'=>session()->get('nama_pic'),
+                'juara'=>$juara[$key]
+            ]);
+            if($upd){
+                array_push($cetakId,$key);
+            }
+        }
+        $data = PesertaKejuaraan::whereIn('id',$cetakId)->orderBy('nama_kontingen')->orderBy('nama_peserta')->get();
+        $pdf = Pdf::loadView('kejuaraan.cetak.sk',compact('data'));
+        $pdf->setBasePath(public_path());
+        $customPaper = [0, 0, 595.28, 935.04];
+        // return view('kejuaraan.cetak.sk',compact('data'));
+        return $pdf->setPaper($customPaper,'portrait')->stream('sk.pdf');
     }
 }

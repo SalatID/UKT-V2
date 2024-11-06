@@ -82,6 +82,10 @@
             $('.sudah_validasi').prop('checked', this.checked);
             $('.sudah_validasi_input').val(this.checked ? 'Y' : 'N');
         });
+        $('input[name="cetak_all"]').change(function() {
+            // Set semua checkbox dengan nama "sudah_validasi" sesuai status "sudah_validasi_all"
+            $('.cetak').prop('checked', this.checked);
+        });
         $('input[name="sudah_bayar_all"]').change(function() {
             // Set semua checkbox dengan nama "sudah_bayar" sesuai status "sudah_bayar_all"
             $('.sudah_bayar').prop('checked', this.checked);
@@ -178,7 +182,11 @@
             doc.save("table_landscape.pdf");
             location.reload()
         }
-
+        function cetak(t){
+            url = $(t).data('url')
+            $('#tableForm').attr('action',url)
+            $('#tableForm').submit()
+        }
 </script>
 
 </html>

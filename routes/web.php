@@ -55,11 +55,13 @@ Route::group(['prefix'=>'event'],function(){
         Route::post('/validasi-bayar',[KejuaraanController::class,'validasi_bayar'])->name('kejuaraan.validasi.bayar');
         Route::post('/validasi-data',[KejuaraanController::class,'validasi_data'])->name('kejuaraan.validasi.data');
         Route::post('/edit-validasi',[KejuaraanController::class,'edit_validasi'])->name('kejuaraan.validasi.edit');
-
+        
         //cetak
-        Route::get('/cetak',[KejuaraanController::class,'cetak'])->name('kejuaraan.cetak');
-        Route::get('/cetak-nama',[KejuaraanController::class,'cetak_nama'])->name('kejuaraan.cetak.nama');
-        Route::get('/cetak-sk',[KejuaraanController::class,'cetak_sk'])->name('kejuaraan.cetak.sk');
+        Route::get('/cetak-home',[KejuaraanController::class,'cetak_home'])->name('kejuaraan.cetak.home');
+        Route::post('/set-pic',[KejuaraanController::class,'set_nama_pic'])->name('kejuaraan.cetak.setPic');
+        Route::get('/cetak',[KejuaraanController::class,'cetak_list'])->name('kejuaraan.cetak');
+        Route::post('/cetak-sertifikat',[KejuaraanController::class,'cetak_sertifikat'])->name('kejuaraan.cetak.sertifikat');
+        Route::post('/cetak-sk',[KejuaraanController::class,'cetak_sk'])->name('kejuaraan.cetak.sk');
     });
 });
 
