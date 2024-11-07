@@ -65,7 +65,7 @@
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Cari</button>
-            <a href="{{ route('kejuaraan.validasi') }}" class="btn btn-secondary">Reset</a>
+            <a href="{{ route('kejuaraan.cetak') }}" class="btn btn-secondary">Reset</a>
             <button type="button" class="btn btn-warning" onclick="exportTableToPDF()">Export PDF</button>
         </form>
 
