@@ -64,10 +64,10 @@
         @foreach ($data as $item)
         @php($exp = explode(' ',($item->weight->label??'')))
         @php($kategori = $exp[0])
-            <div class="text-center d-table mb-3" id="blangko" style="width:20cm;height:32cm;display: inline-block;position: relative;">
+            <div class="text-center d-table mb-3" id="blangko" style="width:20cm;display: inline-block;position: relative;">
                 @if (false)
                     <img src="{{ public_path() }}/blangko_sertifikat/blangko_sk.jpg"
-                        style="width:20cm;height:32cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
+                        style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
                 <div style="margin-top:22.2cm;margin-left:5.03cm;">

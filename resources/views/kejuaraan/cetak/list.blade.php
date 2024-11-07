@@ -101,6 +101,7 @@
                         <th class="text-center">Juara</th>
                         <th class="text-center">Tanggal Cetak Sertifikat</th>
                         <th class="text-center">Tanggal Cetak SK</th>
+                        <th class="text-center">Aksi</th>
                         <th class="text-center removeTd">
                             Pilih Semua
                             <br><input type="checkbox" class="cetak_semua" name="cetak_all" value="">
@@ -134,6 +135,10 @@
                                 </td>
                                 <td>{{ $item->sertifikat_print_at ?? '' }}</td>
                                 <td>{{ $item->sk_print_at ?? '' }}</td>
+                                <td>
+                                    <button type="button" data-data="{{ json_encode($item) }}"
+                                        onclick="detail_peserta(this)" class="btn btn-success btn-small">Edit</button>
+                                </td>
                                 <td class="text-center">
                                     <input class="cetak" type="checkbox" name="cetak[{{ $item->id }}]">
                                 </td>
