@@ -70,7 +70,7 @@
                         style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
-                <div style="margin-top:22.2cm;margin-left:5.03cm;">
+                <div style="margin-top:22.2cm;margin-left:5.5cm;">
                     <div class="w-100" style="float:left">
                         <table>
                             <tr>
