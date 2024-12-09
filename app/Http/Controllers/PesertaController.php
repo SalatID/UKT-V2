@@ -23,12 +23,13 @@ class PesertaController extends Controller
     public function index()
     {
         $dataPeserta = [];
-        // if(count(request()->all())>0){
+        if(count(request()->all())>0){
 
             
             if(count(request()->all())>0 || auth()->user()->event_id !=null){
                 $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
-                if(auth()->user()->role!=='SPADM')$dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+                if(auth()->user()->role!=='SPADM') $dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+                if(auth()->user()->role!=='SPADM') $dataPeserta = $dataPeserta->where(['unit_id'=>auth()->user()->unit_id]);
                 // $dataPeserta = Peserta::all();
                 // dd($dataPeserta);
                 $this->peserta = new Peserta();
@@ -74,7 +75,7 @@ class PesertaController extends Controller
                       }
                 }
             }
-        // }
+        }
         
         $komwil = Komwil::orderBy('name')->get();
         $unit = Unit::orderBy('name')->get();
