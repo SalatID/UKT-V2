@@ -17,7 +17,7 @@
                     <select name="komwil_id" class="form-control" id="komwil" data-href="{{ route('get-json-unit') }}">
                         <option value="">Pilih Komwil</option>
                         @foreach ($komwil as $item)
-                            <option value="{{$item->id}}" {{(request('komwil_id')??'')==$item->id?'selected':''}}>{{$item->name}}</option>
+                            <option value="{{$item->id}}" {{($komwil_id??'')==$item->id?'selected':''}}>{{$item->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -152,7 +152,9 @@
                             <td>{{ $item->tempat_lahir }}</td>
                             <td>{{ $item->tgl_lahir }}</td>
                             <td>{{ $item->data_event->name ?? 'No Event' }} -
-                                {{ $item->data_event->penyelenggara ?? 'No Event' }}</td>
+                                {{ $item->data_event->penyelenggara ?? 'No Event' }}
+                                @ {{ $item->data_event->lokasi ?? 'No Event' }}
+                            </td>
                             <td>
                                 <div style="width: 3cm; height:4cm; border:solid black;">
                                     <img src="/{{$item->foto}}" style="object-fit:contain" width="100%" height="100%" alt="">
@@ -230,7 +232,7 @@
             if($('#komwil').val()!=='') {
                 $('#komwil').change()
                 setInterval(() => {
-                    $('#unit_id').val('{{request("unit_id"??"")}}')
+                    $('#unit_id').val('{{$unit_id}}')
                 }, 2000);
             };
         })

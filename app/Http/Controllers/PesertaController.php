@@ -23,13 +23,23 @@ class PesertaController extends Controller
     public function index()
     {
         $dataPeserta = [];
-        if(count(request()->all())>0){
+        $komwil_id=null;
+        $unit_id=null;
+        // if(count(request()->all())>0){
 
             
             if(count(request()->all())>0 || auth()->user()->event_id !=null){
                 $dataPeserta =Peserta::with(['data_komwil','data_unit','data_ts']);
-                if(auth()->user()->role!=='SPADM') $dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
-                if(auth()->user()->role!=='SPADM') $dataPeserta = $dataPeserta->where(['unit_id'=>auth()->user()->unit_id]);
+                if(auth()->user()->role!=='SPADM') {
+                    if(auth()->user()->role=='KOMWL' || auth()->user()->role=='PJUNT') {
+                        $dataPeserta = $dataPeserta->where(['komwil_id'=>auth()->user()->komwil_id]);
+                        $komwil_id = auth()->user()->komwil_id;
+                    }
+                    if(auth()->user()->role=='PJUNT') {
+                        $dataPeserta = $dataPeserta->where(['unit_id'=>auth()->user()->unit_id]);
+                        $unit_id = auth()->user()->unit_id;
+                    }
+                };
                 // $dataPeserta = Peserta::all();
                 // dd($dataPeserta);
                 $this->peserta = new Peserta();
@@ -75,13 +85,13 @@ class PesertaController extends Controller
                       }
                 }
             }
-        }
+        // }
         
         $komwil = Komwil::orderBy('name')->get();
         $unit = Unit::orderBy('name')->get();
         $ts = Ts::whereNotIn('id',[1])->get();
         $event = EventMaster::all();
-        return view('admin.peserta.index',compact('dataPeserta','komwil','unit','ts','event'));
+        return view('admin.peserta.index',compact('dataPeserta','komwil','unit','ts','event','komwil_id','unit_id'));
     }
     public function storePeserta()
     {
