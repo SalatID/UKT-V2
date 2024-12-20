@@ -53,7 +53,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-xl-9">
+                        <div class="col-xl-10">
                             <p class="text-center">
                                 <strong>TOP 3 Berdasarkan Tingkatan Sabuk</strong>
                             </p>
@@ -80,6 +80,7 @@
                                                 <tr>
                                                     <th>#</th>
                                                     <th>Nama</th>
+                                                    <th>Tingkat</th>
                                                     <th>Unit</th>
                                                     <th>Komwil</th>
                                                     <th>Total Nilai</th>
@@ -87,8 +88,9 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    <td>{{$no++}}</td>
+                                                    <td>{{$item->rank}}</td>
                                                     <td>{{$item->nama_peserta}}</td>
+                                                    <td>{{$item->tingkat}}</td>
                                                     <td>{{$item->unit}}</td>
                                                     <td>{{$item->komwil}}</td>
                                                     <td>{{$item->nilai}}</td>
@@ -100,8 +102,9 @@
                                                 @endif
                                     @else
                                     <tr>
-                                        <td>{{$no++}}</td>
+                                        <td>{{$item->rank}}</td>
                                         <td>{{$item->nama_peserta}}</td>
+                                        <td>{{$item->tingkat}}</td>
                                         <td>{{$item->unit}}</td>
                                         <td>{{$item->komwil}}</td>
                                         <td>{{$item->nilai}}</td>
@@ -116,7 +119,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xl-3">
+                        <div class="col-xl-2">
                             <p class="text-center">
                                 <strong>Jurus Sudah Dinilai / Peserta</strong>
                             </p>
