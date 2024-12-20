@@ -74,7 +74,7 @@ class AdminController extends Controller
                     where a.event_id = :event_id
                     GROUP BY jurus_id
                 ) b ON a.id = b.jurus_id
-                WHERE a.parent_id=0",['event_id'=>$event->id]);
+                WHERE a.parent_id=0 and a.event_id=:event_id2",['event_id'=>$event->id,'event_id2'=>$event->id]);
     
             $top3 = DB::select("
             SELECT a.name,b.name nama_peserta,c.name komwil, d.name unit, pt.*
