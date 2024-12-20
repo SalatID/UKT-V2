@@ -17,7 +17,7 @@ class GuestMiddleware
     public function handle(Request $request, Closure $next)
     {
         if (!session()->has('sNilai')) {
-            return redirect()->back()->with(['error'=>true,'message'=>'sesi anda sudah berakhir']);
+            return redirect(env('HOME_URL'))->with(['error'=>true,'message'=>'sesi anda sudah berakhir']);
         }
         return $next($request);
     }

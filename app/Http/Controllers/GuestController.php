@@ -48,7 +48,11 @@ class GuestController extends Controller
     {
         $sData = json_decode(session()->get('sNilai'));
         $masterJurus = Jurus::where('parent_id',0)->where('event_id',$sData->event_id)->orderBy('name')->get();
-        return view('guest.pilihJurus',compact('masterJurus'));
+        $event = EventMaster::where('id',$sData->event_id)->first();
+        $dataPenilai = Penilai::where('id',$sData->penilai_id)->first();
+        $kelompok = Kelompok::where('id',$sData->kelompok_id)->first();
+        $alias = $event->event_alias;
+        return view('guest.pilihJurus',compact('masterJurus','alias','dataPenilai','kelompok'));
     }
     public function getSubJurus()
     {
@@ -107,7 +111,7 @@ class GuestController extends Controller
         }
         if($successCnt==request('count')){
             
-            return redirect()->route('run-event',[request('alias')])->with([
+            return redirect()->route('jurus',[request('alias')])->with([
                 'error'=>false,
                 'message'=>'Tambah Berhasil'
             ]);

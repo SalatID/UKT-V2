@@ -1,6 +1,18 @@
 @extends('guest.index')
 
 @section('content')
+<table class="table">
+    <tr>
+        <td>Penilai</td>
+        <td>:</td>
+        <td>{{ $dataPenilai->name ?? 'Penilai Tidak Ditemukan' }}</td>
+    </tr>
+    <tr>
+        <td>Kelompok</td>
+        <td>:</td>
+        <td> <b>{{ $kelompok->name??'Kelompok Tidak Ditemukan' }} -{{$kelompok->data_ts->name?? '' }}</b></td>
+    </tr>
+</table>
     <form action="{{ route('proc-jurus') }}" method="POST">
         @csrf
         <div class="row">
@@ -23,6 +35,9 @@
             </div>
         </div>
     </form>
+    <div class="col-xl-12 my-4">
+        <a href="{{env('APP_URL')}}/event/run/{{$alias}}">Kembali Ke Halaman Awal</a>
+    </div>
     <script>
         $('select[name="jurus_id"]').change(function() {
             $.get($(this).data('src')+'?parent_id='+$(this).val(), function(data) {
