@@ -117,7 +117,7 @@ class AdminController extends Controller
             WHERE 
                 ts.id NOT IN (1, 11)
             ORDER BY 
-                ts.id, ranked.rank, ranked.tingkat,ranked.nilai DESC;
+                ts.id, ranked.tingkat,ranked.rank, ranked.nilai DESC;
 
             ",[
                 'event_id'=>$event->id,
