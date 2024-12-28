@@ -49,7 +49,7 @@
 <body style="padding:10px;margin:0;">
     @php
         $jurus = ['Standar SMI', 'Tradisional', 'Prasetya Pesilat', 'Beladiri Praktis'];
-        $td = ['Aerobik', 'Fisik Teknik', 'Kuda-kuda Dasar', 'Serang Hindar'];
+        $td = ['Aerobik', 'Fisik Teknik', 'Kuda-kuda Dasar', 'Serang Hindar','Ujian Tertulis'];
         $detail = new \App\Models\SummaryNilaiDetail();
     @endphp
     @foreach ($dataSertifikat as $item)

@@ -275,6 +275,9 @@ class NilaiController extends Controller
         if(request()->has('komwil_id') && request('komwil_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
             $q->where('komwil_id',request('komwil_id'));
         });
+        if(request()->has('kelompok_id') && request('kelompok_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
+            $q->where('kelompok_id',request('kelompok_id'));
+        });
         if(request()->has('unit_id') && request('unit_id')!=null) $dataSertifikat = $dataSertifikat->whereHas('data_peserta',function($q){
             $q->where('unit_id',request('unit_id'));
         });
