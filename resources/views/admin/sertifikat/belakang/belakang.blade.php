@@ -11,14 +11,14 @@
         }
 
         h1 {
-            font-size: 18px;
+            font-size: 16px;
         }
 
         th,
         td {
             padding: 3px;
             border: 1px solid black;
-             font-size: 15px;
+             font-size: 12px;
         }
 
         .no-border {
@@ -157,53 +157,81 @@
                 </table>
             </div>
             <div class="row col-12 mt-3">
-                <h1 style="margin-left:80px" class="text-center">Mengetahui</h1>
-                <table border="1" width="1" style="border-collapse: collapse;margin-left:30px">
+                <h1 style="margin-left:30px" class="text-center">Penguji</h1>
+                <table border="1" width="1" style="border-collapse: collapse;margin-left:100px">
                     <thead>
                         <tr>
                             <td width="130">
-                               <strong>Dindin Djuandi</strong>
-                                <br>
-                               <span style="font-size : 11px">Dewan Guru</span> 
+                               <strong>Agam Ikhwan - PMM</strong>
                             </td>
-                            <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-abah-dindin.png" width="100px" alt=""></td>
+                            <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_agam.png" width="50px" alt=""></td>
                             <td width="130">
-                                <strong>Muhammad Soleh</strong>
-                                 <br>
-                                <span style="font-size : 11px">Dewan Guru</span> 
+                                <strong>Agus Sutrisno - PMM</strong>
                              </td>
-                             <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-abah-soleh.png" width="100px" alt=""></td>
+                             <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_agus.png" width="50px" alt=""></td>
+                         
                         </tr>
                         <tr>
                             <td width="130">
-                               <strong>Wagianto</strong>
-                                <br>
-                               <span style="font-size : 11px">Pendekar Muda Utama</span> 
-                            </td>
-                            <td width="100" class="text-center"><img src="{{public_path()}}/ttd/ttd-bang-otong.png" width="100px" alt=""></td>
-                            <td width="130">
-                               
+                                <strong>Yonpi Apriadi - PMM</strong>
                              </td>
-                             <td width="100" class="text-center"></td>
+                             <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_yonpi.png" width="50px" alt=""></td>
+                             <td width="130">
+                                 <strong>Ashabul Kahfi - PMT</strong>
+                              </td>
+                              <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_kahfi.png" width="50px" alt=""></td>
+                        </tr>
+                        <tr>
+                            <td width="130">
+                                <strong>Apriyanto Laksono - PMT</strong>
+                             </td>
+                             <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_apri.png" width="50px" alt=""></td>
+                             <td width="130">
+                                 <strong>Eko Purwanto - PMT</strong>
+                              </td>
+                              <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_eko.png" width="50px" alt=""></td>
+                              
+                        </tr>
+                        <tr>
+                            <td width="130">
+                                <strong>Juminta Ibrahim - PMT</strong>
+                             </td>
+                             <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_jum.png" width="50px" alt=""></td>
+                             <td width="130">
+                                 <strong>Nining Eka Wati - PMT</strong>
+                              </td>
+                              <td width="50" class="text-center"><img src="{{public_path()}}/ttd/ka_nining.png" width="50px" alt=""></td>
                         </tr>
                     </thead>
                 </table>
             </div>
             <div class="row col-12 mt-3">
-                <table width="1" style="border-collapse: collapse;margin-left:180px">
+                <table width="1" style="border-collapse: collapse;margin-left:80px">
                     <thead>
                         <tr>
-                            <td style="border:none" class="text-center" width="300">
+                            <td style="border:none" class="text-center" width="200">
+                                Mengetahui <br>
+                                Dewan Guru Sabandar
+                                <br>
+                                <br>
+                                <img src="{{public_path()}}/ttd/ttd-abah-dindin.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;" >
+                                <br>
+                            </td>
+                            <td style="border:none" class="text-center" width="200">
                                 Disahkan Oleh <br>
                                 Ketua PPS Satria Muda Indonesia<br>
                                 Komwil Jakarta Barat
                                 <br>
-                                <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="130px" style="margin-bottom: -30px;margin-top:-10px;" >
+                                <img src="{{public_path()}}/ttd/stempel.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;" >
+                                <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;margin-left:-40px" >
                                 <br>
                             </td>
                         </tr>
                         <tr>
-                            <td style="border:none" class="text-center" width="300">
+                            <td style="border:none" class="text-center" width="200">
+                                <strong>Dindin Djuandi</strong>
+                            </td>
+                            <td style="border:none" class="text-center" width="200">
                                 <strong>Ir. Indra Madya Permana</strong>
                             </td>
                             
@@ -212,7 +240,6 @@
                 </table>
             </div>
         </div>
-        <div class="page-break"></div>
     @endforeach
 
 </body>
