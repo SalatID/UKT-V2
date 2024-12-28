@@ -11,14 +11,14 @@
         }
 
         h1 {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         th,
         td {
             padding: 3px;
             border: 1px solid black;
-             font-size: 12px;
+            font-size: 12px;
         }
 
         .no-border {
@@ -222,8 +222,8 @@
                                 Ketua PPS Satria Muda Indonesia<br>
                                 Komwil Jakarta Barat
                                 <br>
-                                <img src="{{public_path()}}/ttd/stempel.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;" >
-                                <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;margin-left:-40px" >
+                                {{-- <img src="{{public_path()}}/ttd/stempel.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;" > --}}
+                                <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;/*margin-left:-40px*/" >
                                 <br>
                             </td>
                         </tr>
@@ -240,6 +240,7 @@
                 </table>
             </div>
         </div>
+        <div class="page-break"></div>
     @endforeach
 
 </body>
