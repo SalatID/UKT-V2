@@ -6,7 +6,7 @@
         {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
     </div>
     <div class="form-group">
-        <label for="ts_awal_id">Tingkat Sabuk</label>
+        <label for="ts_awal_id">Tingkat Sabuk Awal</label>
         <select name="ts_awal_id" class="form-control" required id="ts_awal_id">
             <option value="">Pilih Tingkat</option>
             @foreach ($ts as $item)
