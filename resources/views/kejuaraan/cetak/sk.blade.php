@@ -52,7 +52,7 @@
 
             body {
                 width: 21cm !important;
-                height: 33cm !important;
+                height: 29cm !important;
                 display: table;
             }
         }
