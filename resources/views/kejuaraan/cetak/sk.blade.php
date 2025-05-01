@@ -33,7 +33,7 @@
         }
 
         td{
-            font-size:15px !important;
+            font-size:14px !important;
             color: black;
         }
 
@@ -69,7 +69,7 @@
                         style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
-                <div style="margin-top:22.2cm;margin-left:5.5cm;">
+                <div style="margin-top:19cm;margin-left:5.5cm;">
                     <div class="w-100" style="float:left">
                         <table>
                             <tr>
