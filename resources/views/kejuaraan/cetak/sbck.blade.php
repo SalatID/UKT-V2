@@ -56,8 +56,7 @@
 
 <body style="padding:0;margin:0;">
         @foreach ($data as $item)
-        @php($exp = explode(' ',($item->weight->label??'')))
-        @php($kategori = str_contains(($item->weight->label??''),"Solo Kreatif")?($item->weight->label??''):$exp[0])
+        @php($kategori = $item->label_weight)
             <div class="text-center d-table mb-3" id="blangko" style="display: inline-block;position: relative;width:29cm;">
                 @if (false)
                     <img src="{{ public_path() }}/blangko_sertifikat/sbck.jpg"
@@ -84,7 +83,7 @@
                 </div>
                 <div style="margin-top:5.5cm;margin-left:10cm;">
                     <div class="w-100" style="float:left">
-                        <img width="110px" src="{{ public_path() }}/blangko_sertifikat/stempel-3.png" alt="">
+                        {{-- <img width="110px" src="{{ public_path() }}/blangko_sertifikat/stempel-3.png" alt=""> --}}
                     </div>
                 </div>
 

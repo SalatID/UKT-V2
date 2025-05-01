@@ -13,17 +13,29 @@ class KejuaraanController extends Controller
     public $menu;
     public function __construct(){
         $this->menu =[
+            // [
+            //     "nama"=>"summary",
+            //     "src"=>route('kejuaraan.summary')
+            // ],
+            // [
+            //     "nama"=>"validasi",
+            //     "src"=>route('kejuaraan.validasi.home')
+            // ],
             [
-                "nama"=>"summary",
-                "src"=>route('kejuaraan.summary')
+                "nama"=>"kasir",
+                "src"=>route('kejuaraan.kasir.home')
             ],
             [
-                "nama"=>"validasi",
-                "src"=>route('kejuaraan.validasi.home')
+                "nama"=>"sertifikat",
+                "src"=>route('kejuaraan.sertifikat.home')
             ],
             [
-                "nama"=>"cetak",
-                "src"=>route('kejuaraan.cetak.home')
+                "nama"=>"sk",
+                "src"=>route('kejuaraan.sk.home')
+            ],
+            [
+                "nama"=>"List Semua",
+                "src"=>route('kejuaraan.cetak.list')
             ],
         ];
     }
@@ -155,6 +167,7 @@ class KejuaraanController extends Controller
         $id = $req['id'];
         unset($req['id']);
         unset($req['_token']);
+        $req['kasir_at'] = date('Y-m-d H:i:s');
         $upd = $peserta->update($req);
         if (!$upd){
             return redirect()->back()->with(['error'=>true,'message'=>'update gagal']);
@@ -188,11 +201,110 @@ class KejuaraanController extends Controller
     {
         return view('kejuaraan.cetak.home');
     }
+    public function kasir_list()
+    {
+        // if (!request()->session()->has('nama_pic')){
+        //     return redirect()->route('kejuaraan.cetak.home');
+        // }
+        $data = PesertaKejuaraan::with('weight')->where('id',0)->get();
+        $sudahBayar = 0;
+        $sudahValidasi = 0;
+        if(count(request()->all())>0){
+            $req = array_filter(request()->all(), function($value) {
+                return $value !== '' && $value != null;
+            });
+                $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta');
+            if(array_key_exists('nama_peserta',$req)){
+                $data = $data->where('nama_peserta','like','%'.$req['nama_peserta'].'%');
+                unset($req['nama_peserta']);
+            }
+            if(array_key_exists('nama_pelatih',$req)){
+                $data = $data->where('nama_pelatih','like','%'.$req['nama_pelatih'].'%');
+                unset($req['nama_pelatih']);
+            }
+            if(array_key_exists('nik',$req)){
+                $data = $data->where('nik','like','%'.$req['nik'].'%');
+                unset($req['nik']);
+            }
+            $data = $data->where($req);
+            $data = $data->get();
+            $cnt = $data;
+            // $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta')->get();
+            return view('kejuaraan.cetak.list_kasir',compact('data'));
+        }
+        return view('kejuaraan.cetak.list_kasir',compact('data'));
+    }
+    public function sertifikat_list()
+    {
+        // if (!request()->session()->has('nama_pic')){
+        //     return redirect()->route('kejuaraan.cetak.home');
+        // }
+        $data = PesertaKejuaraan::with('weight')->whereNotNull('kasir_at')->whereNull('sertifikat_print_at')->get();
+        $sudahBayar = 0;
+        $sudahValidasi = 0;
+        if(count(request()->all())>0){
+            $req = array_filter(request()->all(), function($value) {
+                return $value !== '' && $value != null;
+            });
+                $data = PesertaKejuaraan::orderBy('nama_kontingen')->whereNotNull('kasir_at')->orderBy('nama_peserta');
+            if(array_key_exists('nama_peserta',$req)){
+                $data = $data->where('nama_peserta','like','%'.$req['nama_peserta'].'%');
+                unset($req['nama_peserta']);
+            }
+            if(array_key_exists('nama_pelatih',$req)){
+                $data = $data->where('nama_pelatih','like','%'.$req['nama_pelatih'].'%');
+                unset($req['nama_pelatih']);
+            }
+            if(array_key_exists('nik',$req)){
+                $data = $data->where('nik','like','%'.$req['nik'].'%');
+                unset($req['nik']);
+            }
+            $data = $data->where($req);
+            $data = $data->get();
+            $cnt = $data;
+            // $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta')->get();
+            return view('kejuaraan.cetak.list_sertifikat',compact('data'));
+        }
+        return view('kejuaraan.cetak.list_sertifikat',compact('data'));
+    }
+    public function sk_list()
+    {
+        // if (!request()->session()->has('nama_pic')){
+        //     return redirect()->route('kejuaraan.cetak.home');
+        // }
+        $data = PesertaKejuaraan::with('weight')->whereNotNull('sertifikat_print_at')->whereNull('sk_print_at')->get();
+        $sudahBayar = 0;
+        $sudahValidasi = 0;
+        if(count(request()->all())>0){
+            $req = array_filter(request()->all(), function($value) {
+                return $value !== '' && $value != null;
+            });
+                $data = PesertaKejuaraan::orderBy('nama_kontingen')->whereNotNull('sertifikat_print_at')->whereNull('sk_print_at')->orderBy('nama_peserta');
+            if(array_key_exists('nama_peserta',$req)){
+                $data = $data->where('nama_peserta','like','%'.$req['nama_peserta'].'%');
+                unset($req['nama_peserta']);
+            }
+            if(array_key_exists('nama_pelatih',$req)){
+                $data = $data->where('nama_pelatih','like','%'.$req['nama_pelatih'].'%');
+                unset($req['nama_pelatih']);
+            }
+            if(array_key_exists('nik',$req)){
+                $data = $data->where('nik','like','%'.$req['nik'].'%');
+                unset($req['nik']);
+            }
+            $data = $data->where($req);
+            $data = $data->get();
+            $cnt = $data;
+            // $data = PesertaKejuaraan::orderBy('nama_kontingen')->orderBy('nama_peserta')->get();
+            return view('kejuaraan.cetak.list_sk',compact('data'));
+        }
+        return view('kejuaraan.cetak.list_sk',compact('data'));
+    }
     public function cetak_list()
     {
-        if (!request()->session()->has('nama_pic')){
-            return redirect()->route('kejuaraan.cetak.home');
-        }
+        // if (!request()->session()->has('nama_pic')){
+        //     return redirect()->route('kejuaraan.cetak.home');
+        // }
         $data = PesertaKejuaraan::with('weight')->where('id',0)->get();
         $sudahBayar = 0;
         $sudahValidasi = 0;

@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Silat Benteng Cisadane Kids</title>
+    <title>Silat Benteng Cisadane</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -42,7 +42,7 @@
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">SBCK 2024</a>
+        <a class="navbar-brand" href="#">SBCC 4</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -99,6 +99,18 @@
         })
     });
 
+    function submit_form(){
+        if ($('#juara').val() == '') {
+            alert('Juara Harus Diisi')
+            return false
+        }
+        if ($('#namaAtlet').val() == '') {
+            alert('Nama Harus Diisi')
+            return false
+        }
+        $('#editForm').submit()
+    }
+
     function detail_peserta(t) {
         data = $(t).data('data')
         console.log(data)
@@ -114,6 +126,7 @@
         $('#beratBadan').val(data.berat_badan);
         $('#kategoriPertandingan').val((data.weight != null ? data.weight.id : 0));
         $('#usia').val(data.usia);
+        $('#juara').val(data.juara);
         $('#editPeserta').modal('show')
     }
 

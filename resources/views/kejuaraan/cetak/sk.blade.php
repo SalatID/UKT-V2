@@ -62,8 +62,7 @@
 
 <body style="padding:0;margin:0;">
         @foreach ($data as $item)
-        @php($exp = explode(' ',($item->weight->label??'')))
-        @php($kategori = $exp[0])
+        @php($kategori =$item->label_weight)
             <div class="text-center d-table mb-3" id="blangko" style="width:20cm;display: inline-block;position: relative;">
                 @if (false)
                     <img src="{{ public_path() }}/blangko_sertifikat/blangko_sk.jpg"
@@ -86,7 +85,7 @@
                             <tr>
                                 <td>Pelaksanaan</td>
                                 <td>:</td>
-                                <td>Jumat s.d Minggu, 08 s.d 10 November 2024</td>
+                                <td>Jumat s.d Minggu, 02 s.d 04 Mei 2025</td>
                             </tr>
                             <tr>
                                 <td>Tempat</td>
