@@ -122,8 +122,8 @@
                                 <td>{{ $item->nama_peserta }}</td>
                                 <td>{{ $item->jenis_kelamin }}</td>
                                 <td>{{ $item->kategori_usia }}</td>
-                                <td class="{{ ($item->weight->label ?? '') == '' ? 'bg-danger text-white' : '' }}">
-                                    {{ $item->weight->label ?? '' }}</td>
+                                <td>
+                                    {{ $item->label_weight ?? '' }}</td>
                                 <td>
                                     <select name="juara[{{ $item->id }}]" class="form-control">
                                         <option value="">-Pilih Juara-</option>
