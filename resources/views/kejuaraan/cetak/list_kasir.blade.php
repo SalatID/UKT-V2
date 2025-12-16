@@ -69,6 +69,9 @@
             <a href="{{ route('kejuaraan.kasir.home') }}" class="btn btn-secondary">Reset</a>
             <button type="button" class="btn btn-warning" onclick="exportTableToPDF()">Export PDF</button>
         </form>
+        <button class="my-2 mx-3 btn btn-primary" data-toggle="modal" data-target="#tambahPeserta">
+           Tambah
+       </button>
     </div>
     <div class="row">
         <div class="col-12">
@@ -159,11 +162,11 @@
                                     </div>
 
                                     <!-- Asal Kontingen -->
-                                    <div class="form-group">
+                                    {{-- <div class="form-group">
                                         <label for="asalKontingen">Asal Kontingen</label>
                                         <input type="text" class="form-control" id="asalKontingen"
                                             name="asal_kontingen" placeholder="Masukkan Asal Kontingen">
-                                    </div>
+                                    </div> --}}
 
                                     <!-- Jenis Kelamin -->
                                     <div class="form-group">
@@ -193,10 +196,11 @@
                                         <label for="kategoriPertandingan">Kategori Pertandingan</label>
                                         <select class="form-control" id="kategoriPertandingan" name="id_weight">
                                             <option value="">Pilih Kategori Pertandingan</option>
-                                            @foreach (\App\Models\Kejuaraan\Weight::get() as $item)
-                                                <option value="{{ $item->id }}">
-                                                    {{ $item->label }}</option>
-                                            @endforeach
+                                            <option value="Tanding">Tanding</option>
+                                            <option value="Tunggal">Tunggal</option>
+                                            <option value="Ganda">Ganda</option>
+                                            <option value="Regu">Regu</option>
+                                            <option value="Solo Kreatif">Solo Kreatif</option>
                                         </select>
                                     </div>
 
@@ -220,6 +224,112 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="submit_form()">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="tambahPeserta" tabindex="-1" role="dialog" aria-labelledby="tambahPesertaLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tambahPesertaLabel">Tambah Peserta</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="container">
+                        <form action="{{ route('kejuaraan.validasi.tambah') }}" method="POST" id="tambahForm">
+                            @csrf
+                            <input type="hidden" name="id">
+                            <div class="row">
+                                <div class="col-12">
+                                    <!-- Nama Atlet -->
+                                    <div class="form-group">
+                                        <label for="namaAtlet">Nama Atlet</label>
+                                        <input type="text" class="form-control" style="font-weight:bold;font-size: 35px; text-align:center;background-color:#98f9ec" name="nama_peserta"
+                                            placeholder="Masukkan Nama Atlet" required>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+
+                                    <!-- Nama Kontingen -->
+                                    <div class="form-group">
+                                        <label for="namaKontingen">Nama Kontingen</label>
+                                        <input type="text" class="form-control"
+                                            name="nama_kontingen" placeholder="Masukkan Nama Kontingen">
+                                    </div>
+
+                                    <!-- Asal Kontingen -->
+                                    {{-- <div class="form-group">
+                                        <label for="asalKontingen">Asal Kontingen</label>
+                                        <input type="text" class="form-control" id="asalKontingen"
+                                            name="asal_kontingen" placeholder="Masukkan Asal Kontingen">
+                                    </div> --}}
+
+                                    <!-- Jenis Kelamin -->
+                                    <div class="form-group">
+                                        <label for="jenisKelamin">Jenis Kelamin</label>
+                                            <select class="form-control" name="jenis_kelamin" required>
+                                                <option value="">Pilih Jenis Kelamin</option>
+                                                <option value="Putra">Putra</option>
+                                                <option value="Putri">Putri</option>
+                                            </select>
+                                    </div>
+
+
+                                </div>
+                                <div class="col-6">
+                                    <!-- Kategori Usia -->
+                                    <div class="form-group">
+                                        <label for="kategoriUsia">Kategori Usia</label>
+                                        <select class="form-control" name="kategori_usia">
+                                            <option value="">Pilih Kategori Usia</option>
+                                            @foreach (\App\Models\Kejuaraan\PesertaKejuaraan::kategori_usia() as $item)
+                                                <option value="{{ $item->kategori_usia }}"
+                                                    {{ request('kategori_usia') == $item->kategori_usia ? 'selected' : '' }}>
+                                                    {{ $item->kategori_usia }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <!-- Kategori Pertandingan -->
+                                    <div class="form-group">
+                                        <label for="kategoriPertandingan">Kategori Pertandingan</label>
+                                        <select class="form-control" name="label_weight">
+                                            <option value="">Pilih Kategori Pertandingan</option>
+                                            <option value="Tanding">Tanding</option>
+                                            <option value="Tunggal">Tunggal</option>
+                                            <option value="Ganda">Ganda</option>
+                                            <option value="Regu">Regu</option>
+                                            <option value="Solo Kreatif">Solo Kreatif</option>
+                                        </select>
+                                    </div>
+
+                                    <!-- Juara -->
+                                    <div class="form-group">
+                                        <label for="kategoriPertandingan">Juara</label>
+                                        <select name="juara" class="form-control" required>
+                                            <option value="">-Pilih Juara-</option>
+                                            <option {{($item->juara??'')=='Juara 1'?'selected':''}} value="Juara 1">Juara 1</option>
+                                            <option {{($item->juara??'')=='Juara 2'?'selected':''}} value="Juara 2">Juara 2</option>
+                                            <option {{($item->juara??'')=='Juara 3'?'selected':''}} value="Juara 3">Juara 3</option>
+                                            <option {{($item->juara??'')=='Peserta'?'selected':''}} value="Peserta">Peserta</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="$('#tambahForm').submit()">Simpan</button>
                 </div>
             </div>
         </div>

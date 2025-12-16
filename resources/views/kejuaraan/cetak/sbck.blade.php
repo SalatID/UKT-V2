@@ -63,7 +63,7 @@
                         style="width:29cm;height:20cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
-                <div style="margin-top:7.5cm;">
+                <div style="margin-top:6.5cm;">
                     <div class="w-100" style="float:left">
                         <div class="row justify-content-center">
                             <h1 class="w-100 text-center" style="font-size:25px;">

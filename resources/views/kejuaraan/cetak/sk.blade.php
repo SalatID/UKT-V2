@@ -69,7 +69,7 @@
                         style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
-                <div style="margin-top:19cm;margin-left:5.5cm;">
+                <div style="margin-top:20cm;margin-left:5.5cm;">
                     <div class="w-100" style="float:left">
                         <table>
                             <tr>
@@ -85,12 +85,12 @@
                             <tr>
                                 <td>Pelaksanaan</td>
                                 <td>:</td>
-                                <td>Jumat s.d Minggu, 02 s.d 04 Mei 2025</td>
+                                <td>Jumat s.d Minggu, 26 s.d 28 September 2025</td>
                             </tr>
                             <tr>
                                 <td>Tempat</td>
                                 <td>:</td>
-                                <td>Mall Bale Kota - Kota Tangerang</td>
+                                <td>Atrium Petarung Kuda Putih, Yonif 203/AK, Kota Tangerang</td>
                             </tr>
                         </table>
                     </div>

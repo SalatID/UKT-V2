@@ -374,4 +374,23 @@ class KejuaraanController extends Controller
         // return view('kejuaraan.cetak.sk',compact('data'));
         return $pdf->setPaper($customPaper,'portrait')->stream('sk.pdf');
     }
+
+    public function tambah(Request $request)
+    {
+        $data = $request->only([
+            'nama_peserta',
+            'nama_kontingen',
+            'jenis_kelamin',
+            'kategori_usia',
+            'label_weight',
+            'juara',
+        ]);
+
+        $peserta = PesertaKejuaraan::create($data);
+
+        if ($peserta) {
+            return redirect()->back()->with(['error' => false, 'message' => 'Peserta berhasil ditambahkan']);
+        }
+        return redirect()->back()->with(['error' => true, 'message' => 'Gagal menambahkan peserta']);
+    }
 }

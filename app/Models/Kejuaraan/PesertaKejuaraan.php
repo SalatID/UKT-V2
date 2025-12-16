@@ -11,6 +11,14 @@ class PesertaKejuaraan extends Model
 {
     use HasFactory,SoftDeletes;
     protected $table = 'peserta_kejuaraan';
+    protected $fillable = [
+        'nama_peserta',
+        'nama_kontingen',
+        'jenis_kelamin',
+        'kategori_usia',
+        'label_weight',
+        'juara',
+    ];
 
     public static function nama_kontingen()
     {

@@ -90,7 +90,7 @@
                 <td class="border">{{$val->data_ts->ts_code}}</td>
                 @else 
                 <td class="border">{{$val->data_ts->ts_code}}</td>
-                <td class="border">{{$val->data_ts_akhir->ts_code}}</td>
+                <td class="border">{{$val->data_ts_akhir->ts_code??''}}</td>
                 @endif
                 <td class="border">{{$val->data_komwil->name}}</td>
                 <td class="border">{{$val->data_unit->name}}</td>

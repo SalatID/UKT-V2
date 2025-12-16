@@ -111,6 +111,12 @@
         $('#editForm').submit()
     }
 
+    function toTitleCase(str) {
+        return str.replace(/\w\S*/g, function(txt){
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+    }
+
     function detail_peserta(t) {
         data = $(t).data('data')
         console.log(data)
@@ -124,7 +130,9 @@
         $('#kategoriUsia').val(data.kategori_usia);
         $('#kelasSekolah').val(data.kelas_sekolah);
         $('#beratBadan').val(data.berat_badan);
-        $('#kategoriPertandingan').val((data.weight != null ? data.weight.id : 0));
+        $('#kategoriPertandingan').val((data.label_weight != null ? toTitleCase(data.label_weight) : 0));
+
+        
         $('#usia').val(data.usia);
         $('#juara').val(data.juara);
         $('#editPeserta').modal('show')

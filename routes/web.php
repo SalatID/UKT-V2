@@ -55,6 +55,7 @@ Route::group(['prefix'=>'event'],function(){
         Route::post('/validasi-bayar',[KejuaraanController::class,'validasi_bayar'])->name('kejuaraan.validasi.bayar');
         Route::post('/validasi-data',[KejuaraanController::class,'validasi_data'])->name('kejuaraan.validasi.data');
         Route::post('/edit-validasi',[KejuaraanController::class,'edit_validasi'])->name('kejuaraan.validasi.edit');
+        Route::post('/validasi',[KejuaraanController::class,'tambah'])->name('kejuaraan.validasi.tambah');
         
         //cetak
         Route::get('/sertifikat-home',[KejuaraanController::class,'sertifikat_list'])->name('kejuaraan.sertifikat.home');
