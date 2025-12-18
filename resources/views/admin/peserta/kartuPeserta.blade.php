@@ -38,37 +38,81 @@
                 display: table;
             }
         }
+        
+        .kartu {
+            width: 85mm;
+            height: 52mm;
+            border: 3px solid black;
+            margin: 1mm;
+            float: left;
+            box-sizing: border-box;
+        }
+
+        .clear {
+            clear: both;
+        }
+
+        .page-break {
+            page-break-after: always;
+            clear: both;
+        }
     </style>
 </head>
 
 <body style="padding:0;margin:0;">
-    @php($i=0)
-    <div class="container-fluid" style="width:21cm;">
-        @foreach($dataPeserta as $item)
-            <div style="width:85mm;height:52mm; border:3px solid black;margin:8px;display:block;float:unset">
-                <h1 class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:15px">
-                    PANITIA {{strtoupper($item->data_event->name)}}
-                </h1>
-                <h1 class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:15px">
-                    {{strtoupper($item->data_event->penyelenggara)}}
-                </h1>
-                <h1 class="col-12 m-0 p-0 text-center" style="font-size:10px">
-                    {{date('d F Y',strtotime($item->data_event->tgl_mulai))}} s.d {{date('d F Y',strtotime($item->data_event->tgl_selesai))}} di {{strtoupper($item->data_event->lokasi)}}
-                </h1>
-                <hr style="background:black;height: 3px;" class="p-0 m-0">
-                <h1 class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:70px">
-                    {{strtoupper($item->no_peserta)}}
-                </h1>
-                <div class="col-12 m-0 p-0 text-center font-weight-bold" style="font-size:15px">
-                    {{strtoupper($item->name)}}
-                </div>
+   @php
+        $col = 0;
+        $perPage = 10; // 2 kolom x 3 baris
+        $count = 0;
+    @endphp
+
+    <div style="width:21cm;padding-left:1cm;padding-top:1cm">
+
+    @foreach($dataPeserta as $item)
+
+        <div class="kartu">
+            <h1 class="text-center font-weight-bold" style="font-size:15px;margin:0">
+                PANITIA {{ strtoupper($item->data_event->name) }}
+            </h1>
+            <h1 class="text-center font-weight-bold" style="font-size:15px;margin:0">
+                {{ strtoupper($item->data_event->penyelenggara) }}
+            </h1>
+            <div class="text-center" style="font-size:10px">
+                {{ date('d F Y',strtotime($item->data_event->tgl_mulai)) }}
+                s.d
+                {{ date('d F Y',strtotime($item->data_event->tgl_selesai)) }}
+                di {{ strtoupper($item->data_event->lokasi) }}
             </div>
-            @php($i++)
-            @if($i==5)
+
+            <hr style="background:black;height:3px;margin:2px 0">
+
+            <div class="text-center font-weight-bold" style="font-size:70px;line-height:1">
+                {{ $item->no_peserta }}
+            </div>
+
+            <div class="text-center font-weight-bold" style="font-size:15px">
+                {{ strtoupper($item->name) }}
+            </div>
+        </div>
+
+        @php
+            $col++;
+            $count++;
+        @endphp
+
+        {{-- SETIAP 2 KARTU → BARIS BARU --}}
+        @if($col == 2)
+            <div class="clear"></div>
+            @php $col = 0; @endphp
+        @endif
+
+        {{-- SETIAP 6 KARTU → HALAMAN BARU --}}
+        @if($count == $perPage)
             <div class="page-break"></div>
-            @php($i=0)
-            @endif
-        @endforeach
+            @php $count = 0; @endphp
+        @endif
+
+    @endforeach
     </div>
 </body>
 <script>

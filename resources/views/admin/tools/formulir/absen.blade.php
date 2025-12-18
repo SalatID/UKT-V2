@@ -70,7 +70,7 @@
                 <td class="border text-center" rowspan="2">Unit</td>
                 <td class="border text-center" rowspan="2">Tingkat</td>
                 <td class="border text-center" rowspan="2">Tempat/Tanggal Lahir</td>
-                <td class="border text-center" rowspan="2">Foto Peserta</td>
+                <td class="border text-center" rowspan="2">Foto</td>
                 <td class="border text-center" colspan="2">Absen</td>
             </tr>
             <tr>
