@@ -115,6 +115,7 @@ class GuestController extends Controller
                 $params
             );
             
+            DB::commit();
             if($ins){
                 $successCnt = $successCnt + 1;
             }
@@ -123,8 +124,6 @@ class GuestController extends Controller
             // Get the referer URL
             $referer = request()->headers->get('referer');
             if (strpos($referer, 'admin/kelompok/edit-nilai') !== false) {
-                // Additional logic for when the referer contains "admin/kelompok/edit-nilai"
-                // For example, you might want to redirect to a specific route or log an event
                 return redirect()->route('kelompok', ['event_alias' => request('alias')])->with([
                     'error'=>false,
                     'message'=>'Tambah Berhasil'
