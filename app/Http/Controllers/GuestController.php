@@ -103,14 +103,33 @@ class GuestController extends Controller
                 'created_user'=>request('penilai_id')
             ];
             $i++;
-            $ins = Nilai::create($params);
-            DB::commit();
+            
+            // Check if record exists, update or create
+            $ins = Nilai::updateOrCreate(
+                [
+                    'jurus_id' => request('jurus_id'),
+                    'kelompok_id' => request('kelompok_id'),
+                    'peserta_id' => $val,
+                    'event_id' => request('event_id')
+                ],
+                $params
+            );
+            
             if($ins){
-                $successCnt = $successCnt +1 ; 
+                $successCnt = $successCnt + 1;
             }
         }
         if($successCnt==request('count')){
-            
+            // Get the referer URL
+            $referer = request()->headers->get('referer');
+            if (strpos($referer, 'admin/kelompok/edit-nilai') !== false) {
+                // Additional logic for when the referer contains "admin/kelompok/edit-nilai"
+                // For example, you might want to redirect to a specific route or log an event
+                return redirect()->route('kelompok', ['event_alias' => request('alias')])->with([
+                    'error'=>false,
+                    'message'=>'Tambah Berhasil'
+                ]);
+            }
             return redirect()->route('jurus',[request('alias')])->with([
                 'error'=>false,
                 'message'=>'Tambah Berhasil'

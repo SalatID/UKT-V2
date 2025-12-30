@@ -1,0 +1,84 @@
+@extends('guest.index')
+
+@section('content')
+<h1>Edit Nilai Kelompok</h1>
+    <table class="table" border="0">
+        <tr>
+            <td colspan="2">
+                <br>
+                {{-- <a href="{{env('APP_URL')}}/event/run/{{$adlias}}">Kembali Ke Halaman Awal</a> --}}
+                <br>
+                <br>
+                <br>
+            </td>
+        </tr>
+        <tr>
+            <th style="width : 20%">Penilai </th>
+            <td style="width : 20%">: {{ $dataKelompok->data_penilai->name ?? 'Penilai Tidak Ditemukan' }}
+
+            </td>
+            <td style="width : 40%"> Jurus : {{ $dataJurus->name ?? 'Jurus Tidak Ditemukan' }}</td>
+            
+        </tr>
+        <tr>
+            <th>Nama Kelompok </th>
+            <td>: {{ $dataKelompok->name ?? 'Kelompok Tidak Ditemukan' }}</td>
+            <td  style="width : 40%">
+                <b>Catatan :</b><br>
+                1. Range Nilai 5-9<br>
+                2. Setiap pengulangan diberi waktu istirahat 30 detik<br>
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align : center; text-transform : uppercase;"colspan="3">
+                <h1>
+                    Materi : {{ $dataJurus->name ?? 'Jurus Tidak Ditemukan' }}
+
+                </h1>
+            </th>
+        </tr>
+    </table>
+    <form class="" action="{{route('proc-penilaian')}}" method="post">
+        <table class="table">
+            <tr>
+                <th class="text-center">No</th>
+                <th class="text-center" width="10%">No<br>Peserta</th>
+                <th class="text-center">Nama</th>
+                <th class="text-center">TS</th>
+                <th class="text-center" style="width : 15%">Nilai</th>
+            </tr>
+
+            <input type="hidden" name="count" value="{{ count($dataKelompok->data_peserta) }}">
+            <input type="hidden" name="penilai_id" value="{{ $dataKelompok->data_penilai->id }}">
+            <input type="hidden" name="kelompok_id" value="{{ $dataKelompok->id }}">
+            <input type="hidden" name="event_id" value="{{  $dataKelompok->event_id }}">
+            <input type="hidden" name="jurus_id" value="{{ $dataJurus->id }}">
+            <input type="hidden" name="alias" value="{{$dataKelompok->data_event->event_alias}}">
+            @php($i=1)
+            @foreach ($dataKelompok->data_peserta as $item)
+            <tr>
+                <td>{{$i++}}</td>
+                <td>
+                    <input type="hidden" name="peserta_id[]" value="{{$item->id}}"> 
+                    {{$item->no_peserta}}
+                </td>
+                <td>{{$item->name}}</td>
+                <td>
+                    {{$item->data_ts->ts_code}}
+                </td>
+                <td style="width : 20%">
+                    <input class="form-control nilai" type="number" value="{{$item->nilai??0}}" name="nilai[]" step="1" min="5" max="9"></td>
+            </tr>
+                
+            @endforeach
+            <tr>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="5">
+                    <input type="submit" class="btn btn-info simpan" name="" value="Simpan" style="width: 100%">
+                </td>
+            </tr>
+        </table>
+    </form>
+@endsection

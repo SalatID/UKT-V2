@@ -50,6 +50,7 @@
                                     </button>
                                     <div class="dropdown-menu" aria-labelledby="dropDownOption">
                                         <a class="dropdown-item" onclick="editData(this)" href="{{route('edit-kelompok',$item->id)}}">Edit</a>
+                                        <a class="dropdown-item" onclick="callEditNilaiModal(this)" data-kelompok="{{$item->id}}" data-event="{{$item->event_id}}" data-ts="{{$item->ts_id}}">Edit Nilai</a>
                                         <a class="dropdown-item" onclick="deleteData(this)" href="#" data-action="{{ route('delete-kelompok', $item->id) }}">Delete</a>
                                     </div>
                                 </div>
@@ -58,6 +59,39 @@
                     @endforeach
                 </tbody>
             </table>
+        </div>
+    </div>
+    <!-- Modal Jurus -->
+    <div class="modal fade" id="addJurusModal" tabindex="-1" role="dialog" aria-labelledby="addJurusLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addJurusLabel">Pilih Jurus</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formEditNilaiKelompok" method="POST" action="{{route('edit-nilai-kelompok')}}">
+                        @csrf
+                        <input type="hidden" name="kelompok_id" id="kelompok_id">
+                        <input type="hidden" name="event_id" id="event_id">
+                        <div class="form-group">
+                            <label for="jurusSelect">Jurus</label>
+                            <select class="form-control" id="jurusSelect" name="jurus_id" required>
+                                <option value="">Pilih Jurus</option>
+                                @foreach(\App\Models\Jurus::where("event_id", $item->event_id??'')->where("parent_id","!=","0")->get() as $jurus)
+                                    <option class="jurus_ts_{{$jurus->ts_id}}" value="{{$jurus->id}}">{{$jurus->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                    <button type="button" class="btn btn-primary" onclick="$('#formEditNilaiKelompok').submit()">Simpan</button>
+                </div>
+            </div>
         </div>
     </div>
    
@@ -114,5 +148,17 @@
             $('input[name="id"]').remove()
             form.trigger("reset");
         })
+        function callEditNilaiModal(e){
+            let kelompok_id = $(e).data('kelompok')
+            let event_id = $(e).data('event')
+            let ts_id = $(e).data('ts')
+            $('#kelompok_id').val(kelompok_id)
+            $('#event_id').val(event_id)
+            $('#jurusSelect option').hide()
+            for(let i=0;i<=parseInt(ts_id);i++){
+                $('.jurus_ts_'+(i)).show()
+            }
+            $('#addJurusModal').modal('show')
+        }
     </script>
 @endsection

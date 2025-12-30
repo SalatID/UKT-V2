@@ -11,6 +11,7 @@ use App\Models\Jurus;
 use App\Models\Kelompok;
 use App\Models\Peserta;
 use App\Models\User;
+use App\Models\Nilai;
 use App\Models\EventMaster;
 use App\Models\SummaryNilaiDetail;
 use App\Models\SummaryNilai;
@@ -1063,5 +1064,38 @@ class AdminController extends Controller
         })->all();
         $pdf = Pdf::loadView(request('view'),compact('dataPeserta','dataEvent','form'));
         return $pdf->setPaper('a4')->stream('form-nilai-manual_'.(request('kelompok_id')!='' && $dataPeserta !=null? $dataPeserta[0]->name:''));
+    }
+    public function editNilaiKelompok()
+    { 
+        $validate = Validator::make(request()->all(),[
+            'event_id'=>'required',
+            'kelompok_id'=>'required',
+            'jurus_id'=>'required'
+        ]);
+
+        if($validate->fails()){
+            return redirect()->back()->with([
+                'error'=>true,
+                'message'=>'event_id, kelompok_id, and jurus_id are required'
+            ]);
+        }
+        $sData =[
+            'event_id'=>request('event_id'),
+            'id'=>request('kelompok_id'),
+        ];
+        $dataKelompok = Kelompok::with(['data_peserta','data_penilai','data_event'])->where($sData)->first();
+        $dataJurus = Jurus::where('id',request('jurus_id'))->first();
+        $filterNilai = [
+            'jurus_id'=>request('jurus_id'),
+            'kelompok_id'=>request('kelompok_id'),
+            'event_id'=>request('event_id'),
+        ];
+        $dataNilai = Nilai::where($filterNilai)->get();
+        foreach($dataKelompok->data_peserta as $key=>$peserta){
+            $nilaiPeserta = $dataNilai->where('peserta_id',$peserta->id)->first();
+            // dd($nilaiPeserta);
+            $dataKelompok->data_peserta[$key]->nilai = $nilaiPeserta->nilai ?? 0;
+        }
+        return view('admin.kelompok.penilaian',compact('dataKelompok','dataJurus'));
     }
 }

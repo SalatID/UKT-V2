@@ -98,6 +98,7 @@ Route::group(['prefix'=>'admin','middleware'=>'isLogin'],function(){
         Route::post('/update-kelompok',[AdminController::class,'updateKelompok'])->name('update-kelompok');
         Route::get('/delete/{id}',[AdminController::class,'deleteKelompok'])->name('delete-kelompok');
         Route::get('/edit/{id}',[AdminController::class,'editKelompok'])->name('edit-kelompok');
+        Route::post('/edit-nilai',[AdminController::class,'editNilaiKelompok'])->name('edit-nilai-kelompok');
     });
 
     Route::group(['prefix'=>'nilai'],function(){
