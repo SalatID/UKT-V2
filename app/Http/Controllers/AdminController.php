@@ -1094,7 +1094,11 @@ class AdminController extends Controller
         $dataNilai = Nilai::with(['data_penilai'])->where($filterNilai)->get();
         foreach($dataKelompok->data_peserta as $key=>$peserta){
             $nilaiPeserta = $dataNilai->where('peserta_id',$peserta->id)->first();
-            $penilai = $nilaiPeserta == null ? $dataKelompok->data_penilai : ($nilaiPeserta->data_penilai != null ? $nilaiPeserta->data_penilai : $dataKelompok->data_penilai);
+            if (($nilaiPeserta->nilai??0)!=0){
+                $penilai = $nilaiPeserta == null ? $dataKelompok->data_penilai : ($nilaiPeserta->data_penilai != null ? $nilaiPeserta->data_penilai : $dataKelompok->data_penilai);
+            } else {
+                $penilai = $dataKelompok->data_penilai;
+            }
             $dataKelompok->data_peserta[$key]->nilai = $nilaiPeserta->nilai ?? 0;
         }
         return view('admin.kelompok.penilaian',compact('dataKelompok','dataJurus','penilai'));
