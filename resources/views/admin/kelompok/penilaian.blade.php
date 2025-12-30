@@ -49,7 +49,7 @@
             </tr>
 
             <input type="hidden" name="count" value="{{ count($dataKelompok->data_peserta) }}">
-            <input type="hidden" name="penilai_id" value="{{ $dataKelompok->data_penilai->id }}">
+            <input type="hidden" name="penilai_id" value="{{ $dataKelompok->data_penilai->id??'' }}">
             <input type="hidden" name="kelompok_id" value="{{ $dataKelompok->id }}">
             <input type="hidden" name="event_id" value="{{  $dataKelompok->event_id }}">
             <input type="hidden" name="jurus_id" value="{{ $dataJurus->id }}">
