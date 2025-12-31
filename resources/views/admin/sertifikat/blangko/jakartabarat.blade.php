@@ -151,8 +151,8 @@
  <style>
     img[src*="STEMPEL"] {
         position: absolute;
-        bottom: 3cm;
-        right: 7cm;
+        bottom: 2.8cm;
+        right: 8cm;
         z-index: 10;
     }
 </style>
