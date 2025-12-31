@@ -194,13 +194,15 @@
                         </tr>
                         <tr>
                             <td width="130">
-                                <strong>Juminta Ibrahim - PMT</strong>
+                                <strong>Nining Eka Wati - PMT</strong>
                              </td>
-                             <td width="50" class="text-center"><img src="{{public_path()}}/ttd/bang_jum.png" width="50px" alt=""></td>
-                             <td width="130">
-                                 <strong>Nining Eka Wati - PMT</strong>
-                              </td>
-                              <td width="50" class="text-center"><img src="{{public_path()}}/ttd/ka_nining.png" width="50px" alt=""></td>
+                             <td width="50" class="text-center"><img src="{{public_path()}}/ttd/ka_nining.png" width="50px" alt=""></td>
+                            <td width="130">
+                                {{-- <strong>Juminta Ibrahim - PMT</strong> --}}
+                             </td>
+                             <td width="50" class="text-center">
+                                {{-- <img src="{{public_path()}}/ttd/bang_jum.png" width="50px" alt=""> --}}
+                            </td>
                         </tr>
                     </thead>
                 </table>
@@ -225,6 +227,7 @@
                                 {{-- <img src="{{public_path()}}/ttd/stempel.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;" > --}}
                                 <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="90px" style="margin-bottom: -30px;margin-top:-10px;/*margin-left:-40px*/" >
                                 <br>
+                                <img src="{{public_path()}}/assets/img/STEMPEL-1.png" width="80px" alt="" >
                             </td>
                         </tr>
                         <tr>
@@ -240,9 +243,18 @@
                 </table>
             </div>
         </div>
-        <div class="page-break"></div>
+        @if (!$loop->last)
+            <div class="page-break"></div>
+        @endif
     @endforeach
-
+ <style>
+    img[src*="STEMPEL"] {
+        position: absolute;
+        top:25px;
+        right: 6cm;
+        z-index: 20;
+    }
+</style>
 </body>
 
 </html>

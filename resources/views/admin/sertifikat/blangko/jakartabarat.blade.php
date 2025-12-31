@@ -134,6 +134,8 @@
                                     <br>
                                     <img src="{{public_path()}}/ttd/ttd-ka-indra.png" width="200px" alt="" >
                                     <br>
+                                    <img src="{{public_path()}}/assets/img/STEMPEL-1.png" width="150px" alt="" >
+                                    
                                     <strong>Ir. Indra Madya Permana</strong>
                                 </td>
                             </tr>
@@ -146,5 +148,13 @@
     @endif
 
 </body>
+ <style>
+    img[src*="STEMPEL"] {
+        position: absolute;
+        bottom: 3cm;
+        right: 7cm;
+        z-index: 10;
+    }
+</style>
 
 </html>
