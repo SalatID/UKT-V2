@@ -84,7 +84,7 @@
                             <tr>
                                 <td width="200">Nama</td>
                                 <td width="5">:</td>
-                                <td width="300" class="font-weight-bold">{{ $item->data_peserta->name }}</td>
+                                <td width="300" class="font-weight-bold">{{ strtoupper($item->data_peserta->name) }}</td>
                             </tr>
                             <tr>
                                 <td width="200">Tempat/Tanggal Lahir</td>
