@@ -82,12 +82,12 @@
                     <div class="w-100">
                         <table style="margin-left:100px">
                             <tr>
-                                <td width="200">Nama</td>
+                                <td width="150">Nama</td>
                                 <td width="5">:</td>
                                 <td width="300" class="font-weight-bold">{{ strtoupper($item->data_peserta->name) }}</td>
                             </tr>
                             <tr>
-                                <td width="200">Tempat/Tanggal Lahir</td>
+                                <td width="150">Tempat/Tanggal Lahir</td>
                                 <td width="5">:</td>
                                 <td width="300">{{ ucfirst(strtolower($item->data_peserta->tempat_lahir)) }},
                                     {{ date('d', strtotime($item->data_peserta->tgl_lahir)) }}
@@ -95,7 +95,7 @@
                                     {{ date('Y', strtotime($item->data_peserta->tgl_lahir)) }}</td>
                             </tr>
                             <tr>
-                                <td width="200">Tingkatan Sabuk</td>
+                                <td width="150">Tingkatan Sabuk</td>
                                 <td width="5">:</td>
                                 <td width="300">{{ $item->data_peserta->data_ts->name }}</td>
                             </tr>
