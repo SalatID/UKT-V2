@@ -1,6 +1,12 @@
 <html>
 
 <head>
+    @php
+        $pathSk = public_path() ."/blangko_sertifikat/sk-sbcc5.jpg";
+        $typeSk = pathinfo($pathSk, PATHINFO_EXTENSION);
+        $dataImgSk = file_get_contents($pathSk);
+        $base64Sk = 'data:image/' . $typeSk . ';base64,' . base64_encode($dataImgSk);   
+    @endphp
     <title>Cetak Sertifikat</title>
     <link rel="stylesheet" href="{{ public_path() }}/assets/css/bootstrap.min.css">
     <script type="text/javascript" src="{{ public_path() }}/assets/js/jquery.js"></script>
@@ -26,8 +32,9 @@
             text-align: 'center';
         }
 
-        #blangko {
+        .blangko {
             /* background-image: url(/blangko_sertifikat/sbck.jpg); */
+            background-image: url('{{ $base64Sk }}');
             background-size: contain;
             background-repeat: no-repeat;
         }
@@ -43,7 +50,7 @@
                 -webkit-print-color-adjust: exact;
             }
 
-            #blangko {
+            .blangko {
                 /* background-image: url(/blangko_sertifikat/sbck.jpg); */
                 background-size: contain;
                 background-repeat: no-repeat;
@@ -63,13 +70,13 @@
 <body style="padding:0;margin:0;">
         @foreach ($data as $item)
         @php($kategori =$item->label_weight)
-            <div class="text-center d-table mb-3" id="blangko" style="width:20cm;display: inline-block;position: relative;">
+            <div class="text-center d-table mb-3 {{(false) ? 'blangko' : ''}}" style="width:20cm;display: inline-block;position: relative; width:100%;height:96%;">
                 @if (false)
                     <img src="{{ public_path() }}/blangko_sertifikat/blangko_sk.jpg"
                         style="width:20cm;height:29cm;position:absolute;padding:0;margin:0;z-index:-1;pointer-events: none;"
                         alt="">
                 @endif
-                <div style="margin-top:20cm;margin-left:5.5cm;">
+                <div style="padding-top:19.2cm;margin-left:5.5cm;">
                     <div class="w-100" style="float:left">
                         <table>
                             <tr>
@@ -85,12 +92,12 @@
                             <tr>
                                 <td>Pelaksanaan</td>
                                 <td>:</td>
-                                <td>Jumat s.d Minggu, 26 s.d 28 September 2025</td>
+                                <td>Jumat s.d Minggu, 16 s.d 18 Oktober 2026</td>
                             </tr>
                             <tr>
                                 <td>Tempat</td>
                                 <td>:</td>
-                                <td>Atrium Petarung Kuda Putih, Yonif 203/AK, Kota Tangerang</td>
+                                <td>Mall Bale Kota, Kota tangerang</td>
                             </tr>
                         </table>
                     </div>

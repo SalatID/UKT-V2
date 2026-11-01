@@ -166,7 +166,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="container">
-                        <form action="{{ route('kejuaraan.validasi.tambah') }}" method="POST" id="editForm">
+                        <form action="{{ route('kejuaraan.validasi.tambah') }}" method="POST" id="tambahForm">
                             @csrf
                             <input type="hidden" name="id">
                             <div class="row">
@@ -252,7 +252,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="$('#editForm').submit()">Simpan</button>
+                    <button type="button" class="btn btn-primary" onclick="$('#tambahForm').submit()">Simpan</button>
                 </div>
             </div>
         </div>

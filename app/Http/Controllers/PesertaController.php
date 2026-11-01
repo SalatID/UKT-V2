@@ -98,6 +98,8 @@ class PesertaController extends Controller
         // dd(request()->all());
         $validate = Validator::make(request()->all(),[
             'name'=>'required|max:200',
+            'jenis_kelamin'=>'required|in:Laki-Laki,Perempuan',
+            'penyakit_bawaan'=>'nullable|max:255',
             'ts_awal_id'=>'required',
             'komwil_id'=>'required',
             'unit_id'=>'required',

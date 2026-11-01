@@ -5,6 +5,25 @@
         <input type="text" class="form-control" name="name" id="nama" placeholder="Nama" required>
         {{-- <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> --}}
     </div>
+    <div class="row">
+        <div class="col-xl-6">
+            <div class="form-group">
+                <label for="jenis_kelamin">Jenis Kelamin</label>
+                <select name="jenis_kelamin" class="form-control" required id="jenis_kelamin">
+                    <option value="">Pilih Jenis Kelamin</option>
+                    <option value="Laki-Laki">Laki-Laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="form-group">
+                <label for="penyakit_bawaan">Penyakit Bawaan</label>
+                <input type="text" class="form-control" name="penyakit_bawaan" id="penyakit_bawaan"
+                    placeholder="Kosongkan jika tidak ada">
+            </div>
+        </div>
+    </div>
     <div class="form-group">
         <label for="ts_awal_id">Tingkat Sabuk Awal</label>
         <select name="ts_awal_id" class="form-control" required id="ts_awal_id">

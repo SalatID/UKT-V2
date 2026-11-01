@@ -132,6 +132,8 @@
                         <th>Tingkatan</th>
                         <th>Tempat Lahir</th>
                         <th>Tanggal Lahir</th>
+                        <th>Jenis Kelamin</th>
+                        <th>Penyakit Bawaan</th>
                         <th>Aktif Event</th>
                         <th>Foto</th>
                         <th>Action</th>
@@ -151,6 +153,8 @@
                             <td>{{ $item->tingkat }}</td>
                             <td>{{ $item->tempat_lahir }}</td>
                             <td>{{ $item->tgl_lahir }}</td>
+                            <td>{{ $item->jenis_kelamin }}</td>
+                            <td>{{ $item->penyakit_bawaan }}</td>
                             <td>{{ $item->data_event->name ?? 'No Event' }} -
                                 {{ $item->data_event->penyelenggara ?? 'No Event' }}
                                 @ {{ $item->data_event->lokasi ?? 'No Event' }}
@@ -211,12 +215,12 @@
                 {
                     extend: 'pdf',
                     exportOptions: {
-                        columns: [ 0, 2,3,4,5,6,7,8,9 ]
+                        columns: [ 0, 2,3,4,5,6,7,8,9,10,11 ]
                     }
                 },{
                     extend: 'excel',
                     exportOptions: {
-                        columns: [ 0, 2,3,4,5,6,7,8,9 ]
+                        columns: [ 0, 2,3,4,5,6,7,8,9,10,11 ]
                     }
                 }
             ],
@@ -248,6 +252,8 @@
                         value: data.id
                     }).appendTo('#formPeserta');
                     $('input[name="name"]', form).val(data.name)
+                    $('select[name="jenis_kelamin"]', form).val(data.jenis_kelamin)
+                    $('input[name="penyakit_bawaan"]', form).val(data.penyakit_bawaan)
                     $('input[name="tempat_lahir"]', form).val(data.tempat_lahir)
                     $('input[name="tgl_lahir"]', form).val(data.tgl_lahir)
                     $('select[name="ts_awal_id"]', form).val(data.ts_awal_id)

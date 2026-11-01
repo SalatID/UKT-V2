@@ -72,6 +72,22 @@
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
+                                <label for="jenis_kelamin">Jenis Kelamin</label>
+                                <input type="text" class="form-control" disabled name="jenis_kelamin" id="jenis_kelamin"
+                                    placeholder="Jenis Kelamin" disabled value="{{$peserta->jenis_kelamin}}">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="penyakit_bawaan">Penyakit Bawaan</label>
+                                <input type="text" class="form-control" disabled name="penyakit_bawaan" id="penyakit_bawaan"
+                                    placeholder="Penyakit Bawaan" disabled value="{{$peserta->penyakit_bawaan}}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
                                 <label for="tempat_lahir">Tempat Lahir</label>
                                 <input type="text" class="form-control" disabled name="tempat_lahir" id="tempat_lahir"
                                     placeholder="Tempat Lahir" disabled value="{{$peserta->tempat_lahir}}">

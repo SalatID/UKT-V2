@@ -14,8 +14,12 @@ class AltgerEventTable extends Migration
     public function up()
     {
         Schema::table('event', function (Blueprint $table) {
-            $table->string('blangko_belakang')->nullable();
-            $table->string('orientation')->nullable();
+            if (!Schema::hasColumn('event', 'blangko_belakang')) {
+                $table->string('blangko_belakang')->nullable();
+            }
+            if (!Schema::hasColumn('event', 'orientation')) {
+                $table->string('orientation')->nullable();
+            }
         });
     }
 
@@ -27,8 +31,12 @@ class AltgerEventTable extends Migration
     public function down()
     {
         Schema::table('event', function (Blueprint $table) {
-            $table->droptColumn('blangko_belakang');
-            $table->droptColumn('orientation');
+            if (Schema::hasColumn('event', 'blangko_belakang')) {
+                $table->dropColumn('blangko_belakang');
+            }
+            if (Schema::hasColumn('event', 'orientation')) {
+                $table->dropColumn('orientation');
+            }
         });
     }
 }

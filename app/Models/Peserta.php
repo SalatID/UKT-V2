@@ -12,7 +12,7 @@ class Peserta extends Model
     use HasFactory,LogsActivity;
     protected $table = 'peserta';
     public $fillable =[
-        'no_peserta','name','ts_awal_id','tempat_lahir','tgl_lahir','komwil_id','unit_id','event_id','tingkat','created_user','foto'
+        'no_peserta','name','jenis_kelamin','penyakit_bawaan','ts_awal_id','tempat_lahir','tgl_lahir','komwil_id','unit_id','event_id','tingkat','created_user','foto'
     ];
     protected $casts = [
         'y' => 'integer',

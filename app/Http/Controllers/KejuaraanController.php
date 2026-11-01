@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Kejuaraan\Weight;
 use App\Models\Kejuaraan\PesertaKejuaraan;
+use App\Models\ManualCertificate;
 use DB;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -36,6 +37,10 @@ class KejuaraanController extends Controller
             [
                 "nama"=>"List Semua",
                 "src"=>route('kejuaraan.cetak.list')
+            ],
+             [
+                "nama"=>"Manual Cetak",
+                "src"=>route('kejuaraan.cetak.manual')
             ],
         ];
     }
@@ -337,11 +342,26 @@ class KejuaraanController extends Controller
     {
         $cetakId = [];
         $juara = request('juara');
+        
         foreach (request('cetak') as $key=>$val){
-            $upd = PesertaKejuaraan::where('id',$key)->update([
+            $get = PesertaKejuaraan::where('id',$key);
+            $data = $get->first();
+            if($data->no_sertifikat!=null){
+                $latestNoPeserta = $data->no_sertifikat;
+            } else {
+                if(strtolower($juara[$key])!="peserta"){
+                    $latestNoPeserta = PesertaKejuaraan::select("no_sertifikat")->orderBy("no_sertifikat", "desc")->value("no_sertifikat") ?? 50;
+                    $latestNoPeserta = $latestNoPeserta + 1;
+                } else {
+                    $latestNoPeserta = null;
+                }
+            }
+            
+            $upd = $get->update([
                 'sertifikat_print_at'=>date('Y-m-d H:i:s'),
                 'sertifikat_pic'=>session()->get('nama_pic'),
-                'juara'=>$juara[$key]
+                'juara'=>$juara[$key],
+                'no_sertifikat'=>$latestNoPeserta
             ]);
             if($upd){
                 array_push($cetakId,$key);
@@ -385,6 +405,7 @@ class KejuaraanController extends Controller
             'label_weight',
             'juara',
         ]);
+        $data['kasir_at'] = date('Y-m-d H:i:s');
 
         $peserta = PesertaKejuaraan::create($data);
 
@@ -392,5 +413,35 @@ class KejuaraanController extends Controller
             return redirect()->back()->with(['error' => false, 'message' => 'Peserta berhasil ditambahkan']);
         }
         return redirect()->back()->with(['error' => true, 'message' => 'Gagal menambahkan peserta']);
+    }
+
+    public function cetak_manual(){
+        $certificates = ManualCertificate::latest()->get();
+        return view('kejuaraan.cetak.manual', compact('certificates'));
+    }
+
+        public function cetak_manual_store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'achievement' => 'required|string|max:255',
+            ]);
+            
+            // dd($request->all());
+        $ins = ManualCertificate::create([
+            'name' => $request->name,
+            'achievement' => $request->achievement,
+        ]);
+
+        return redirect()->back()->with('success', 'Data sertifikat berhasil ditambahkan');
+    }
+
+    public function cetak_manual_print ($id)
+    {
+        $data = ManualCertificate::findOrFail($id);
+        $pdf = Pdf::loadView('kejuaraan.cetak.manual_certificate',compact('data'));
+        $pdf->setBasePath(public_path());
+        return $pdf->setPaper('a4','landscape')->stream($data->name.'.pdf');
+        dd($data);
     }
 }

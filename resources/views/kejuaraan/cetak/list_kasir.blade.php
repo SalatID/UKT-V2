@@ -194,7 +194,7 @@
                                     <!-- Kategori Pertandingan -->
                                     <div class="form-group">
                                         <label for="kategoriPertandingan">Kategori Pertandingan</label>
-                                        <select class="form-control" id="kategoriPertandingan" name="id_weight">
+                                        <select class="form-control" id="kategoriPertandingan" name="label_weight">
                                             <option value="">Pilih Kategori Pertandingan</option>
                                             <option value="Tanding">Tanding</option>
                                             <option value="Tunggal">Tunggal</option>

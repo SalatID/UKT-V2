@@ -66,6 +66,9 @@ Route::group(['prefix'=>'event'],function(){
         Route::get('/cetak',[KejuaraanController::class,'cetak_list'])->name('kejuaraan.cetak');
         Route::post('/cetak-sertifikat',[KejuaraanController::class,'cetak_sertifikat'])->name('kejuaraan.cetak.sertifikat');
         Route::post('/cetak-sk',[KejuaraanController::class,'cetak_sk'])->name('kejuaraan.cetak.sk');
+        Route::get('/cetak-manual',[KejuaraanController::class,'cetak_manual'])->name('kejuaraan.cetak.manual');
+        Route::post('/certificates', [KejuaraanController::class, 'cetak_manual_store'])->name('certificates.store');
+        Route::get('/certificates/{id}/print', [KejuaraanController::class, 'cetak_manual_print'])->name('certificates.print');
     });
 });
 
