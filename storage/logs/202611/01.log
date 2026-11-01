@@ -232,3 +232,123 @@ Stack trace:
 [stacktrace]
 #0 {main}
 "} 
+[2026-11-01 05:11:45] production.ERROR: Unexpected end of input {"exception":"[object] (InvalidArgumentException(code: 0): Unexpected end of input at D:\\Project\\web-base\\UKT-V2\\vendor\\psy\\psysh\\src\\Shell.php:905)
+[stacktrace]
+#0 D:\\Project\\web-base\\UKT-V2\\vendor\\psy\\psysh\\src\\Shell.php(1354): Psy\\Shell->setCode('echo DB::select...', true)
+#1 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\tinker\\src\\Console\\TinkerCommand.php(76): Psy\\Shell->execute('echo DB::select...')
+#2 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#3 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#4 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#5 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#6 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#7 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#8 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#9 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(120): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#10 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Application.php(1040): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Application.php(301): Symfony\\Component\\Console\\Application->doRunCommand(Object(Laravel\\Tinker\\Console\\TinkerCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#12 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#13 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#14 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#15 D:\\Project\\web-base\\UKT-V2\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#16 {main}
+"} 
+[2026-11-01 05:11:45] production.ERROR: Uncaught Whoops\Exception\ErrorException: Using ${var} in strings is deprecated, use {$var} instead in D:\Project\web-base\UKT-V2\vendor\facade\ignition\src\SolutionProviders\MergeConflictSolutionProvider.php:52
+Stack trace:
+#0 D:\Project\web-base\UKT-V2\vendor\composer\ClassLoader.php(571): Whoops\Run->handleError(8192, 'Using ${var} in...', 'D:\\Project\\web-...', 52)
+#1 D:\Project\web-base\UKT-V2\vendor\composer\ClassLoader.php(571): include()
+#2 D:\Project\web-base\UKT-V2\vendor\composer\ClassLoader.php(428): Composer\Autoload\includeFile('D:\\Project\\web-...')
+#3 [internal function]: Composer\Autoload\ClassLoader->loadClass('Facade\\Ignition...')
+#4 D:\Project\web-base\UKT-V2\vendor\facade\ignition\src\SolutionProviders\SolutionProviderRepository.php(50): class_implements('Facade\\Ignition...')
+#5 [internal function]: Facade\Ignition\SolutionProviders\SolutionProviderRepository->Facade\Ignition\SolutionProviders\{closure}('Facade\\Ignition...', 10)
+#6 D:\Project\web-base\UKT-V2\vendor\laravel\framework\src\Illuminate\Collections\Arr.php(717): array_filter(Array, Object(Closure), 1)
+#7 D:\Project\web-base\UKT-V2\vendor\laravel\framework\src\Illuminate\Collections\Collection.php(358): Illuminate\Support\Arr::where(Array, Object(Closure))
+#8 D:\Project\web-base\UKT-V2\vendor\facade\ignition\src\SolutionProviders\SolutionProviderRepository.php(49): Illuminate\Support\Collection->filter(Object(Closure))
+#9 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Adapters\Laravel\IgnitionSolutionsRepository.php(36): Facade\Ignition\SolutionProviders\SolutionProviderRepository->getSolutionsForThrowable(Object(Whoops\Exception\ErrorException))
+#10 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Writer.php(244): NunoMaduro\Collision\Adapters\Laravel\IgnitionSolutionsRepository->getFromThrowable(Object(Whoops\Exception\ErrorException))
+#11 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Writer.php(123): NunoMaduro\Collision\Writer->renderSolution(Object(Whoops\Exception\Inspector))
+#12 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Handler.php(39): NunoMaduro\Collision\Writer->write(Object(Whoops\Exception\Inspector))
+#13 D:\Project\web-base\UKT-V2\vendor\filp\whoops\src\Whoops\Run.php(370): NunoMaduro\Collision\Handler->handle(Object(Whoops\Exception\ErrorException))
+#14 [internal function]: Whoops\Run->handleException(Object(Whoops\Exception\ErrorException))
+#15 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught Whoops\\Exception\\ErrorException: Using ${var} in strings is deprecated, use {$var} instead in D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\MergeConflictSolutionProvider.php:52
+Stack trace:
+#0 D:\\Project\\web-base\\UKT-V2\\vendor\\composer\\ClassLoader.php(571): Whoops\\Run->handleError(8192, 'Using ${var} in...', 'D:\\\\Project\\\\web-...', 52)
+#1 D:\\Project\\web-base\\UKT-V2\\vendor\\composer\\ClassLoader.php(571): include()
+#2 D:\\Project\\web-base\\UKT-V2\\vendor\\composer\\ClassLoader.php(428): Composer\\Autoload\\includeFile('D:\\\\Project\\\\web-...')
+#3 [internal function]: Composer\\Autoload\\ClassLoader->loadClass('Facade\\\\Ignition...')
+#4 D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\SolutionProviderRepository.php(50): class_implements('Facade\\\\Ignition...')
+#5 [internal function]: Facade\\Ignition\\SolutionProviders\\SolutionProviderRepository->Facade\\Ignition\\SolutionProviders\\{closure}('Facade\\\\Ignition...', 10)
+#6 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Arr.php(717): array_filter(Array, Object(Closure), 1)
+#7 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Collection.php(358): Illuminate\\Support\\Arr::where(Array, Object(Closure))
+#8 D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\SolutionProviderRepository.php(49): Illuminate\\Support\\Collection->filter(Object(Closure))
+#9 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Adapters\\Laravel\\IgnitionSolutionsRepository.php(36): Facade\\Ignition\\SolutionProviders\\SolutionProviderRepository->getSolutionsForThrowable(Object(Whoops\\Exception\\ErrorException))
+#10 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Writer.php(244): NunoMaduro\\Collision\\Adapters\\Laravel\\IgnitionSolutionsRepository->getFromThrowable(Object(Whoops\\Exception\\ErrorException))
+#11 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Writer.php(123): NunoMaduro\\Collision\\Writer->renderSolution(Object(Whoops\\Exception\\Inspector))
+#12 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Handler.php(39): NunoMaduro\\Collision\\Writer->write(Object(Whoops\\Exception\\Inspector))
+#13 D:\\Project\\web-base\\UKT-V2\\vendor\\filp\\whoops\\src\\Whoops\\Run.php(370): NunoMaduro\\Collision\\Handler->handle(Object(Whoops\\Exception\\ErrorException))
+#14 [internal function]: Whoops\\Run->handleException(Object(Whoops\\Exception\\ErrorException))
+#15 {main}
+  thrown at D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\MergeConflictSolutionProvider.php:52)
+[stacktrace]
+#0 {main}
+"} 
+[2026-11-01 05:12:27] production.ERROR: Unexpected end of input {"exception":"[object] (InvalidArgumentException(code: 0): Unexpected end of input at D:\\Project\\web-base\\UKT-V2\\vendor\\psy\\psysh\\src\\Shell.php:905)
+[stacktrace]
+#0 D:\\Project\\web-base\\UKT-V2\\vendor\\psy\\psysh\\src\\Shell.php(1354): Psy\\Shell->setCode('echo json_encod...', true)
+#1 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\tinker\\src\\Console\\TinkerCommand.php(76): Psy\\Shell->execute('echo json_encod...')
+#2 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(36): Laravel\\Tinker\\Console\\TinkerCommand->handle()
+#3 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php(40): Illuminate\\Container\\BoundMethod::Illuminate\\Container\\{closure}()
+#4 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(93): Illuminate\\Container\\Util::unwrapIfClosure(Object(Closure))
+#5 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php(35): Illuminate\\Container\\BoundMethod::callBoundMethod(Object(Illuminate\\Foundation\\Application), Array, Object(Closure))
+#6 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php(653): Illuminate\\Container\\BoundMethod::call(Object(Illuminate\\Foundation\\Application), Array, Array, NULL)
+#7 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(136): Illuminate\\Container\\Container->call(Array)
+#8 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Command\\Command.php(298): Illuminate\\Console\\Command->execute(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#9 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php(120): Symfony\\Component\\Console\\Command\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Illuminate\\Console\\OutputStyle))
+#10 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Application.php(1040): Illuminate\\Console\\Command->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#11 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Application.php(301): Symfony\\Component\\Console\\Application->doRunCommand(Object(Laravel\\Tinker\\Console\\TinkerCommand), Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#12 D:\\Project\\web-base\\UKT-V2\\vendor\\symfony\\console\\Application.php(171): Symfony\\Component\\Console\\Application->doRun(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#13 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php(94): Symfony\\Component\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#14 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php(129): Illuminate\\Console\\Application->run(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#15 D:\\Project\\web-base\\UKT-V2\\artisan(35): Illuminate\\Foundation\\Console\\Kernel->handle(Object(Symfony\\Component\\Console\\Input\\ArgvInput), Object(Symfony\\Component\\Console\\Output\\ConsoleOutput))
+#16 {main}
+"} 
+[2026-11-01 05:12:27] production.ERROR: Uncaught Whoops\Exception\ErrorException: Using ${var} in strings is deprecated, use {$var} instead in D:\Project\web-base\UKT-V2\vendor\facade\ignition\src\SolutionProviders\MergeConflictSolutionProvider.php:52
+Stack trace:
+#0 D:\Project\web-base\UKT-V2\vendor\composer\ClassLoader.php(571): Whoops\Run->handleError(8192, 'Using ${var} in...', 'D:\\Project\\web-...', 52)
+#1 D:\Project\web-base\UKT-V2\vendor\composer\ClassLoader.php(571): include()
+#2 D:\Project\web-base\UKT-V2\vendor\composer\ClassLoader.php(428): Composer\Autoload\includeFile('D:\\Project\\web-...')
+#3 [internal function]: Composer\Autoload\ClassLoader->loadClass('Facade\\Ignition...')
+#4 D:\Project\web-base\UKT-V2\vendor\facade\ignition\src\SolutionProviders\SolutionProviderRepository.php(50): class_implements('Facade\\Ignition...')
+#5 [internal function]: Facade\Ignition\SolutionProviders\SolutionProviderRepository->Facade\Ignition\SolutionProviders\{closure}('Facade\\Ignition...', 10)
+#6 D:\Project\web-base\UKT-V2\vendor\laravel\framework\src\Illuminate\Collections\Arr.php(717): array_filter(Array, Object(Closure), 1)
+#7 D:\Project\web-base\UKT-V2\vendor\laravel\framework\src\Illuminate\Collections\Collection.php(358): Illuminate\Support\Arr::where(Array, Object(Closure))
+#8 D:\Project\web-base\UKT-V2\vendor\facade\ignition\src\SolutionProviders\SolutionProviderRepository.php(49): Illuminate\Support\Collection->filter(Object(Closure))
+#9 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Adapters\Laravel\IgnitionSolutionsRepository.php(36): Facade\Ignition\SolutionProviders\SolutionProviderRepository->getSolutionsForThrowable(Object(Whoops\Exception\ErrorException))
+#10 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Writer.php(244): NunoMaduro\Collision\Adapters\Laravel\IgnitionSolutionsRepository->getFromThrowable(Object(Whoops\Exception\ErrorException))
+#11 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Writer.php(123): NunoMaduro\Collision\Writer->renderSolution(Object(Whoops\Exception\Inspector))
+#12 D:\Project\web-base\UKT-V2\vendor\nunomaduro\collision\src\Handler.php(39): NunoMaduro\Collision\Writer->write(Object(Whoops\Exception\Inspector))
+#13 D:\Project\web-base\UKT-V2\vendor\filp\whoops\src\Whoops\Run.php(370): NunoMaduro\Collision\Handler->handle(Object(Whoops\Exception\ErrorException))
+#14 [internal function]: Whoops\Run->handleException(Object(Whoops\Exception\ErrorException))
+#15 {main}
+  thrown {"exception":"[object] (Symfony\\Component\\ErrorHandler\\Error\\FatalError(code: 0): Uncaught Whoops\\Exception\\ErrorException: Using ${var} in strings is deprecated, use {$var} instead in D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\MergeConflictSolutionProvider.php:52
+Stack trace:
+#0 D:\\Project\\web-base\\UKT-V2\\vendor\\composer\\ClassLoader.php(571): Whoops\\Run->handleError(8192, 'Using ${var} in...', 'D:\\\\Project\\\\web-...', 52)
+#1 D:\\Project\\web-base\\UKT-V2\\vendor\\composer\\ClassLoader.php(571): include()
+#2 D:\\Project\\web-base\\UKT-V2\\vendor\\composer\\ClassLoader.php(428): Composer\\Autoload\\includeFile('D:\\\\Project\\\\web-...')
+#3 [internal function]: Composer\\Autoload\\ClassLoader->loadClass('Facade\\\\Ignition...')
+#4 D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\SolutionProviderRepository.php(50): class_implements('Facade\\\\Ignition...')
+#5 [internal function]: Facade\\Ignition\\SolutionProviders\\SolutionProviderRepository->Facade\\Ignition\\SolutionProviders\\{closure}('Facade\\\\Ignition...', 10)
+#6 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Arr.php(717): array_filter(Array, Object(Closure), 1)
+#7 D:\\Project\\web-base\\UKT-V2\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Collection.php(358): Illuminate\\Support\\Arr::where(Array, Object(Closure))
+#8 D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\SolutionProviderRepository.php(49): Illuminate\\Support\\Collection->filter(Object(Closure))
+#9 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Adapters\\Laravel\\IgnitionSolutionsRepository.php(36): Facade\\Ignition\\SolutionProviders\\SolutionProviderRepository->getSolutionsForThrowable(Object(Whoops\\Exception\\ErrorException))
+#10 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Writer.php(244): NunoMaduro\\Collision\\Adapters\\Laravel\\IgnitionSolutionsRepository->getFromThrowable(Object(Whoops\\Exception\\ErrorException))
+#11 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Writer.php(123): NunoMaduro\\Collision\\Writer->renderSolution(Object(Whoops\\Exception\\Inspector))
+#12 D:\\Project\\web-base\\UKT-V2\\vendor\\nunomaduro\\collision\\src\\Handler.php(39): NunoMaduro\\Collision\\Writer->write(Object(Whoops\\Exception\\Inspector))
+#13 D:\\Project\\web-base\\UKT-V2\\vendor\\filp\\whoops\\src\\Whoops\\Run.php(370): NunoMaduro\\Collision\\Handler->handle(Object(Whoops\\Exception\\ErrorException))
+#14 [internal function]: Whoops\\Run->handleException(Object(Whoops\\Exception\\ErrorException))
+#15 {main}
+  thrown at D:\\Project\\web-base\\UKT-V2\\vendor\\facade\\ignition\\src\\SolutionProviders\\MergeConflictSolutionProvider.php:52)
+[stacktrace]
+#0 {main}
+"} 

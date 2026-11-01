@@ -23,3 +23,4 @@ Homestead.json
 /.vagrant
 .phpunit.result.cache
 database/uktv2_20241220.sql
+/storage
